@@ -7,7 +7,20 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AllProjects from "./pages/AllProjects.tsx";
 import Auth from "./pages/Auth.tsx";
-import AdminPlaceholder from "./pages/AdminPlaceholder.tsx";
+import AdminLayout from "./pages/admin/AdminLayout.tsx";
+import Dashboard from "./pages/admin/Dashboard.tsx";
+import Navigation from "./pages/admin/Navigation.tsx";
+import HeroAdmin from "./pages/admin/HeroAdmin.tsx";
+import AboutAdmin from "./pages/admin/About.tsx";
+import ServicesAdmin from "./pages/admin/Services.tsx";
+import ProjectsAdmin from "./pages/admin/ProjectsAdmin.tsx";
+import PricingAdmin from "./pages/admin/PricingAdmin.tsx";
+import ContactInfoAdmin from "./pages/admin/ContactInfo.tsx";
+import Submissions from "./pages/admin/Submissions.tsx";
+import FooterAdmin from "./pages/admin/FooterAdmin.tsx";
+import WhatsAppAdmin from "./pages/admin/WhatsAppAdmin.tsx";
+import IntroVideoAdmin from "./pages/admin/IntroVideoAdmin.tsx";
+import AdminUsers from "./pages/admin/AdminUsers.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,7 +34,21 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<AdminPlaceholder />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="navigation" element={<Navigation />} />
+            <Route path="hero" element={<HeroAdmin />} />
+            <Route path="about" element={<AboutAdmin />} />
+            <Route path="services" element={<ServicesAdmin />} />
+            <Route path="projects" element={<ProjectsAdmin />} />
+            <Route path="pricing" element={<PricingAdmin />} />
+            <Route path="contact" element={<ContactInfoAdmin />} />
+            <Route path="submissions" element={<Submissions />} />
+            <Route path="footer" element={<FooterAdmin />} />
+            <Route path="whatsapp" element={<WhatsAppAdmin />} />
+            <Route path="intro-video" element={<IntroVideoAdmin />} />
+            <Route path="users" element={<AdminUsers />} />
+          </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

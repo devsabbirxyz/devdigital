@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PageHeader, Card, Field, inputCls, PrimaryBtn, GhostBtn, uploadToBucket } from "./_ui";
+import { PageHeader, Card, Field, inputCls, GhostBtn, uploadToBucket } from "./_ui";
 import { useSettingForm, SaveBar } from "./SettingsForm";
 
 type HeroData = { title: string; description: string; primary_cta: string; secondary_cta: string };
@@ -78,12 +78,9 @@ export default function HeroAdmin() {
             <h3 className="font-display font-semibold text-lg">Carousel Images</h3>
             <p className="text-xs text-muted-foreground">Recommended: 7 portrait images. Fallback assets are used if empty.</p>
           </div>
-          <label className="cursor-pointer">
-            <PrimaryBtn type="button" loading={uploading} onClick={(e) => (e.currentTarget.previousElementSibling as HTMLInputElement)?.click()} />
-            <input type="file" accept="image/*" multiple onChange={handleUpload} className="hidden" />
-            <span className="bg-gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl neon-glow hover:scale-[1.02] transition-transform inline-flex items-center gap-2 text-sm">
-              <Upload className="h-4 w-4" /> Upload
-            </span>
+          <label className="cursor-pointer bg-gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl neon-glow hover:scale-[1.02] transition-transform inline-flex items-center gap-2 text-sm">
+            <Upload className="h-4 w-4" /> {uploading ? "Uploading…" : "Upload"}
+            <input type="file" accept="image/*" multiple onChange={handleUpload} disabled={uploading} className="hidden" />
           </label>
         </div>
         {images.length === 0 ? (
