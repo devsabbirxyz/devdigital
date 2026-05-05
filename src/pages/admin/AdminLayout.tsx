@@ -39,11 +39,14 @@ export default function AdminLayout() {
         return;
       }
       setEmail(session.user.email ?? "");
-      const { data: isAdmin } = await supabase.rpc("has_role", {
-        _user_id: session.user.id,
-        _role: "admin",
-      });
-      if (!isAdmin) {
+      const { data: roles, error: roleError } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin")
+        .limit(1);
+
+      if (roleError || !roles?.length) {
         toast.error("Admin access required");
         await supabase.auth.signOut();
         navigate("/auth");
