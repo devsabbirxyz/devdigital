@@ -104,6 +104,17 @@ export default function Contact() {
                 </div>
               </a>
             ))}
+
+            <div className="rounded-2xl overflow-hidden glass-strong glow-border shadow-glow-soft border border-primary/30">
+              <iframe
+                title="Location map"
+                src={`https://www.google.com/maps?q=${encodeURIComponent(data.location)}&output=embed`}
+                className="w-full h-64 grayscale-[40%] contrast-110"
+                style={{ border: 0, filter: "invert(0.9) hue-rotate(180deg)" }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </motion.div>
 
           <motion.form
