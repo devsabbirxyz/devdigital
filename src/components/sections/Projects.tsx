@@ -60,7 +60,9 @@ export default function Projects({ all = false }: { all?: boolean }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: (i % 4) * 0.08 }}
-                className="group relative aspect-[4/3] rounded-3xl overflow-hidden glass-strong cursor-pointer"
+                className={`group relative aspect-[4/3] rounded-3xl overflow-hidden glass-strong cursor-pointer ${
+                  !all && i >= 4 ? "hidden lg:block" : ""
+                }`}
               >
                 <img
                   src={img}
