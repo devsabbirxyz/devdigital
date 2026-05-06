@@ -6,6 +6,7 @@ import Services from "@/components/sections/Services";
 import Projects from "@/components/sections/Projects";
 import Pricing from "@/components/sections/Pricing";
 import Contact from "@/components/sections/Contact";
+import Blog from "@/components/sections/Blog";
 import Footer from "@/components/sections/Footer";
 import WhatsAppButton from "@/components/site/WhatsAppButton";
 import IntroVideoModal from "@/components/site/IntroVideoModal";
@@ -34,6 +35,7 @@ const Index = () => {
       <Projects />
       <Pricing />
       <Contact />
+      <Blog />
       <Footer />
       <WhatsAppButton />
       <IntroVideoModal />

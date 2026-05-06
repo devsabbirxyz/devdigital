@@ -21,6 +21,10 @@ import FooterAdmin from "./pages/admin/FooterAdmin.tsx";
 import WhatsAppAdmin from "./pages/admin/WhatsAppAdmin.tsx";
 import IntroVideoAdmin from "./pages/admin/IntroVideoAdmin.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
+import BlogAdmin from "./pages/admin/BlogAdmin.tsx";
+import ServicePagesAdmin from "./pages/admin/ServicePagesAdmin.tsx";
+import BlogPost from "./pages/BlogPost.tsx";
+import ServicePage from "./pages/ServicePage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +37,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/services/:slug" element={<ServicePage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
@@ -48,6 +54,8 @@ const App = () => (
             <Route path="whatsapp" element={<WhatsAppAdmin />} />
             <Route path="intro-video" element={<IntroVideoAdmin />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="blog" element={<BlogAdmin />} />
+            <Route path="service-pages" element={<ServicePagesAdmin />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

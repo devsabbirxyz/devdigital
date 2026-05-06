@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
-  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone,
+  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,11 +15,13 @@ const NAV = [
   { to: "/admin/services", label: "Services", icon: Sparkles },
   { to: "/admin/projects", label: "Projects", icon: FolderKanban },
   { to: "/admin/pricing", label: "Pricing", icon: DollarSign },
+  { to: "/admin/blog", label: "Blog", icon: Newspaper },
   { to: "/admin/contact", label: "Contact Info", icon: Phone },
   { to: "/admin/submissions", label: "Submissions", icon: Mail },
   { to: "/admin/footer", label: "Footer", icon: Settings },
   { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle },
   { to: "/admin/intro-video", label: "Intro Video", icon: Video },
+  { to: "/admin/service-pages", label: "Service Pages", icon: Briefcase },
   { to: "/admin/users", label: "Admin Users", icon: Users },
 ];
 

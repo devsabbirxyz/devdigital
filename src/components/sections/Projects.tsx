@@ -18,7 +18,7 @@ export default function Projects({ all = false }: { all?: boolean }) {
   useEffect(() => {
     (async () => {
       let q = supabase.from("projects").select("id,title,description,image_url,featured,sort_order").order("sort_order");
-      if (!all) q = q.eq("featured", true).limit(4);
+      if (!all) q = q.eq("featured", true).limit(8);
       const { data } = await q;
       setProjects((data as Project[]) || []);
     })();
@@ -50,8 +50,8 @@ export default function Projects({ all = false }: { all?: boolean }) {
           )}
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6">
-          {projects.map((p, i) => {
+        <div className={`grid grid-cols-2 ${all ? "sm:grid-cols-2 lg:grid-cols-3" : "lg:grid-cols-4"} gap-4 md:gap-5`}>
+          {(all ? projects : projects.slice(0, 8)).map((p, i) => {
             const img = p.image_url || FALLBACK[i % FALLBACK.length];
             return (
               <motion.article
@@ -60,7 +60,9 @@ export default function Projects({ all = false }: { all?: boolean }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: (i % 4) * 0.08 }}
-                className="group relative aspect-[4/3] rounded-3xl overflow-hidden glass-strong cursor-pointer"
+                className={`group relative aspect-[4/3] rounded-3xl overflow-hidden glass-strong cursor-pointer ${
+                  !all && i >= 4 ? "hidden lg:block" : ""
+                }`}
               >
                 <img
                   src={img}
@@ -69,14 +71,14 @@ export default function Projects({ all = false }: { all?: boolean }) {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-90 group-hover:opacity-95 transition" />
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                  <h3 className="text-2xl font-bold mb-2 group-hover:text-gradient transition-colors">{p.title}</h3>
-                  <p className="text-muted-foreground text-sm max-h-0 overflow-hidden opacity-0 group-hover:max-h-32 group-hover:opacity-100 transition-all duration-500">
+                <div className="absolute inset-0 p-3 md:p-5 flex flex-col justify-end">
+                  <h3 className="text-base md:text-lg font-bold mb-1 group-hover:text-gradient transition-colors line-clamp-2">{p.title}</h3>
+                  <p className="text-muted-foreground text-xs max-h-0 overflow-hidden opacity-0 group-hover:max-h-32 group-hover:opacity-100 transition-all duration-500">
                     {p.description}
                   </p>
                 </div>
-                <div className="absolute top-4 right-4 w-10 h-10 rounded-full glass-strong flex items-center justify-center opacity-0 group-hover:opacity-100 transition group-hover:neon-glow">
-                  <ArrowUpRight className="h-4 w-4" />
+                <div className="absolute top-2 right-2 w-8 h-8 rounded-full glass-strong flex items-center justify-center opacity-0 group-hover:opacity-100 transition group-hover:neon-glow">
+                  <ArrowUpRight className="h-3.5 w-3.5" />
                 </div>
               </motion.article>
             );

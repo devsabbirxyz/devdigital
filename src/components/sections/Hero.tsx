@@ -70,7 +70,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="relative pt-32 pb-20 overflow-hidden bg-grid">
+    <section id="home" className="relative pt-28 pb-16 overflow-hidden bg-grid">
       {/* ambient glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px] pointer-events-none" />
@@ -96,7 +96,7 @@ export default function Hero() {
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             {data.description}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             <button
               onClick={() => scrollToSection("contact")}
               className="bg-gradient-primary text-white font-semibold px-7 py-3 rounded-full neon-glow hover:scale-105 transition-transform inline-flex items-center gap-2"
@@ -113,7 +113,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Carousel */}
-        <div className="relative mt-16 h-[420px] md:h-[480px] flex items-center justify-center [perspective:1200px]">
+        <div className="relative mt-2 md:mt-4 h-[340px] md:h-[400px] flex items-center justify-center [perspective:1200px]">
           {images.map((src, i) => {
             const style = getStyle(i);
             return (
@@ -121,7 +121,7 @@ export default function Hero() {
                 key={i}
                 animate={style}
                 transition={{ type: "spring", stiffness: 80, damping: 18 }}
-                className="absolute w-44 md:w-56 h-64 md:h-80 rounded-3xl overflow-hidden glass-strong"
+              className="absolute w-36 md:w-48 h-52 md:h-72 rounded-3xl overflow-hidden glass-strong"
                 style={{ zIndex: style.zIndex }}
               >
                 <img
