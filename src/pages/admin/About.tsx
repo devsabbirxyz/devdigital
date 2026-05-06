@@ -3,10 +3,11 @@ import { toast } from "sonner";
 import { PageHeader, Card, Field, inputCls, GhostBtn, uploadToBucket } from "./_ui";
 import { useSettingForm, SaveBar } from "./SettingsForm";
 
-type AboutData = { title: string; tagline: string; bio: string; image_url: string };
+type AboutData = { title: string; tagline: string; name: string; bio: string; image_url: string };
 const DEFAULT: AboutData = {
   title: "About Me",
   tagline: "Designer · Developer · AI Specialist",
+  name: "Your Name",
   bio: "I build modern, future-ready digital products that blend stunning design with powerful technology.",
   image_url: "",
 };
@@ -36,6 +37,9 @@ export default function AboutAdmin() {
         </Field>
         <Field label="Tagline">
           <input value={data.tagline} maxLength={150} onChange={(e) => setData({ ...data, tagline: e.target.value })} className={inputCls} />
+        </Field>
+        <Field label="Your Name (shown large under heading)">
+          <input value={data.name} maxLength={80} onChange={(e) => setData({ ...data, name: e.target.value })} className={inputCls} />
         </Field>
         <Field label="Bio">
           <textarea value={data.bio} maxLength={1000} rows={5} onChange={(e) => setData({ ...data, bio: e.target.value })} className={inputCls + " resize-none"} />
