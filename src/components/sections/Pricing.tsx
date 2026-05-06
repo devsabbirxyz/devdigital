@@ -54,8 +54,10 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className={`relative glass-strong rounded-3xl p-8 transition-all hover:-translate-y-2 ${
-                plan.highlighted ? "shadow-neon md:scale-105 ring-1 ring-primary/40" : "glow-border"
+              className={`relative rounded-3xl p-8 transition-all hover:-translate-y-2 ${
+                plan.highlighted
+                  ? "md:scale-110 md:-mt-4 ring-2 ring-primary/70 shadow-neon bg-gradient-to-br from-primary/30 via-accent/15 to-background/40 backdrop-blur-2xl border border-primary/40"
+                  : "glass-strong glow-border"
               }`}
             >
               {plan.highlighted && (
@@ -87,8 +89,8 @@ export default function Pricing() {
                 onClick={() => setOpenPlan(plan.name)}
                 className={`w-full py-3 rounded-full font-semibold transition-all ${
                   plan.highlighted
-                    ? "bg-white text-background hover:scale-105"
-                    : "bg-gradient-primary text-white neon-glow hover:scale-105"
+                    ? "bg-gradient-primary text-white neon-glow hover:scale-105 shadow-[0_0_30px_hsl(var(--primary)/0.6)]"
+                    : "glass border border-primary/30 text-foreground hover:bg-primary/10 hover:scale-105"
                 }`}
               >
                 Get Started
