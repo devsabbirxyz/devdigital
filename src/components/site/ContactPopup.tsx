@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { sendWhatsAppNotification } from "@/lib/whatsappNotify";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -49,6 +50,13 @@ export default function ContactPopup({
       toast.error("Could not submit. Please try again.");
       return;
     }
+    sendWhatsAppNotification({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: parsed.data.phone || null,
+      message: parsed.data.message,
+      plan: plan ?? null,
+    });
     toast.success("Thanks! I'll get back to you shortly.");
     onOpenChange(false);
     (e.target as HTMLFormElement).reset();

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { toast } from "sonner";
+import { sendWhatsAppNotification } from "@/lib/whatsappNotify";
 
 type ContactInfo = { email: string; phone: string; location: string };
 const DEFAULT: ContactInfo = { email: "hello@portfolio.com", phone: "+1 (555) 123-4567", location: "New York, USA" };
@@ -42,6 +43,11 @@ export default function Contact() {
       toast.error("Could not send. Please try again.");
       return;
     }
+    sendWhatsAppNotification({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      message: parsed.data.message,
+    });
     toast.success("Message sent! I'll get back to you soon.");
     (e.target as HTMLFormElement).reset();
   };
