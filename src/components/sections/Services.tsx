@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import * as Icons from "lucide-react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 type Service = { id: string; icon: string; title: string; description: string };
+
+function routeForTitle(title: string): string | null {
+  const t = title.toLowerCase();
+  if (t.includes("digital") || t.includes("marketing")) return "/digitalmarketingservice";
+  if (t.includes("ai") || t.includes("automation")) return "/aiautomation";
+  if (t.includes("web") || t.includes("dev")) return "/webdev";
+  return null;
+}
 
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
@@ -38,6 +47,9 @@ export default function Services() {
         <div className="grid md:grid-cols-3 gap-6">
           {services.map((s, i) => {
             const Icon = (Icons as any)[s.icon] ?? Sparkles;
+            const route = routeForTitle(s.title);
+            const Wrapper: any = route ? Link : "div";
+            const wrapperProps: any = route ? { to: route } : {};
             return (
               <motion.div
                 key={s.id}
@@ -48,11 +60,20 @@ export default function Services() {
                 whileHover={{ y: -8 }}
                 className="glass-strong rounded-3xl p-8 glow-border group transition-all hover:shadow-neon"
               >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform neon-glow">
-                  <Icon className="h-7 w-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{s.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{s.description}</p>
+                <Wrapper {...wrapperProps} className="block h-full">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform neon-glow">
+                      <Icon className="h-7 w-7 text-white" />
+                    </div>
+                    {route && (
+                      <div className="w-9 h-9 rounded-full glass flex items-center justify-center group-hover:rotate-45 transition-transform">
+                        <ArrowUpRight className="h-4 w-4" />
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{s.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{s.description}</p>
+                </Wrapper>
               </motion.div>
             );
           })}
