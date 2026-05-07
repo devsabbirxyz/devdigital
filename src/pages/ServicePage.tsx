@@ -11,8 +11,9 @@ import WhatsAppButton from "@/components/site/WhatsAppButton";
 type Page = { slug: string; title: string; description: string; image_url: string | null; floating_icons: string[] };
 type CardT = { id: string; title: string; description: string; image_url: string | null; price: string | null };
 
-export default function ServicePage() {
-  const { slug } = useParams();
+export default function ServicePage({ forcedSlug }: { forcedSlug?: string } = {}) {
+  const params = useParams();
+  const slug = forcedSlug ?? params.slug;
   const navigate = useNavigate();
   const [page, setPage] = useState<Page | null>(null);
   const [cards, setCards] = useState<CardT[]>([]);

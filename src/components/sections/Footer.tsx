@@ -71,9 +71,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-sm tracking-wider">SERVICES</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-foreground transition">Digital Marketing</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-foreground transition">Web Development</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-foreground transition">AI Automation</button></li>
+              <li><Link to="/digitalmarketingservice" className="hover:text-foreground transition">Digital Marketing</Link></li>
+              <li><Link to="/webdev" className="hover:text-foreground transition">Web Development</Link></li>
+              <li><Link to="/aiautomation" className="hover:text-foreground transition">AI Automation</Link></li>
             </ul>
           </div>
 
