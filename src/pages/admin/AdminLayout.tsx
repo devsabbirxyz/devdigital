@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
   Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase,
@@ -7,26 +7,46 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const NAV = [
-  { to: "/admin", end: true, label: "Dashboard", icon: LayoutDashboard },
-  { to: "/admin/navigation", label: "Navigation", icon: Compass },
-  { to: "/admin/hero", label: "Hero Section", icon: ImageIcon },
-  { to: "/admin/about", label: "About", icon: User },
-  { to: "/admin/services", label: "Services", icon: Sparkles },
-  { to: "/admin/projects", label: "Projects", icon: FolderKanban },
-  { to: "/admin/pricing", label: "Pricing", icon: DollarSign },
-  { to: "/admin/blog", label: "Blog", icon: Newspaper },
-  { to: "/admin/contact", label: "Contact Info", icon: Phone },
-  { to: "/admin/submissions", label: "Submissions", icon: Mail },
-  { to: "/admin/footer", label: "Footer", icon: Settings },
-  { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle },
-  { to: "/admin/intro-video", label: "Intro Video", icon: Video },
-  { to: "/admin/service-pages", label: "Service Pages", icon: Briefcase },
-  { to: "/admin/users", label: "Admin Users", icon: Users },
+import Dashboard from "./Dashboard";
+import Navigation from "./Navigation";
+import HeroAdmin from "./HeroAdmin";
+import AboutAdmin from "./About";
+import ServicesAdmin from "./Services";
+import ProjectsAdmin from "./ProjectsAdmin";
+import PricingAdmin from "./PricingAdmin";
+import ContactInfoAdmin from "./ContactInfo";
+import Submissions from "./Submissions";
+import FooterAdmin from "./FooterAdmin";
+import WhatsAppAdmin from "./WhatsAppAdmin";
+import IntroVideoAdmin from "./IntroVideoAdmin";
+import AdminUsers from "./AdminUsers";
+import BlogAdmin from "./BlogAdmin";
+import ServicePagesAdmin from "./ServicePagesAdmin";
+
+const TABS = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
+  { id: "navigation", label: "Navigation", icon: Compass, Component: Navigation },
+  { id: "hero", label: "Hero Section", icon: ImageIcon, Component: HeroAdmin },
+  { id: "about", label: "About", icon: User, Component: AboutAdmin },
+  { id: "services", label: "Services", icon: Sparkles, Component: ServicesAdmin },
+  { id: "projects", label: "Projects", icon: FolderKanban, Component: ProjectsAdmin },
+  { id: "pricing", label: "Pricing", icon: DollarSign, Component: PricingAdmin },
+  { id: "blog", label: "Blog", icon: Newspaper, Component: BlogAdmin },
+  { id: "contact", label: "Contact Info", icon: Phone, Component: ContactInfoAdmin },
+  { id: "submissions", label: "Submissions", icon: Mail, Component: Submissions },
+  { id: "footer", label: "Footer", icon: Settings, Component: FooterAdmin },
+  { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, Component: WhatsAppAdmin },
+  { id: "intro-video", label: "Intro Video", icon: Video, Component: IntroVideoAdmin },
+  { id: "service-pages", label: "Service Pages", icon: Briefcase, Component: ServicePagesAdmin },
+  { id: "users", label: "Admin Users", icon: Users, Component: AdminUsers },
 ];
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+  const activeId = params.get("tab") ?? "dashboard";
+  const Active = TABS.find((t) => t.id === activeId)?.Component ?? Dashboard;
+
   const [email, setEmail] = useState("");
   const [checking, setChecking] = useState(true);
   const [allowed, setAllowed] = useState(false);
@@ -36,19 +56,12 @@ export default function AdminLayout() {
     document.title = "Admin — Portfolio";
     const init = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
+      if (!session) { navigate("/auth"); return; }
       setEmail(session.user.email ?? "");
-      const { data: roles, error: roleError } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id)
-        .eq("role", "admin")
-        .limit(1);
-
-      if (roleError || !roles?.length) {
+      const { data: roles, error } = await supabase
+        .from("user_roles").select("role")
+        .eq("user_id", session.user.id).eq("role", "admin").limit(1);
+      if (error || !roles?.length) {
         toast.error("Admin access required");
         await supabase.auth.signOut();
         navigate("/auth");
@@ -70,6 +83,11 @@ export default function AdminLayout() {
     navigate("/");
   };
 
+  const selectTab = (id: string) => {
+    setParams(id === "dashboard" ? {} : { tab: id });
+    setOpen(false);
+  };
+
   if (checking || !allowed) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -80,7 +98,6 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen flex bg-background">
-      {/* Sidebar */}
       <aside
         className={`fixed lg:sticky top-0 left-0 h-screen w-72 z-40 transform transition-transform lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
@@ -97,47 +114,36 @@ export default function AdminLayout() {
                 <p className="text-[10px] text-muted-foreground truncate max-w-[150px]">{email}</p>
               </div>
             </Link>
-            <button
-              onClick={() => setOpen(false)}
-              className="lg:hidden p-2 rounded-lg hover:bg-white/5"
-              aria-label="Close menu"
-            >
+            <button onClick={() => setOpen(false)} className="lg:hidden p-2 rounded-lg hover:bg-white/5" aria-label="Close menu">
               <X className="h-5 w-5" />
             </button>
           </div>
 
           <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-            {NAV.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            {TABS.map((t) => {
+              const isActive = t.id === activeId;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => selectTab(t.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left ${
                     isActive
                       ? "bg-gradient-primary text-white shadow-glow-soft"
                       : "text-foreground/70 hover:text-foreground hover:bg-white/5"
-                  }`
-                }
-              >
-                <item.icon className="h-4 w-4 flex-shrink-0" />
-                {item.label}
-              </NavLink>
-            ))}
+                  }`}
+                >
+                  <t.icon className="h-4 w-4 flex-shrink-0" />
+                  {t.label}
+                </button>
+              );
+            })}
           </nav>
 
           <div className="p-3 border-t border-border/50 space-y-1">
-            <Link
-              to="/"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-white/5 transition"
-            >
+            <Link to="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-white/5 transition">
               <Compass className="h-4 w-4" /> View Site
             </Link>
-            <button
-              onClick={signOut}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition"
-            >
+            <button onClick={signOut} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition">
               <LogOut className="h-4 w-4" /> Sign Out
             </button>
           </div>
@@ -145,20 +151,12 @@ export default function AdminLayout() {
       </aside>
 
       {open && (
-        <div
-          className="fixed inset-0 z-30 bg-background/70 backdrop-blur-sm lg:hidden"
-          onClick={() => setOpen(false)}
-        />
+        <div className="fixed inset-0 z-30 bg-background/70 backdrop-blur-sm lg:hidden" onClick={() => setOpen(false)} />
       )}
 
-      {/* Main */}
       <div className="flex-1 min-w-0">
         <header className="lg:hidden sticky top-0 z-20 glass-strong border-b border-border/50 px-4 py-3 flex items-center justify-between">
-          <button
-            onClick={() => setOpen(true)}
-            className="p-2 rounded-lg hover:bg-white/5"
-            aria-label="Open menu"
-          >
+          <button onClick={() => setOpen(true)} className="p-2 rounded-lg hover:bg-white/5" aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>
           <span className="font-display font-bold tracking-wider text-sm">ADMIN</span>
@@ -166,7 +164,7 @@ export default function AdminLayout() {
         </header>
 
         <main className="p-5 md:p-8 max-w-6xl">
-          <Outlet />
+          <Active />
         </main>
       </div>
     </div>
