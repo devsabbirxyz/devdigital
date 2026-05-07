@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { sendWhatsAppNotification } from "@/lib/whatsappNotify";
+import { sendFormsubmit } from "@/lib/formsubmit";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -51,6 +52,13 @@ export default function ContactPopup({
       return;
     }
     sendWhatsAppNotification({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: parsed.data.phone || null,
+      message: parsed.data.message,
+      plan: plan ?? null,
+    });
+    sendFormsubmit({
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone || null,
