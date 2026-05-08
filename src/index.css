@@ -206,3 +206,10 @@
   100% { transform: rotate(360deg) translateX(var(--r, 120px)) rotate(-360deg); }
 }
 .animate-orbit { animation: orbit var(--speed, 14s) linear infinite; }
+
+/* Vertical marquee for mobile testimonials */
+@keyframes marquee-up {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.animate-marquee-up { animation: marquee-up var(--marquee-speed, 25s) linear infinite; }
