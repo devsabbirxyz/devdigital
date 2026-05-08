@@ -56,9 +56,17 @@ function FeedbackCard({
 }) {
   return (
     <div
-      className={`relative glass-strong rounded-3xl p-6 md:p-8 ${
+      className={`relative glass-strong rounded-3xl p-6 md:p-8 backdrop-blur-2xl ${
         active ? "neon-glow ring-1 ring-primary/40" : ""
       } ${className}`}
+      style={
+        active
+          ? {
+              boxShadow:
+                "0 0 60px hsl(271 91% 65% / 0.45), 0 0 120px hsl(271 91% 65% / 0.25)",
+            }
+          : undefined
+      }
     >
       <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/30" />
       <div className="flex items-center gap-3 mb-4">
@@ -100,11 +108,10 @@ export default function Testimonials() {
 
   if (items.length === 0) return null;
 
-  const prev = (active - 1 + desktop.length) % desktop.length;
-  const next = (active + 1) % desktop.length;
-
-  // For mobile marquee, duplicate list for seamless loop
-  const marquee = [...mobile, ...mobile];
+  const prev2 = desktop.length ? (active - 2 + desktop.length) % desktop.length : 0;
+  const prev = desktop.length ? (active - 1 + desktop.length) % desktop.length : 0;
+  const next = desktop.length ? (active + 1) % desktop.length : 0;
+  const next2 = desktop.length ? (active + 2) % desktop.length : 0;
 
   return (
     <section id="testimonials" className="relative py-24 overflow-hidden">
@@ -128,77 +135,69 @@ export default function Testimonials() {
           </h2>
         </motion.div>
 
-        {/* Desktop: 3D carousel */}
+        {/* Desktop: depth carousel — slides right→left */}
         {desktop.length > 0 && (
-          <div className="hidden md:block relative h-[360px] [perspective:1400px]">
-            <AnimatePresence initial={false}>
-              {/* Back-left */}
-              {desktop.length > 2 && (
-                <motion.div
-                  key={`prev-${desktop[prev].id}`}
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 0.4,
-                    x: -360,
-                    scale: 0.8,
-                    filter: "blur(4px)",
-                    rotateY: 25,
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] z-10"
-                >
-                  <FeedbackCard t={desktop[prev]} />
-                </motion.div>
-              )}
-
-              {/* Active */}
+          <div className="hidden md:block relative h-[400px] [perspective:1600px]">
+            {/* Far back-left */}
+            {desktop.length > 4 && (
               <motion.div
-                key={`active-${desktop[active].id}`}
-                initial={{ opacity: 0, scale: 0.9, y: 30 }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                  scale: 1,
-                  filter: "blur(0px)",
-                  rotateY: 0,
-                  y: [0, -8, 0],
-                }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{
-                  duration: 0.7,
-                  ease: "easeOut",
-                  y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                }}
-                whileHover={{ scale: 1.03 }}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[440px] z-30"
+                key={`p2-${desktop[prev2].id}`}
+                animate={{ opacity: 0.25, x: -520, scale: 0.65, filter: "blur(6px)", rotateY: 30 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] z-0"
+              >
+                <FeedbackCard t={desktop[prev2]} />
+              </motion.div>
+            )}
+            {/* Back-left */}
+            {desktop.length > 2 && (
+              <motion.div
+                key={`p-${desktop[prev].id}`}
+                animate={{ opacity: 0.5, x: -300, scale: 0.82, filter: "blur(3px)", rotateY: 22 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] z-10"
+              >
+                <FeedbackCard t={desktop[prev]} />
+              </motion.div>
+            )}
+            {/* Active center — slides in from right */}
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.div
+                key={`a-${desktop[active].id}`}
+                initial={{ opacity: 0, x: 320, scale: 0.85 }}
+                animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)", rotateY: 0 }}
+                exit={{ opacity: 0, x: -320, scale: 0.85 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] z-30"
               >
                 <FeedbackCard t={desktop[active]} active />
               </motion.div>
-
-              {/* Back-right */}
-              {desktop.length > 1 && (
-                <motion.div
-                  key={`next-${desktop[next].id}`}
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 0.4,
-                    x: 360,
-                    scale: 0.8,
-                    filter: "blur(4px)",
-                    rotateY: -25,
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] z-10"
-                >
-                  <FeedbackCard t={desktop[next]} />
-                </motion.div>
-              )}
             </AnimatePresence>
+            {/* Back-right */}
+            {desktop.length > 1 && (
+              <motion.div
+                key={`n-${desktop[next].id}`}
+                animate={{ opacity: 0.5, x: 300, scale: 0.82, filter: "blur(3px)", rotateY: -22 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] z-10"
+              >
+                <FeedbackCard t={desktop[next]} />
+              </motion.div>
+            )}
+            {/* Far back-right */}
+            {desktop.length > 3 && (
+              <motion.div
+                key={`n2-${desktop[next2].id}`}
+                animate={{ opacity: 0.25, x: 520, scale: 0.65, filter: "blur(6px)", rotateY: -30 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] z-0"
+              >
+                <FeedbackCard t={desktop[next2]} />
+              </motion.div>
+            )}
 
             {/* Dots */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
               {desktop.map((_, i) => (
                 <button
                   key={i}
@@ -213,23 +212,17 @@ export default function Testimonials() {
           </div>
         )}
 
-        {/* Mobile: vertical marquee */}
+        {/* Mobile: horizontal snap scroll */}
         {mobile.length > 0 && (
-          <div
-            className="md:hidden relative h-[480px] overflow-hidden"
-            style={{
-              maskImage:
-                "linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%)",
-            }}
-          >
-            <div
-              className="absolute inset-x-0 top-0 flex flex-col gap-4 animate-marquee-up"
-              style={{ ["--marquee-speed" as any]: `${Math.max(20, mobile.length * 6)}s` }}
-            >
-              {marquee.map((t, i) => (
-                <FeedbackCard key={`${t.id}-${i}`} t={t} />
+          <div className="md:hidden -mx-4 px-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+            <div className="flex gap-4 pb-4">
+              {mobile.map((t) => (
+                <div
+                  key={t.id}
+                  className="snap-center shrink-0 w-[82%] first:ml-2 last:mr-2"
+                >
+                  <FeedbackCard t={t} active />
+                </div>
               ))}
             </div>
           </div>
