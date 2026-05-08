@@ -117,11 +117,10 @@ export default function Hero() {
           {/* Center back-light glow behind active card */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] md:w-[520px] h-[340px] md:h-[520px] rounded-full animate-pulse-glow"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] md:w-[640px] h-[420px] md:h-[640px] rounded-full blur-3xl animate-pulse-glow"
             style={{
               background:
-                "radial-gradient(circle, hsl(271 91% 65% / 0.55) 0%, hsl(271 91% 65% / 0.25) 35%, transparent 70%)",
-              filter: "blur(40px)",
+                "radial-gradient(circle, #a855f7cc 0%, #a855f799 30%, #a855f733 55%, transparent 75%)",
               zIndex: 0,
             }}
           />
