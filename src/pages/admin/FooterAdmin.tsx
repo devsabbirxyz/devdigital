@@ -17,7 +17,7 @@ const DEFAULT: FooterData = {
   phone: "+1 (555) 123-4567",
   email: "hello@portfolio.com",
   location: "New York, USA",
-  copyright: "© 2026 Portfolio. All rights reserved.",
+  copyright: "© 2026 Portfolio. All Rights Reserved.",
   socials: [
     { platform: "facebook", url: "" },
     { platform: "instagram", url: "" },

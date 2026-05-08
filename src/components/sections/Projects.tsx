@@ -50,7 +50,7 @@ export default function Projects({ all = false }: { all?: boolean }) {
           )}
         </motion.div>
 
-        <div className={`grid grid-cols-2 ${all ? "sm:grid-cols-2 lg:grid-cols-3" : "lg:grid-cols-4"} gap-4 md:gap-5`}>
+        <div className={`grid grid-cols-2 ${all ? "sm:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2 lg:grid-cols-4"} gap-3 md:gap-4`}>
           {(all ? projects : projects.slice(0, 8)).map((p, i) => {
             const img = p.image_url || FALLBACK[i % FALLBACK.length];
             return (
@@ -61,7 +61,7 @@ export default function Projects({ all = false }: { all?: boolean }) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: (i % 4) * 0.08 }}
                 className={`group relative aspect-[4/3] rounded-3xl overflow-hidden glass-strong cursor-pointer ${
-                  !all && i >= 4 ? "hidden lg:block" : ""
+                  !all && i >= 4 ? "hidden md:block" : ""
                 }`}
               >
                 <img

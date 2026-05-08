@@ -114,6 +114,17 @@ export default function Hero() {
 
         {/* Carousel */}
         <div className="relative mt-2 md:mt-4 h-[340px] md:h-[400px] flex items-center justify-center [perspective:1200px]">
+          {/* Center back-light glow behind active card */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] md:w-[520px] h-[340px] md:h-[520px] rounded-full animate-pulse-glow"
+            style={{
+              background:
+                "radial-gradient(circle, hsl(271 91% 65% / 0.55) 0%, hsl(271 91% 65% / 0.25) 35%, transparent 70%)",
+              filter: "blur(40px)",
+              zIndex: 0,
+            }}
+          />
           {images.map((src, i) => {
             const style = getStyle(i);
             return (

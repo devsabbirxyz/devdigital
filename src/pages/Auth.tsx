@@ -12,7 +12,6 @@ const schema = z.object({
 
 export default function Auth() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -35,31 +34,16 @@ export default function Auth() {
       return;
     }
     setLoading(true);
-    if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({
-        email: parsed.data.email,
-        password: parsed.data.password,
-        options: { emailRedirectTo: `${window.location.origin}/admin` },
-      });
-      setLoading(false);
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-      toast.success("Account created. Check your email to confirm, then sign in.");
-      setMode("signin");
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: parsed.data.email,
-        password: parsed.data.password,
-      });
-      setLoading(false);
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-      toast.success("Welcome back!");
+    const { error } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
     }
+    toast.success("Welcome back!");
   };
 
   return (
@@ -72,12 +56,8 @@ export default function Auth() {
           </div>
           <span className="font-display font-bold text-xl tracking-wider">PORTFOLIO</span>
         </Link>
-        <h1 className="font-display text-3xl font-bold text-center mb-2">
-          {mode === "signin" ? "Admin Login" : "Create Admin"}
-        </h1>
-        <p className="text-center text-sm text-muted-foreground mb-6">
-          {mode === "signin" ? "Sign in to manage your site" : "Set up your admin account"}
-        </p>
+        <h1 className="font-display text-3xl font-bold text-center mb-2">Admin Login</h1>
+        <p className="text-center text-sm text-muted-foreground mb-6">Sign in to manage your site</p>
 
         <form onSubmit={onSubmit} className="space-y-4">
           <input
@@ -102,18 +82,11 @@ export default function Auth() {
             className="w-full bg-gradient-primary text-white font-semibold py-3 rounded-xl neon-glow hover:scale-[1.02] transition-transform disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            {mode === "signin" ? "Sign In" : "Sign Up"}
+            Sign In
           </button>
         </form>
 
-        <button
-          onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="mt-4 w-full text-sm text-muted-foreground hover:text-foreground transition"
-        >
-          {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
-        </button>
-
-        <Link to="/" className="block mt-2 text-center text-xs text-muted-foreground hover:text-foreground transition">
+        <Link to="/" className="block mt-4 text-center text-xs text-muted-foreground hover:text-foreground transition">
           ← Back to site
         </Link>
       </div>
