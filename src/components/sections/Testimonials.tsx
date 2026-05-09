@@ -165,10 +165,11 @@ export default function Testimonials() {
               <motion.div
                 key={`a-${desktop[active].id}`}
                 initial={{ opacity: 0, x: 320, scale: 0.85 }}
-                animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)", rotateY: 0 }}
+                animate={{ opacity: 1, x: "-50%", scale: 1, filter: "blur(0px)", rotateY: 0 }}
                 exit={{ opacity: 0, x: -320, scale: 0.85 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] z-30"
+                style={{ translateY: "-50%" }}
+                className="absolute left-1/2 top-1/2 w-[460px] z-30"
               >
                 <FeedbackCard t={desktop[active]} active />
               </motion.div>
