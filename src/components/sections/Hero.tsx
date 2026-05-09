@@ -114,14 +114,25 @@ export default function Hero() {
 
         {/* Carousel */}
         <div className="relative mt-2 md:mt-4 h-[340px] md:h-[400px] flex items-center justify-center [perspective:1200px]">
-          {/* Center back-light glow behind active card */}
+          {/* Outer halo — wide soft purple wash behind everything */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] md:w-[640px] h-[420px] md:h-[640px] rounded-full blur-3xl animate-pulse-glow"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] md:w-[720px] h-[460px] md:h-[720px] rounded-full blur-3xl animate-pulse-glow"
             style={{
               background:
-                "radial-gradient(circle, #a855f7cc 0%, #a855f799 30%, #a855f733 55%, transparent 75%)",
+                "radial-gradient(circle, #a855f7cc 0%, #a855f799 28%, #a855f744 55%, transparent 78%)",
               zIndex: 0,
+            }}
+          />
+          {/* Inner core — bright lamp bulb, sits in front of side cards but behind the active card */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] md:w-[360px] h-[260px] md:h-[360px] rounded-full blur-2xl animate-pulse-glow"
+            style={{
+              background:
+                "radial-gradient(circle, #f5d0fe 0%, #d8b4fe 18%, #a855f7 45%, #a855f766 70%, transparent 100%)",
+              zIndex: 5,
+              animationDuration: "2.6s",
             }}
           />
           {images.map((src, i) => {
@@ -131,8 +142,14 @@ export default function Hero() {
                 key={i}
                 animate={style}
                 transition={{ type: "spring", stiffness: 80, damping: 18 }}
-              className="absolute w-36 md:w-48 h-52 md:h-72 rounded-3xl overflow-hidden glass-strong"
-                style={{ zIndex: style.zIndex }}
+                className="absolute w-36 md:w-48 h-52 md:h-72 rounded-3xl overflow-hidden glass-strong"
+                style={{
+                  zIndex: i === active ? 20 : style.zIndex,
+                  boxShadow:
+                    i === active
+                      ? "0 0 80px #a855f7cc, 0 0 160px #a855f766"
+                      : undefined,
+                }}
               >
                 <img
                   src={src}

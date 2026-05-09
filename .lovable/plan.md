@@ -1,21 +1,31 @@
-## Testimonials Section Fixes
+## Hero Carousel — Stronger "Light Bulb" Glow Behind Center Image
 
-### 1. Mobile — Vertical Auto-Scroll (like reference image)
-Replace current horizontal snap-scroll with a **vertical upward marquee animation**:
-- Stack all mobile testimonial cards vertically (pill-shaped cards with avatar left + name/stars/feedback right, matching the uploaded reference)
-- Cards slowly scroll upward continuously (CSS `animate-marquee-up`, ~25-30s loop)
-- Duplicate the list so the loop is seamless
-- Container has fixed height (~500px) with `overflow-hidden` and top/bottom fade masks
-- Each card uses rounded-full pill shape with neon purple glow on the active/centered one
+### Goal
+Make the neon purple glow behind the **center/active image** in the hero carousel much more visible — like a light bulb shining from behind the active card.
 
-### 2. Desktop — Re-center the Carousel
-The active center card is currently shifted slightly to one side. Fix by:
-- Ensuring the active card is positioned exactly at center (`left-1/2 -translate-x-1/2` with `x: 0`)
-- Verify the perspective container has symmetric padding so left/right depth cards are balanced
-- Active card sits perfectly in the middle horizontally
+### Current Issue
+A glow already exists, but it sits at `zIndex: 0` while side cards (with their own zIndex from `getStyle`) likely cover or wash it out. The image itself is opaque, so the glow only shows as a halo around the card edges and feels weak.
 
-### Files to Edit
-- `src/components/sections/Testimonials.tsx` — rewrite mobile block to vertical marquee; verify desktop centering
-- `src/index.css` — confirm `animate-marquee-up` keyframe exists (already added previously); add fade mask if needed
+### Changes (Hero.tsx only)
 
-No database, admin, or other section changes.
+1. **Move the glow to follow the active card position**
+   - Keep it centered (active card is centered) but layer it correctly so the halo bleeds out around all four edges of the active card.
+
+2. **Make the glow stronger and more "lamp-like"**
+   - Add a second tighter inner glow on top of the existing wide one:
+     - Inner core: smaller (~280px) bright purple radial, less blur (`blur-2xl`), higher opacity
+     - Outer halo: existing wide 640px soft radial (kept)
+   - Bump core color stops to use full `#a855f7` and a hot inner white-purple highlight (`#d8b4fe`) at center for a "bulb" feel.
+
+3. **Add a subtle pulsing/breathing animation** (already using `animate-pulse-glow` — keep, but apply slightly different timing to inner vs outer for a layered shimmer).
+
+4. **Z-index fix**
+   - Outer halo stays at `z-0` (behind everything)
+   - Add an additional **front rim glow** rendered as an absolutely positioned element *just behind* the active card (z-index between back cards and active card) so light visibly spills around the active image edges in front of side cards too.
+
+5. **Optional touch**: extend the active card's own ring with a soft outer `box-shadow: 0 0 80px #a855f7` so the card itself appears lit from behind.
+
+### Files
+- `src/components/sections/Hero.tsx` — only this file changes.
+
+No DB, no admin, no other sections affected.
