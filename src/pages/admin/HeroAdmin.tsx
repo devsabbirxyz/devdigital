@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Trash2, Upload } from "lucide-react";
+import { Trash2, Upload, Plus, Link2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PageHeader, Card, Field, inputCls, GhostBtn, uploadToBucket } from "./_ui";
+import { PageHeader, Card, Field, inputCls, uploadToBucket } from "./_ui";
 import { useSettingForm, SaveBar } from "./SettingsForm";
 
 type HeroData = { title: string; description: string; primary_cta: string; secondary_cta: string };
@@ -18,7 +18,7 @@ type HeroImage = { id: string; image_url: string; sort_order: number };
 export default function HeroAdmin() {
   const { data, setData, loading, saving, save } = useSettingForm<HeroData>("hero", DEFAULT);
   const [images, setImages] = useState<HeroImage[]>([]);
-  const [uploading, setUploading] = useState(false);
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
 
   const loadImages = async () => {
     const { data } = await supabase.from("hero_images").select("*").order("sort_order");
@@ -26,21 +26,31 @@ export default function HeroAdmin() {
   };
   useEffect(() => { loadImages(); }, []);
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (!files.length) return;
-    setUploading(true);
-    for (const f of files) {
-      const url = await uploadToBucket(f, "hero");
-      if (!url) { toast.error(`Upload failed: ${f.name}`); continue; }
-      const next = images.length;
-      const { error } = await supabase.from("hero_images").insert({ image_url: url, sort_order: next });
-      if (error) toast.error(error.message);
-    }
-    setUploading(false);
-    e.target.value = "";
+  const addRow = async () => {
+    const { error } = await supabase.from("hero_images").insert({ image_url: "", sort_order: images.length });
+    if (error) return toast.error(error.message);
     await loadImages();
-    toast.success("Images uploaded");
+  };
+
+  const updateUrl = async (id: string, image_url: string) => {
+    setImages((prev) => prev.map((i) => (i.id === id ? { ...i, image_url } : i)));
+  };
+
+  const saveUrl = async (id: string, image_url: string) => {
+    const { error } = await supabase.from("hero_images").update({ image_url }).eq("id", id);
+    if (error) toast.error(error.message);
+    else toast.success("Saved");
+  };
+
+  const handleRowUpload = async (id: string, file: File) => {
+    setUploadingId(id);
+    const url = await uploadToBucket(file, "hero");
+    setUploadingId(null);
+    if (!url) return toast.error("Upload failed");
+    const { error } = await supabase.from("hero_images").update({ image_url: url }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setImages((prev) => prev.map((i) => (i.id === id ? { ...i, image_url: url } : i)));
+    toast.success("Image uploaded");
   };
 
   const removeImage = async (id: string) => {
@@ -76,26 +86,64 @@ export default function HeroAdmin() {
         <div className="flex items-end justify-between mb-4">
           <div>
             <h3 className="font-display font-semibold text-lg">Carousel Images</h3>
-            <p className="text-xs text-muted-foreground">Recommended: 7 portrait images. Fallback assets are used if empty.</p>
+            <p className="text-xs text-muted-foreground">Recommended: 7 portrait images. Paste a URL or upload from device per row.</p>
           </div>
-          <label className="cursor-pointer bg-gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl neon-glow hover:scale-[1.02] transition-transform inline-flex items-center gap-2 text-sm">
-            <Upload className="h-4 w-4" /> {uploading ? "Uploading…" : "Upload"}
-            <input type="file" accept="image/*" multiple onChange={handleUpload} disabled={uploading} className="hidden" />
-          </label>
+          <button
+            onClick={addRow}
+            className="bg-gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl neon-glow hover:scale-[1.02] transition-transform inline-flex items-center gap-2 text-sm"
+          >
+            <Plus className="h-4 w-4" /> Add Image
+          </button>
         </div>
         {images.length === 0 ? (
-          <p className="text-muted-foreground text-sm">No custom images yet.</p>
+          <p className="text-muted-foreground text-sm">No custom images yet. Click "Add Image" to start.</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-            {images.map((img) => (
-              <div key={img.id} className="relative aspect-[3/4] rounded-xl overflow-hidden glass group">
-                <img src={img.image_url} alt="" className="w-full h-full object-cover" />
+          <div className="space-y-3">
+            {images.map((img, idx) => (
+              <div key={img.id} className="flex items-center gap-3 glass rounded-xl p-3">
+                <div className="w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-muted/30 flex items-center justify-center">
+                  {img.image_url ? (
+                    <img src={img.image_url} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-[10px] text-muted-foreground">No image</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="text-xs font-medium text-muted-foreground">Image {idx + 1}</div>
+                  <div className="flex gap-2">
+                    <div className="flex-1 relative">
+                      <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                      <input
+                        value={img.image_url}
+                        onChange={(e) => updateUrl(img.id, e.target.value)}
+                        onBlur={(e) => saveUrl(img.id, e.target.value)}
+                        placeholder="Paste image URL…"
+                        className={inputCls + " pl-9"}
+                      />
+                    </div>
+                    <label className="cursor-pointer glass rounded-xl px-3 py-2 text-xs font-medium hover:bg-white/5 transition inline-flex items-center gap-1.5 flex-shrink-0">
+                      <Upload className="h-3.5 w-3.5" />
+                      {uploadingId === img.id ? "Uploading…" : "Upload"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploadingId === img.id}
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleRowUpload(img.id, f);
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
                 <button
                   onClick={() => removeImage(img.id)}
-                  className="absolute top-1 right-1 bg-destructive/90 text-destructive-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition"
+                  className="p-2 rounded-lg hover:bg-destructive/10 text-destructive flex-shrink-0"
                   aria-label="Remove"
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
+                  <Trash2 className="h-4 w-4" />
                 </button>
               </div>
             ))}

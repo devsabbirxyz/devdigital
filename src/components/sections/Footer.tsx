@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Linkedin, MessageCircle, Sparkles } from "lucide-react";
+import { Facebook, Instagram, Linkedin, MessageCircle, Sparkles, Lock } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Link } from "react-router-dom";
 import { scrollToSection } from "@/lib/scroll";
@@ -66,6 +66,14 @@ export default function Footer() {
                 );
               })}
             </div>
+            <Link
+              to="/admin"
+              className="mt-4 inline-flex items-center gap-1.5 glass rounded-full px-3 py-1 text-[11px] font-medium opacity-30 hover:opacity-100 hover:bg-primary/10 transition-all w-fit"
+              aria-label="Admin login"
+            >
+              <Lock className="h-3 w-3" />
+              Admin
+            </Link>
           </div>
 
           <div>

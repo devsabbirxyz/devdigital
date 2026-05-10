@@ -65,7 +65,7 @@ export default function ContactPopup({
       message: parsed.data.message,
       plan: plan ?? null,
     });
-    toast.success("Thanks! I'll get back to you shortly.");
+    toast.success("✓ Message sent successfully!");
     onOpenChange(false);
     (e.target as HTMLFormElement).reset();
   };

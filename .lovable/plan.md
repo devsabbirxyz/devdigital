@@ -1,31 +1,54 @@
-## Hero Carousel — Stronger "Light Bulb" Glow Behind Center Image
+## Plan — Site fixes & improvements
 
-### Goal
-Make the neon purple glow behind the **center/active image** in the hero carousel much more visible — like a light bulb shining from behind the active card.
+### 1. Site title & favicon
+- `index.html`: change `<title>` to **"Your All Solution Is Here"** and update meta og:title / twitter:title to match.
+- Favicon: **apni logo image ta chat e upload korun** (PNG preferred). Ami `public/favicon.png` te copy korbo, `public/favicon.ico` delete korbo, ar `<link rel="icon" href="/favicon.png" type="image/png">` add korbo.
 
-### Current Issue
-A glow already exists, but it sits at `zIndex: 0` while side cards (with their own zIndex from `getStyle`) likely cover or wash it out. The image itself is opaque, so the glow only shows as a halo around the card edges and feels weak.
+### 2. Hero carousel — URL + device upload (per image)
+Update `src/pages/admin/HeroAdmin.tsx`:
+- Existing `hero_images` table already supports per-image rows with `image_url` (text) and Supabase Storage upload to the `site-assets` bucket. We'll keep Supabase Storage (no base64).
+- Replace bulk uploader with **per-row editor** for each carousel image showing:
+  - URL text input (paste link)
+  - "Upload from device" file picker (uploads to `site-assets/hero/...`, fills the URL)
+  - Live thumbnail preview
+  - Delete + drag/sort order
+- Upload always wins if both used in same edit (overwrites URL field with uploaded URL).
 
-### Changes (Hero.tsx only)
+### 3. Admin button in Footer
+- `src/components/sections/Footer.tsx`: under social icons row, add a small low-opacity glass button labeled "Admin" → `Link to="/admin"`. Styled with `text-xs opacity-40 hover:opacity-100 glass px-3 py-1 rounded-full`.
 
-1. **Move the glow to follow the active card position**
-   - Keep it centered (active card is centered) but layer it correctly so the halo bleeds out around all four edges of the active card.
+### 4. Contact form fix
+- `src/components/site/ContactPopup.tsx` and main `Contact.tsx` form: keep current Supabase insert (works + powers Submissions tab) AND keep the existing `sendFormsubmit` helper to mirror submissions to formsubmit.co. Verify the helper points to `developersabbir.x@gmail.com` with `_subject`, `_captcha=false`, `_template=table`. Fix any current breakage (check `src/lib/formsubmit.ts`).
+- On success: sonner toast "✓ Message sent successfully!" + reset form fields.
+- Apply same flow to Pricing popup form.
 
-2. **Make the glow stronger and more "lamp-like"**
-   - Add a second tighter inner glow on top of the existing wide one:
-     - Inner core: smaller (~280px) bright purple radial, less blur (`blur-2xl`), higher opacity
-     - Outer halo: existing wide 640px soft radial (kept)
-   - Bump core color stops to use full `#a855f7` and a hot inner white-purple highlight (`#d8b4fe`) at center for a "bulb" feel.
+### 5. Submissions tab (admin login fix)
+- User reports cannot log in to `/admin`. Likely missing admin role for their account. Plan:
+  - Verify `user_roles` table — check if any admin exists. If user has signed up but is not admin, we'll insert their `user_id` as admin via a data update (need their email).
+  - The `assign_first_admin` trigger only assigns admin to the very first signup. If they signed up after someone else, they're stuck on `user` role.
+  - **Action needed from user:** confirm the email used to sign up at `/auth`. Ami sheta diye admin role assign kore debo.
+- Defensive cleanup in `src/pages/admin/Submissions.tsx`:
+  - Show "-" for null fields, empty state message, refresh on tab focus, already has delete button (kept).
 
-3. **Add a subtle pulsing/breathing animation** (already using `animate-pulse-glow` — keep, but apply slightly different timing to inner vs outer for a layered shimmer).
+### 6. Vercel routing
+- **Skip.** Apni Lovable e deploy korchen — SPA fallback already built in. `vercel.json` lagbe na. `BrowserRouter` already use hocche (`src/App.tsx`).
 
-4. **Z-index fix**
-   - Outer halo stays at `z-0` (behind everything)
-   - Add an additional **front rim glow** rendered as an absolutely positioned element *just behind* the active card (z-index between back cards and active card) so light visibly spills around the active image edges in front of side cards too.
+### 7. Speed optimization
+- `src/App.tsx`: convert non-home pages to `React.lazy` + `<Suspense fallback={...}>`:
+  - `AllProjects`, `Auth`, `AdminLayout`, `BlogPost`, `ServicePage`, `NotFound`
+  - Keep `Index` eager (homepage = LCP).
+- `vite.config.ts`: add `build.rollupOptions.output.manualChunks` splitting `react/react-dom/react-router-dom` (vendor), `framer-motion` (animations), Radix UI (ui). Set `chunkSizeWarningLimit: 1000`.
+- `index.html`: add `<link rel="preconnect">` for Google Fonts (gstatic + googleapis).
+- Add `loading="lazy"` and `decoding="async"` to below-the-fold `<img>` tags in `Projects`, `Blog`, `Testimonials`, `About`. Hero stays eager.
 
-5. **Optional touch**: extend the active card's own ring with a soft outer `box-shadow: 0 0 80px #a855f7` so the card itself appears lit from behind.
+### What I will NOT do
+- Will not store images as base64 (you chose Supabase Storage).
+- Will not add `vercel.json` (Lovable hosting).
+- Will not modify `supabase/client.ts` or `types.ts` (auto-generated).
+- Will not change DB schema — all tables already exist.
 
-### Files
-- `src/components/sections/Hero.tsx` — only this file changes.
+### Need from you before I start
+1. **Upload the logo image** in chat (for favicon).
+2. **Email used to sign up at `/auth`** so I can grant admin role for the Submissions tab.
 
-No DB, no admin, no other sections affected.
+Once you reply with those two, I'll implement everything in one pass.
