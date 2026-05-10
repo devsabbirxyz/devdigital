@@ -54,7 +54,7 @@ export default function Contact() {
       email: parsed.data.email,
       message: parsed.data.message,
     });
-    toast.success("Message sent! I'll get back to you soon.");
+    toast.success("✓ Message sent successfully!");
     (e.target as HTMLFormElement).reset();
   };
 
