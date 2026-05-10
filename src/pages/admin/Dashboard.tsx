@@ -27,10 +27,10 @@ export default function Dashboard() {
   }, []);
 
   const tiles = [
-    { label: "Projects", value: stats.projects, icon: FolderKanban, to: "/admin/projects" },
-    { label: "Services", value: stats.services, icon: Sparkles, to: "/admin/services" },
-    { label: "Pricing Plans", value: stats.plans, icon: DollarSign, to: "/admin/pricing" },
-    { label: "Submissions", value: stats.submissions, icon: Mail, to: "/admin/submissions", badge: stats.unread },
+    { label: "Projects", value: stats.projects, icon: FolderKanban, to: "/admin?tab=projects" },
+    { label: "Services", value: stats.services, icon: Sparkles, to: "/admin?tab=services" },
+    { label: "Pricing Plans", value: stats.plans, icon: DollarSign, to: "/admin?tab=pricing" },
+    { label: "Submissions", value: stats.submissions, icon: Mail, to: "/admin?tab=submissions", badge: stats.unread },
   ];
 
   return (
@@ -61,15 +61,15 @@ export default function Dashboard() {
       <Card>
         <h2 className="font-display font-semibold text-lg mb-4">Quick Actions</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <Link to="/admin/projects" className="glass rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition">
+          <Link to="/admin?tab=projects" className="glass rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition">
             <FolderKanban className="h-5 w-5 text-primary" />
             <span className="font-medium text-sm">Add a project</span>
           </Link>
-          <Link to="/admin/hero" className="glass rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition">
+          <Link to="/admin?tab=hero" className="glass rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition">
             <ImageIcon className="h-5 w-5 text-primary" />
             <span className="font-medium text-sm">Update hero</span>
           </Link>
-          <Link to="/admin/submissions" className="glass rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition">
+          <Link to="/admin?tab=submissions" className="glass rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition">
             <Mail className="h-5 w-5 text-primary" />
             <span className="font-medium text-sm">View submissions</span>
           </Link>
