@@ -14,6 +14,19 @@ import h6 from "@/assets/hero-6.jpg";
 import h7 from "@/assets/hero-7.jpg";
 
 const FALLBACK = [h1, h2, h3, h4, h5, h6, h7];
+const CACHE_KEY = "hero_images_v1";
+
+function readCache(): string[] | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr) && arr.length === 7 && arr.every((s) => typeof s === "string" && s)) {
+      return arr;
+    }
+  } catch {}
+  return null;
+}
 
 type HeroData = {
   title: string;
@@ -31,7 +44,7 @@ const DEFAULT: HeroData = {
 
 export default function Hero() {
   const { data } = useSiteSettings<HeroData>("hero", DEFAULT);
-  const [images, setImages] = useState<string[]>(FALLBACK);
+  const [images, setImages] = useState<string[]>(() => readCache() ?? FALLBACK);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -42,10 +55,27 @@ export default function Hero() {
         .order("sort_order");
       if (rows && rows.length === 7) {
         const urls = rows.map((r, i) => r.image_url || FALLBACK[i]);
-        setImages(urls);
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(urls)); } catch {}
+        // Only swap if actually different to avoid re-render flicker
+        setImages((prev) => (prev.every((u, i) => u === urls[i]) ? prev : urls));
       }
     })();
   }, []);
+
+  // Preload all hero images via <link rel="preload"> for instant render
+  useEffect(() => {
+    const links: HTMLLinkElement[] = [];
+    images.forEach((src, i) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = src;
+      if (i === 0) link.setAttribute("fetchpriority", "high");
+      document.head.appendChild(link);
+      links.push(link);
+    });
+    return () => { links.forEach((l) => l.remove()); };
+  }, [images]);
 
   useEffect(() => {
     const t = setInterval(() => setActive((i) => (i + 1) % images.length), 3000);
@@ -145,6 +175,9 @@ export default function Hero() {
                 className="absolute w-36 md:w-48 h-52 md:h-72 rounded-3xl overflow-hidden glass-strong"
                 style={{
                   zIndex: i === active ? 20 : style.zIndex,
+                  willChange: "transform, opacity",
+                  transform: "translateZ(0)",
+                  backfaceVisibility: "hidden",
                   boxShadow:
                     i === active
                       ? "0 0 80px #a855f7cc, 0 0 160px #a855f766"
@@ -154,7 +187,11 @@ export default function Hero() {
                 <img
                   src={src}
                   alt={`Showcase ${i + 1}`}
-                  loading={i === 0 ? "eager" : "lazy"}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority={i === active ? "high" : "low"}
+                  width={192}
+                  height={288}
                   className="w-full h-full object-cover"
                 />
                 {i === active && (
