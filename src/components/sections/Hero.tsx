@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { scrollToSection } from "@/lib/scroll";
 
-const CACHE_KEY = "hero_images_v2";
+const CACHE_KEY = "hero_images_v3";
 
 function readCache(): string[] | null {
   try {
@@ -35,9 +36,13 @@ const DEFAULT: HeroData = {
 
 export default function Hero() {
   const { data } = useSiteSettings<HeroData>("hero", DEFAULT);
+  const isMobile = useIsMobile();
   const [images, setImages] = useState<string[]>(() => readCache() ?? []);
   const [active, setActive] = useState(0);
-  const readyImages = useMemo(() => images.filter(Boolean).slice(0, 7), [images]);
+  const readyImages = useMemo(
+    () => images.filter(Boolean).slice(0, isMobile ? 5 : 7),
+    [images, isMobile]
+  );
   const shouldAnimate = readyImages.length > 1;
 
   useEffect(() => {
@@ -98,12 +103,12 @@ export default function Hero() {
     const pos = offset - center;
     const abs = Math.abs(pos);
     return {
-      x: pos * 96,
-      y: abs * 22,
-      rotate: pos * 8,
-      scale: pos === 0 ? 1.1 : 1 - abs * 0.12,
+      x: pos * (isMobile ? 72 : 96),
+      y: abs * (isMobile ? 14 : 22),
+      rotate: pos * (isMobile ? 5 : 8),
+      scale: pos === 0 ? 1.06 : 1 - abs * (isMobile ? 0.08 : 0.12),
       zIndex: 10 - abs,
-      opacity: abs > 3 ? 0 : 1 - abs * 0.18,
+      opacity: abs > (isMobile ? 2 : 3) ? 0 : 1 - abs * (isMobile ? 0.24 : 0.18),
     };
   };
 
