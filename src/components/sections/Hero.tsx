@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -37,6 +37,8 @@ export default function Hero() {
   const { data } = useSiteSettings<HeroData>("hero", DEFAULT);
   const [images, setImages] = useState<string[]>(() => readCache() ?? []);
   const [active, setActive] = useState(0);
+  const readyImages = useMemo(() => images.filter(Boolean).slice(0, 7), [images]);
+  const shouldAnimate = readyImages.length > 1;
 
   useEffect(() => {
     (async () => {
@@ -58,7 +60,7 @@ export default function Hero() {
   // Preload all hero images via <link rel="preload"> for instant render
   useEffect(() => {
     const links: HTMLLinkElement[] = [];
-    images.forEach((src, i) => {
+    readyImages.forEach((src, i) => {
       const link = document.createElement("link");
       link.rel = "preload";
       link.as = "image";
@@ -68,28 +70,40 @@ export default function Hero() {
       links.push(link);
     });
     return () => { links.forEach((l) => l.remove()); };
-  }, [images]);
+  }, [readyImages]);
 
   useEffect(() => {
-    const t = setInterval(() => setActive((i) => (i + 1) % images.length), 3000);
+    readyImages.forEach((src) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+    });
+  }, [readyImages]);
+
+  useEffect(() => {
+    if (!shouldAnimate) return;
+    const t = setInterval(() => setActive((i) => (i + 1) % readyImages.length), 4200);
     return () => clearInterval(t);
-  }, [images.length]);
+  }, [readyImages.length, shouldAnimate]);
+
+  useEffect(() => {
+    if (active >= readyImages.length) setActive(0);
+  }, [active, readyImages.length]);
 
   // arrange images in a fan: positions relative to center, dynamic by count
-  const n = images.length;
+  const n = readyImages.length;
   const center = Math.floor(n / 2);
   const getStyle = (i: number) => {
     const offset = ((i - active + n) % n);
     const pos = offset - center;
     const abs = Math.abs(pos);
     return {
-      x: pos * 110,
-      y: abs * 30,
+      x: pos * 96,
+      y: abs * 22,
       rotate: pos * 8,
       scale: pos === 0 ? 1.1 : 1 - abs * 0.12,
       zIndex: 10 - abs,
       opacity: abs > 3 ? 0 : 1 - abs * 0.18,
-      filter: pos === 0 ? "blur(0px)" : `blur(${abs * 1.5}px)`,
     };
   };
 
@@ -159,19 +173,20 @@ export default function Hero() {
               animationDuration: "2.6s",
             }}
           />
-          {images.map((src, i) => {
+          {readyImages.map((src, i) => {
             const style = getStyle(i);
             return (
               <motion.div
                 key={i}
                 animate={style}
-                transition={{ type: "spring", stiffness: 80, damping: 18 }}
+                transition={{ type: "spring", stiffness: 70, damping: 20, mass: 0.8 }}
                 className="absolute w-36 md:w-48 h-52 md:h-72 rounded-3xl overflow-hidden glass-strong"
                 style={{
                   zIndex: i === active ? 20 : style.zIndex,
                   willChange: "transform, opacity",
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden",
+                  contain: "layout paint style",
                   boxShadow:
                     i === active
                       ? "0 0 80px #a855f7cc, 0 0 160px #a855f766"
@@ -181,9 +196,9 @@ export default function Hero() {
                 <img
                   src={src}
                   alt={`Showcase ${i + 1}`}
-                  loading="eager"
+                  loading={i < 2 ? "eager" : "lazy"}
                   decoding="async"
-                  fetchPriority={i === active ? "high" : "low"}
+                  fetchPriority={i === 0 ? "high" : "auto"}
                   width={192}
                   height={288}
                   className="w-full h-full object-cover"
@@ -197,7 +212,7 @@ export default function Hero() {
         </div>
 
         <div className="flex justify-center gap-2 mt-8">
-          {images.map((_, i) => (
+          {readyImages.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
