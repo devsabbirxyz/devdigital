@@ -5,16 +5,7 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import { scrollToSection } from "@/lib/scroll";
 
-import h1 from "@/assets/hero-1.jpg";
-import h2 from "@/assets/hero-2.jpg";
-import h3 from "@/assets/hero-3.jpg";
-import h4 from "@/assets/hero-4.jpg";
-import h5 from "@/assets/hero-5.jpg";
-import h6 from "@/assets/hero-6.jpg";
-import h7 from "@/assets/hero-7.jpg";
-
-const FALLBACK = [h1, h2, h3, h4, h5, h6, h7];
-const CACHE_KEY = "hero_images_v1";
+const CACHE_KEY = "hero_images_v2";
 
 function readCache(): string[] | null {
   try {
@@ -44,7 +35,7 @@ const DEFAULT: HeroData = {
 
 export default function Hero() {
   const { data } = useSiteSettings<HeroData>("hero", DEFAULT);
-  const [images, setImages] = useState<string[]>(() => readCache() ?? FALLBACK);
+  const [images, setImages] = useState<string[]>(() => readCache() ?? []);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -53,11 +44,13 @@ export default function Hero() {
         .from("hero_images")
         .select("image_url, sort_order")
         .order("sort_order");
-      if (rows && rows.length === 7) {
-        const urls = rows.map((r, i) => r.image_url || FALLBACK[i]);
+      if (rows && rows.length > 0) {
+        const urls = rows.map((r) => r.image_url).filter(Boolean) as string[];
+        if (urls.length === 0) return;
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(urls)); } catch {}
-        // Only swap if actually different to avoid re-render flicker
-        setImages((prev) => (prev.every((u, i) => u === urls[i]) ? prev : urls));
+        setImages((prev) =>
+          prev.length === urls.length && prev.every((u, i) => u === urls[i]) ? prev : urls
+        );
       }
     })();
   }, []);
