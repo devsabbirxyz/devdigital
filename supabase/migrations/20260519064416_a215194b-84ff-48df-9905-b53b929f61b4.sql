@@ -1,0 +1,1 @@
+UPDATE public.site_settings SET value = jsonb_set(value, '{menu_items}', '[{"label":"Home","target":"home"},{"label":"Solutions","target":"services"},{"label":"Plans","target":"pricing"},{"label":"Blog","target":"blog"},{"label":"Contact","target":"contact"}]'::jsonb) WHERE key='navigation';
