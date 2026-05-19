@@ -165,6 +165,7 @@ export default function Hero() {
               background:
                 "radial-gradient(circle, #a855f7cc 0%, #a855f799 28%, #a855f744 55%, transparent 78%)",
               zIndex: 0,
+              animationDuration: isMobile ? "4.8s" : undefined,
             }}
           />
           {/* Inner core — bright lamp bulb, sits in front of side cards but behind the active card */}
@@ -175,7 +176,7 @@ export default function Hero() {
               background:
                 "radial-gradient(circle, #f5d0fe 0%, #d8b4fe 18%, #a855f7 45%, #a855f766 70%, transparent 100%)",
               zIndex: 5,
-              animationDuration: "2.6s",
+              animationDuration: isMobile ? "5.4s" : "2.6s",
             }}
           />
           {readyImages.map((src, i) => {
@@ -185,7 +186,7 @@ export default function Hero() {
                 key={i}
                 animate={style}
                 transition={{ type: "spring", stiffness: 70, damping: 20, mass: 0.8 }}
-                className="absolute w-36 md:w-48 h-52 md:h-72 rounded-3xl overflow-hidden glass-strong"
+                className="absolute w-32 md:w-48 h-48 md:h-72 rounded-3xl overflow-hidden glass-strong"
                 style={{
                   zIndex: i === active ? 20 : style.zIndex,
                   willChange: "transform, opacity",
