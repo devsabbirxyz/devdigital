@@ -15,19 +15,13 @@ const ServicePage = lazy(() => import("./pages/ServicePage.tsx"));
 
 const queryClient = new QueryClient();
 
-const PageFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
-  </div>
-);
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Suspense fallback={<PageFallback />}>
+        <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
