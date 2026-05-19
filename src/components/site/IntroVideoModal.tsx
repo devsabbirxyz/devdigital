@@ -26,7 +26,7 @@ export default function IntroVideoModal() {
   useEffect(() => {
     if (loading || !data.enabled || !data.video_url) return;
     if (data.show_once && localStorage.getItem(STORAGE_KEY)) return;
-    const t = setTimeout(() => setOpen(true), 600);
+    const t = setTimeout(() => setOpen(true), 1800);
     return () => clearTimeout(t);
   }, [loading, data]);
 
