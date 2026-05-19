@@ -8,20 +8,26 @@ type Post = { id: string; slug: string; title: string; excerpt: string | null; c
 
 export default function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("blog_posts")
         .select("id,slug,title,excerpt,cover_url,sort_order,published")
         .eq("published", true)
         .order("sort_order")
-          .limit(8);
+        .limit(8);
+      if (error) {
+        setLoaded(true);
+        return;
+      }
       setPosts((data as any) || []);
+      setLoaded(true);
     })();
   }, []);
 
-  if (posts.length === 0) return null;
+  if (loaded && posts.length === 0) return null;
 
   return (
     <section id="blog" className="relative py-24">
@@ -52,7 +58,7 @@ export default function Blog() {
               <Link to={`/blog/${p.slug}`} className="block">
                 <div className="relative h-32 md:h-36 overflow-hidden">
                   {p.cover_url ? (
-                    <img src={p.cover_url} alt={p.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <img src={p.cover_url} alt={p.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-primary/30 via-accent/20 to-background" />
                   )}
