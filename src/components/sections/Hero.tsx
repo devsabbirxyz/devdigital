@@ -75,11 +75,12 @@ export default function Hero() {
     return () => clearInterval(t);
   }, [images.length]);
 
-  // arrange images in a fan: positions relative to center
-  const positions = [-3, -2, -1, 0, 1, 2, 3]; // for 7 images
+  // arrange images in a fan: positions relative to center, dynamic by count
+  const n = images.length;
+  const center = Math.floor(n / 2);
   const getStyle = (i: number) => {
-    const offset = ((i - active + images.length) % images.length);
-    const pos = positions[offset];
+    const offset = ((i - active + n) % n);
+    const pos = offset - center;
     const abs = Math.abs(pos);
     return {
       x: pos * 110,
