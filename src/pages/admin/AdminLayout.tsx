@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
-  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase,
+  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, Layers,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ import IntroVideoAdmin from "./IntroVideoAdmin";
 import AdminUsers from "./AdminUsers";
 import BlogAdmin from "./BlogAdmin";
 import ServicePagesAdmin from "./ServicePagesAdmin";
+import ShowcaseAdmin from "./ShowcaseAdmin";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
@@ -30,6 +31,7 @@ const TABS = [
   { id: "about", label: "About", icon: User, Component: AboutAdmin },
   { id: "services", label: "Services", icon: Sparkles, Component: ServicesAdmin },
   { id: "projects", label: "Projects", icon: FolderKanban, Component: ProjectsAdmin },
+  { id: "showcase", label: "Showcase", icon: Layers, Component: ShowcaseAdmin },
   { id: "pricing", label: "Pricing", icon: DollarSign, Component: PricingAdmin },
   { id: "blog", label: "Blog", icon: Newspaper, Component: BlogAdmin },
   { id: "contact", label: "Contact Info", icon: Phone, Component: ContactInfoAdmin },
