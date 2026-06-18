@@ -301,6 +301,51 @@ export type Database = {
         }
         Relationships: []
       }
+      showcase_items: {
+        Row: {
+          badge: string | null
+          created_at: string
+          description: string
+          features: Json
+          icon: string | null
+          id: string
+          is_active: boolean
+          media_type: string
+          media_url: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          badge?: string | null
+          created_at?: string
+          description?: string
+          features?: Json
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          media_url?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          badge?: string | null
+          created_at?: string
+          description?: string
+          features?: Json
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          media_url?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           key: string
