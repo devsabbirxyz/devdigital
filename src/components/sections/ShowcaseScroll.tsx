@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Icons from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
@@ -88,6 +89,7 @@ export default function ShowcaseScroll() {
   if (!settings.enabled || items.length === 0) return null;
 
   const current = items[active];
+  const ITEM_H = 110; // px per word row
 
   return (
     <section
@@ -116,68 +118,63 @@ export default function ShowcaseScroll() {
           </div>
 
           {/* content */}
-          <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-center pb-10">
-            {/* Media */}
-            <div className="relative order-1 lg:order-1">
-              <div className="relative aspect-[4/3] md:aspect-video rounded-3xl overflow-hidden glass-strong neon-glow ring-1 ring-primary/30">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={current.id}
-                    initial={{ opacity: 0, scale: 0.96, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 1.02, filter: "blur(10px)" }}
-                    transition={{ duration: 0.5 / (settings.animation_speed || 1) }}
-                    className="absolute inset-0"
-                  >
-                    {current.media_url ? (
-                      current.media_type === "video" ? (
-                        <video
-                          src={current.media_url}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <img
-                          src={current.media_url}
-                          alt={current.title}
-                          loading="lazy"
-                          className="h-full w-full object-cover"
-                        />
-                      )
-                    ) : (
-                      <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
-                        <Icon name={current.icon} className="h-24 w-24 text-primary" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
-                  </motion.div>
-                </AnimatePresence>
+          <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 md:gap-10 items-center pb-10">
+            {/* Rolling word list (slot-machine) */}
+            <div className="relative h-[440px] md:h-[520px] overflow-hidden order-1">
+              {/* fade masks */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background to-transparent z-10" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent z-10" />
+              {/* arrow indicator */}
+              <div className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 text-primary">
+                <ArrowRight className="h-7 w-7 md:h-9 md:w-9 drop-shadow-[0_0_12px_hsl(var(--primary))]" />
               </div>
 
-              {/* progress dots */}
-              <div className="mt-4 flex justify-center gap-2">
-                {items.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all ${
-                      i === active ? "w-8 bg-primary shadow-glow-soft" : "w-2 bg-white/15"
-                    }`}
-                  />
-                ))}
-              </div>
+              <motion.ul
+                className="absolute left-0 right-0 top-1/2 will-change-transform"
+                style={{ perspective: 800 }}
+                animate={{ y: -active * ITEM_H - ITEM_H / 2 }}
+                transition={{ type: "spring", stiffness: 120, damping: 22, mass: 0.6 }}
+              >
+                {items.map((it, i) => {
+                  const diff = i - active;
+                  const isActive = diff === 0;
+                  return (
+                    <li
+                      key={it.id}
+                      style={{ height: ITEM_H }}
+                      className="flex items-center pl-14 md:pl-20"
+                    >
+                      <span
+                        className={`font-display font-extrabold tracking-tight transition-all duration-500 ${
+                          isActive
+                            ? "text-white text-5xl md:text-7xl"
+                            : "text-white/30 text-3xl md:text-5xl"
+                        }`}
+                        style={{
+                          filter: isActive ? "blur(0px)" : `blur(${Math.min(8, Math.abs(diff) * 3)}px)`,
+                          transform: isActive
+                            ? "rotate(0deg) scale(1)"
+                            : `rotate(${diff > 0 ? -8 : 8}deg) scale(${Math.max(0.7, 1 - Math.abs(diff) * 0.08)})`,
+                          opacity: isActive ? 1 : Math.max(0.15, 1 - Math.abs(diff) * 0.25),
+                          textShadow: isActive ? "0 0 40px hsl(var(--primary) / 0.5)" : "none",
+                        }}
+                      >
+                        {it.title}
+                      </span>
+                    </li>
+                  );
+                })}
+              </motion.ul>
             </div>
 
-            {/* Text panel */}
-            <div className="order-2 lg:order-2 relative">
+            {/* Detail panel */}
+            <div className="order-2 relative">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.id}
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -24 }}
+                  exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
                   transition={{ duration: 0.45 / (settings.animation_speed || 1) }}
                   className="glass-strong rounded-3xl p-6 md:p-8 ring-1 ring-primary/20"
                 >
@@ -191,9 +188,6 @@ export default function ShowcaseScroll() {
                       </span>
                     )}
                   </div>
-                  <h3 className="font-display text-2xl md:text-4xl font-bold mb-2">
-                    {current.title}
-                  </h3>
                   <p className="text-sm md:text-base text-muted-foreground mb-5">
                     {current.description}
                   </p>
@@ -207,31 +201,27 @@ export default function ShowcaseScroll() {
                       ))}
                     </ul>
                   )}
+                  {current.media_url && (
+                    <div className="mt-5 rounded-2xl overflow-hidden ring-1 ring-primary/20">
+                      {current.media_type === "video" ? (
+                        <video src={current.media_url} autoPlay muted loop playsInline className="w-full h-48 object-cover" />
+                      ) : (
+                        <img src={current.media_url} alt={current.title} loading="lazy" className="w-full h-48 object-cover" />
+                      )}
+                    </div>
+                  )}
                 </motion.div>
               </AnimatePresence>
 
-              {/* item nav */}
-              <div className="mt-4 hidden md:flex flex-wrap gap-2">
-                {items.map((it, i) => (
-                  <button
-                    key={it.id}
-                    onClick={() => {
-                      const el = sectionRef.current;
-                      if (!el) return;
-                      const vh = window.innerHeight;
-                      const total = el.offsetHeight - vh;
-                      const target =
-                        el.offsetTop + (total * (i + 0.5)) / items.length;
-                      window.scrollTo({ top: target, behavior: "smooth" });
-                    }}
-                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
-                      i === active
-                        ? "border-primary/60 bg-primary/15 text-foreground shadow-glow-soft scale-105"
-                        : "border-white/10 text-muted-foreground hover:text-foreground hover:border-white/20 blur-[0.3px] opacity-70"
+              {/* progress dots */}
+              <div className="mt-4 flex justify-center gap-2">
+                {items.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === active ? "w-8 bg-primary shadow-glow-soft" : "w-2 bg-white/15"
                     }`}
-                  >
-                    {it.title}
-                  </button>
+                  />
                 ))}
               </div>
             </div>
