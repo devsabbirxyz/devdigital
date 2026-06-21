@@ -4,8 +4,11 @@ import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/sections/Footer";
+import Seo from "@/components/Seo";
+import BlogComments from "@/components/BlogComments";
+import RelatedPosts from "@/components/RelatedPosts";
 
-type Post = { title: string; content: string; cover_url: string | null; excerpt: string | null; created_at: string };
+type Post = { id: string; title: string; content: string; cover_url: string | null; excerpt: string | null; created_at: string };
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -16,7 +19,7 @@ export default function BlogPost() {
     (async () => {
       const { data } = await supabase
         .from("blog_posts")
-        .select("title,content,cover_url,excerpt,created_at")
+        .select("id,title,content,cover_url,excerpt,created_at")
         .eq("slug", slug!)
         .eq("published", true)
         .maybeSingle();
@@ -28,6 +31,23 @@ export default function BlogPost() {
 
   return (
     <main className="min-h-screen">
+      {post && slug && (
+        <Seo
+          path={`/blog/${slug}`}
+          defaultTitle={`${post.title} — Blog`}
+          defaultDescription={post.excerpt ?? undefined}
+          defaultImage={post.cover_url ?? undefined}
+          type="article"
+          jsonLd={{
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: post.title,
+            description: post.excerpt ?? undefined,
+            image: post.cover_url ?? undefined,
+            datePublished: post.created_at,
+          }}
+        />
+      )}
       <Navbar />
       <article className="container max-w-3xl pt-32 pb-24">
         <Link to="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
@@ -47,6 +67,8 @@ export default function BlogPost() {
             <div className="prose prose-invert max-w-none whitespace-pre-wrap text-foreground/90 leading-relaxed">
               {post.content}
             </div>
+            <RelatedPosts currentSlug={slug!} />
+            <BlogComments postId={post.id} />
           </>
         )}
       </article>

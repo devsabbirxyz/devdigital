@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
-  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History,
+  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -24,6 +24,8 @@ import BlogAdmin from "./BlogAdmin";
 import ServicePagesAdmin from "./ServicePagesAdmin";
 import BrandingAdmin from "./BrandingAdmin";
 import ActivityLogAdmin from "./ActivityLogAdmin";
+import PageSeoAdmin from "./PageSeoAdmin";
+import CommentsAdmin from "./CommentsAdmin";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
@@ -35,6 +37,8 @@ const TABS = [
   { id: "projects", label: "Projects", icon: FolderKanban, Component: ProjectsAdmin },
   { id: "pricing", label: "Pricing", icon: DollarSign, Component: PricingAdmin },
   { id: "blog", label: "Blog", icon: Newspaper, Component: BlogAdmin },
+  { id: "comments", label: "Comments", icon: MessagesSquare, Component: CommentsAdmin },
+  { id: "seo", label: "SEO Meta", icon: Search, Component: PageSeoAdmin },
   { id: "contact", label: "Contact Info", icon: Phone, Component: ContactInfoAdmin },
   { id: "submissions", label: "Submissions", icon: Mail, Component: Submissions },
   { id: "footer", label: "Footer", icon: Settings, Component: FooterAdmin },
