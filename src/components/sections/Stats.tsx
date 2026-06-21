@@ -80,7 +80,7 @@ export default function Stats() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           {stats.map((s, i) => {
             const Icon =
               ((LucideIcons as unknown) as Record<string, React.ComponentType<{ className?: string }>>)[s.icon] ||
@@ -94,20 +94,25 @@ export default function Stats() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="group relative"
               >
-                <div className="absolute -inset-0.5 rounded-2xl bg-gradient-primary opacity-30 blur-lg group-hover:opacity-70 transition-opacity duration-500" />
-                <div className="relative glass-strong rounded-2xl p-5 md:p-7 text-center border border-primary/20 group-hover:border-primary/50 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.6)]">
-                  <div className="mx-auto mb-4 w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-primary flex items-center justify-center neon-glow">
-                    <Icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                <div className="absolute -inset-0.5 rounded-2xl bg-gradient-primary opacity-20 blur-lg group-hover:opacity-60 transition-opacity duration-500" />
+                <div className="relative glass-strong rounded-2xl p-4 md:p-5 flex items-center gap-3.5 md:gap-4 border border-primary/15 group-hover:border-primary/40 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)]">
+                  {/* Premium diamond icon badge */}
+                  <div className="shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-[0.85rem] bg-gradient-primary flex items-center justify-center rotate-45 neon-glow">
+                    <Icon className="w-5 h-5 md:w-6 md:h-6 text-white -rotate-45" strokeWidth={1.5} />
                   </div>
-                  <div className="font-display text-3xl md:text-5xl font-extrabold text-gradient drop-shadow-[0_0_20px_hsl(var(--primary)/0.5)]">
-                    <Counter to={s.value} suffix={s.suffix} />
-                  </div>
-                  <div className="mt-2 font-semibold text-sm md:text-base">{s.title}</div>
-                  {s.description && (
-                    <div className="mt-1 text-xs md:text-sm text-muted-foreground">
-                      {s.description}
+                  <div className="min-w-0">
+                    <div className="flex items-baseline gap-1.5 flex-wrap leading-tight">
+                      <span className="font-display text-2xl md:text-3xl font-extrabold text-gradient tabular-nums drop-shadow-[0_0_12px_hsl(var(--primary)/0.4)]">
+                        <Counter to={s.value} suffix={s.suffix} />
+                      </span>
+                      <span className="font-semibold text-sm md:text-[0.95rem] truncate">{s.title}</span>
                     </div>
-                  )}
+                    {s.description && (
+                      <p className="text-[0.7rem] md:text-xs text-muted-foreground truncate mt-0.5">
+                        {s.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             );
