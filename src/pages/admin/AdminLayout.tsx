@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
-  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare, TrendingUp, HelpCircle, Workflow, GitCompare,
+  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare, TrendingUp, HelpCircle, Workflow,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -29,7 +29,7 @@ import CommentsAdmin from "./CommentsAdmin";
 import StatsAdmin from "./StatsAdmin";
 import FaqAdmin from "./FaqAdmin";
 import ProcessAdmin from "./ProcessAdmin";
-import BeforeAfterAdmin from "./BeforeAfterAdmin";
+
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
@@ -42,7 +42,7 @@ const TABS = [
   { id: "services", label: "Services", icon: Sparkles, Component: ServicesAdmin },
   { id: "projects", label: "Projects", icon: FolderKanban, Component: ProjectsAdmin },
   { id: "pricing", label: "Pricing", icon: DollarSign, Component: PricingAdmin },
-  { id: "results", label: "Before/After", icon: GitCompare, Component: BeforeAfterAdmin },
+  
   { id: "blog", label: "Blog", icon: Newspaper, Component: BlogAdmin },
   { id: "comments", label: "Comments", icon: MessagesSquare, Component: CommentsAdmin },
   { id: "faq", label: "FAQ", icon: HelpCircle, Component: FaqAdmin },
