@@ -12,6 +12,7 @@ const Testimonials = lazy(() => import("@/components/sections/Testimonials"));
 const Pricing = lazy(() => import("@/components/sections/Pricing"));
 const Contact = lazy(() => import("@/components/sections/Contact"));
 const Blog = lazy(() => import("@/components/sections/Blog"));
+const FAQ = lazy(() => import("@/components/sections/FAQ"));
 const Footer = lazy(() => import("@/components/sections/Footer"));
 const WhatsAppButton = lazy(() => import("@/components/site/WhatsAppButton"));
 const IntroVideoModal = lazy(() => import("@/components/site/IntroVideoModal"));
@@ -35,6 +36,7 @@ const Index = () => {
         <Testimonials />
         <Contact />
         <Blog />
+        <FAQ />
         <Footer />
         <WhatsAppButton />
         <IntroVideoModal />
