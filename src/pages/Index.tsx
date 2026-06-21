@@ -1,16 +1,18 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
-import Services from "@/components/sections/Services";
-import Projects from "@/components/sections/Projects";
-import Testimonials from "@/components/sections/Testimonials";
-import Pricing from "@/components/sections/Pricing";
-import Contact from "@/components/sections/Contact";
-import Blog from "@/components/sections/Blog";
-import Footer from "@/components/sections/Footer";
-import WhatsAppButton from "@/components/site/WhatsAppButton";
-import IntroVideoModal from "@/components/site/IntroVideoModal";
+
+// Below-the-fold sections are code-split for faster initial paint
+const About = lazy(() => import("@/components/sections/About"));
+const Services = lazy(() => import("@/components/sections/Services"));
+const Projects = lazy(() => import("@/components/sections/Projects"));
+const Testimonials = lazy(() => import("@/components/sections/Testimonials"));
+const Pricing = lazy(() => import("@/components/sections/Pricing"));
+const Contact = lazy(() => import("@/components/sections/Contact"));
+const Blog = lazy(() => import("@/components/sections/Blog"));
+const Footer = lazy(() => import("@/components/sections/Footer"));
+const WhatsAppButton = lazy(() => import("@/components/site/WhatsAppButton"));
+const IntroVideoModal = lazy(() => import("@/components/site/IntroVideoModal"));
 
 const Index = () => {
   useEffect(() => {
@@ -31,16 +33,18 @@ const Index = () => {
     <main className="relative min-h-screen">
       <Navbar />
       <Hero />
-      <About />
-      <Services />
-      <Projects />
-      <Pricing />
-      <Testimonials />
-      <Contact />
-      <Blog />
-      <Footer />
-      <WhatsAppButton />
-      <IntroVideoModal />
+      <Suspense fallback={<div className="h-32" />}>
+        <About />
+        <Services />
+        <Projects />
+        <Pricing />
+        <Testimonials />
+        <Contact />
+        <Blog />
+        <Footer />
+        <WhatsAppButton />
+        <IntroVideoModal />
+      </Suspense>
     </main>
   );
 };
