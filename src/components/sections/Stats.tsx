@@ -80,7 +80,7 @@ export default function Stats() {
           </p>
         </motion.div>
 
-        <div className="flex lg:grid lg:grid-cols-4 gap-4 md:gap-5 overflow-x-auto pb-2 lg:overflow-visible snap-x snap-mandatory">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           {stats.map((s, i) => {
             const Icon =
               ((LucideIcons as unknown) as Record<string, React.ComponentType<{ className?: string }>>)[s.icon] ||
@@ -92,7 +92,7 @@ export default function Stats() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group relative shrink-0 w-[260px] sm:w-[280px] lg:w-auto snap-center"
+                className="group relative"
               >
                 <div className="absolute -inset-0.5 rounded-2xl bg-gradient-primary opacity-20 blur-lg group-hover:opacity-60 transition-opacity duration-500" />
                 <div className="relative glass-strong rounded-2xl p-4 md:p-5 flex items-center gap-3.5 md:gap-4 border border-primary/15 group-hover:border-primary/40 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)]">
