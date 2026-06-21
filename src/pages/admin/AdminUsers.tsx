@@ -74,7 +74,7 @@ export default function AdminUsers() {
             <input type="email" value={email} maxLength={255} onChange={(e) => setEmail(e.target.value)} className={inputCls} />
           </Field>
           <Field label="Temporary Password" hint="Min 6 characters. They can change it after sign-in.">
-            <input type="text" value={password} maxLength={72} onChange={(e) => setPassword(e.target.value)} className={inputCls} />
+            <input type="password" autoComplete="new-password" value={password} maxLength={72} onChange={(e) => setPassword(e.target.value)} className={inputCls} />
           </Field>
         </div>
         <div className="flex justify-end">
