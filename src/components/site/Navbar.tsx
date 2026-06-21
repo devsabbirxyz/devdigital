@@ -55,7 +55,7 @@ export default function Navbar() {
       >
         <Link to="/" className="flex items-center gap-1.5 md:gap-2 pl-1.5 md:pl-2 pr-2 md:pr-3" aria-label="Home">
           {data.logo_url ? (
-            <img src={data.logo_url} alt={data.brand_name} className="h-6 w-6 md:h-8 md:w-8 rounded-full object-cover" />
+            <img src={data.logo_url} alt={data.brand_name} loading="eager" decoding="async" width={32} height={32} className="h-6 w-6 md:h-8 md:w-8 rounded-full object-cover" />
           ) : (
             <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-primary flex items-center justify-center neon-glow">
               <Sparkles className="h-3 w-3 md:h-4 md:w-4 text-white" />
