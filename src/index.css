@@ -59,11 +59,58 @@
     --glass-border: hsl(271 60% 50% / 0.2);
   }
 
-  .dark {
-    /* Same as root - we are dark by default */
-    --background: 240 30% 4%;
-    --foreground: 0 0% 98%;
+  /* Light theme — opt-in via <html class="light"> */
+  .light {
+    --background: 0 0% 100%;
+    --background-end: 270 40% 97%;
+    --foreground: 240 30% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 30% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 30% 10%;
+
+    --primary: 271 91% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 280 100% 65%;
+
+    --accent: 328 86% 52%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 320 100% 65%;
+
+    --secondary: 270 30% 94%;
+    --secondary-foreground: 240 30% 10%;
+
+    --muted: 270 25% 95%;
+    --muted-foreground: 240 10% 40%;
+
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 270 30% 88%;
+    --input: 270 30% 94%;
+    --ring: 271 91% 55%;
+
+    --gradient-bg: radial-gradient(ellipse at top, hsl(271 80% 95%) 0%, hsl(270 40% 98%) 50%, hsl(0 0% 100%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.8), hsl(270 30% 96% / 0.6));
+
+    --shadow-neon: 0 0 30px hsl(271 91% 55% / 0.25), 0 0 60px hsl(271 91% 55% / 0.12);
+    --shadow-neon-pink: 0 0 30px hsl(328 86% 52% / 0.25), 0 0 60px hsl(328 86% 52% / 0.12);
+    --shadow-card: 0 8px 32px hsl(240 30% 60% / 0.15);
+    --shadow-glow-soft: 0 0 40px hsl(271 91% 55% / 0.15);
+
+    --glass-bg: hsl(0 0% 100% / 0.7);
+    --glass-border: hsl(271 60% 70% / 0.3);
   }
+
+  .light .glass-strong {
+    background: hsl(0 0% 100% / 0.85);
+    border-color: hsl(271 60% 70% / 0.35);
+  }
+
+  .light ::-webkit-scrollbar-track { background: hsl(270 30% 94%); }
+  .light ::-webkit-scrollbar-thumb { background: hsl(271 50% 70%); }
 
   * { @apply border-border; }
 
