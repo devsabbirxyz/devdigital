@@ -17,8 +17,12 @@ const DEFAULT: NavData = {
   brand_name: "PORTFOLIO",
   menu_items: [
     { label: "Home", target: "home" },
-    { label: "Solutions", target: "services" },
-    { label: "Plans", target: "pricing" },
+    { label: "About", target: "about" },
+    { label: "Services", target: "services" },
+    { label: "Projects", target: "projects" },
+    { label: "Process", target: "process" },
+    { label: "Pricing", target: "pricing" },
+    { label: "Results", target: "results" },
     { label: "Contact", target: "contact" },
   ],
 };

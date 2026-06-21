@@ -9,10 +9,11 @@ const Stats = lazy(() => import("@/components/sections/Stats"));
 const Process = lazy(() => import("@/components/sections/Process"));
 const Services = lazy(() => import("@/components/sections/Services"));
 const Projects = lazy(() => import("@/components/sections/Projects"));
+const ShowcaseScroll = lazy(() => import("@/components/sections/ShowcaseScroll"));
+const BeforeAfter = lazy(() => import("@/components/sections/BeforeAfter"));
 const Testimonials = lazy(() => import("@/components/sections/Testimonials"));
 const Pricing = lazy(() => import("@/components/sections/Pricing"));
 const Contact = lazy(() => import("@/components/sections/Contact"));
-const Blog = lazy(() => import("@/components/sections/Blog"));
 const FAQ = lazy(() => import("@/components/sections/FAQ"));
 const Footer = lazy(() => import("@/components/sections/Footer"));
 const WhatsAppButton = lazy(() => import("@/components/site/WhatsAppButton"));
@@ -31,14 +32,15 @@ const Index = () => {
       <Suspense fallback={<div className="h-32" />}>
         <About />
         <Stats />
-        <Process />
         <Services />
         <Projects />
+        <ShowcaseScroll />
+        <Process />
         <Pricing />
+        <BeforeAfter />
         <Testimonials />
-        <Contact />
-        <Blog />
         <FAQ />
+        <Contact />
         <Footer />
         <WhatsAppButton />
         <IntroVideoModal />
