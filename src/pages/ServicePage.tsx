@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/sections/Footer";
 import WhatsAppButton from "@/components/site/WhatsAppButton";
+import Seo from "@/components/Seo";
 
 type Page = { slug: string; title: string; description: string; image_url: string | null; floating_icons: string[] };
 type CardT = { id: string; title: string; description: string; image_url: string | null; price: string | null };
@@ -39,6 +40,14 @@ export default function ServicePage({ forcedSlug }: { forcedSlug?: string } = {}
 
   return (
     <main className="min-h-screen">
+      {slug && (
+        <Seo
+          path={`/services/${slug}`}
+          defaultTitle={`${page.title} — DevDigital`}
+          defaultDescription={page.description}
+          defaultImage={page.image_url ?? undefined}
+        />
+      )}
       <Navbar />
 
       {/* Hero */}
