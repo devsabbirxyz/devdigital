@@ -67,6 +67,9 @@ export default function Projects({ all = false }: { all?: boolean }) {
                     src={img}
                     alt={p.title}
                     loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={128}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute top-2 right-2 w-7 h-7 rounded-full glass-strong flex items-center justify-center opacity-0 group-hover:opacity-100 transition group-hover:neon-glow">

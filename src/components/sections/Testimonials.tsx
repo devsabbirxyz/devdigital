@@ -34,6 +34,9 @@ function Avatar({ name, src }: { name: string; src: string | null }) {
         src={src}
         alt={name}
         loading="lazy"
+        decoding="async"
+        width={48}
+        height={48}
         className="h-12 w-12 rounded-full object-cover ring-2 ring-primary/40"
       />
     );

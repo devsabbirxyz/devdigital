@@ -28,7 +28,7 @@ export default function About() {
           >
             <div className="absolute inset-0 bg-primary/30 blur-[80px] rounded-full animate-pulse-glow" />
             <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden glass-strong p-2 animate-float">
-              <img src={img} alt="Profile" loading="lazy" className="w-full h-full object-cover rounded-full" />
+              <img src={img} alt="Profile" loading="lazy" decoding="async" className="w-full h-full object-cover rounded-full" />
             </div>
           </motion.div>
 
