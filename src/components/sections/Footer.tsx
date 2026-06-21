@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Linkedin, MessageCircle, Sparkles, Lock } from "lucide-react";
+import { Facebook, Instagram, Linkedin, MessageCircle, Sparkles, Lock, Twitter, Youtube, Github, Music2 } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Link } from "react-router-dom";
 import { scrollToSection } from "@/lib/scroll";
@@ -32,6 +32,10 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   instagram: Instagram,
   linkedin: Linkedin,
   whatsapp: MessageCircle,
+  twitter: Twitter,
+  youtube: Youtube,
+  github: Github,
+  tiktok: Music2,
 };
 
 export default function Footer() {
@@ -49,8 +53,8 @@ export default function Footer() {
               <span className="font-display font-bold text-lg tracking-wider">{data.brand_name}</span>
             </div>
             <p className="text-muted-foreground max-w-sm mb-6">{data.slogan}</p>
-            <div className="flex gap-2">
-              {data.socials.map((s) => {
+            <div className="flex gap-2 flex-wrap">
+              {data.socials.filter((s) => s.url && s.url !== "#").map((s) => {
                 const Icon = ICONS[s.platform] ?? MessageCircle;
                 return (
                   <a

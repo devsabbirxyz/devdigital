@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Trash2, Mail, MailOpen } from "lucide-react";
+import { Trash2, Mail, MailOpen, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PageHeader, Card } from "./_ui";
+import { PageHeader, Card, GhostBtn } from "./_ui";
 
 type Submission = {
   id: string; name: string; email: string; phone: string | null;
@@ -34,13 +34,40 @@ export default function Submissions() {
 
   const visible = list.filter((s) => filter === "all" || !s.read);
 
+  const exportCsv = () => {
+    if (list.length === 0) return toast.error("No submissions to export");
+    const headers = ["Date", "Name", "Email", "Phone", "Plan", "Read", "Message"];
+    const escape = (v: unknown) => {
+      const s = v == null ? "" : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const rows = list.map((s) => [
+      new Date(s.created_at).toISOString(),
+      s.name, s.email, s.phone ?? "", s.plan ?? "",
+      s.read ? "yes" : "no", s.message,
+    ].map(escape).join(","));
+    const csv = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `submissions-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${list.length} submissions`);
+  };
+
   return (
     <>
       <PageHeader
         title="Form Submissions"
         description={`${list.length} total · ${list.filter((s) => !s.read).length} unread`}
         action={
-          <div className="flex gap-1 glass rounded-xl p-1">
+          <div className="flex items-center gap-2">
+            <GhostBtn onClick={exportCsv}>
+              <Download className="h-4 w-4 inline mr-1.5" /> Export CSV
+            </GhostBtn>
+            <div className="flex gap-1 glass rounded-xl p-1">
             {(["all", "unread"] as const).map((f) => (
               <button
                 key={f}
@@ -52,6 +79,7 @@ export default function Submissions() {
                 {f}
               </button>
             ))}
+            </div>
           </div>
         }
       />

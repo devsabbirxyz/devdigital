@@ -64,6 +64,10 @@ export default function FooterAdmin() {
                 <option value="instagram">Instagram</option>
                 <option value="linkedin">LinkedIn</option>
                 <option value="whatsapp">WhatsApp</option>
+                <option value="twitter">Twitter / X</option>
+                <option value="youtube">YouTube</option>
+                <option value="tiktok">TikTok</option>
+                <option value="github">GitHub</option>
               </select>
               <input
                 value={s.url}

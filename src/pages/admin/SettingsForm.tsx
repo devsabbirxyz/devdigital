@@ -2,6 +2,7 @@ import { useEffect, useState, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { PrimaryBtn } from "./_ui";
+import { logActivity } from "@/lib/activityLog";
 
 export function useSettingForm<T extends object>(key: string, defaults: T) {
   const [data, setData] = useState<T>(defaults);
@@ -22,7 +23,10 @@ export function useSettingForm<T extends object>(key: string, defaults: T) {
     const { error } = await supabase.from("site_settings").upsert({ key, value: data as any });
     setSaving(false);
     if (error) toast.error("Could not save: " + error.message);
-    else toast.success("Saved!");
+    else {
+      toast.success("Saved!");
+      logActivity("update", `site_settings:${key}`);
+    }
   };
 
   return { data, setData, loading, saving, save };
