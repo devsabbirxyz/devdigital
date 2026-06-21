@@ -22,7 +22,7 @@ const DEFAULT: NavData = {
     { label: "Projects", target: "projects" },
     { label: "Process", target: "process" },
     { label: "Pricing", target: "pricing" },
-    { label: "Skills", target: "skills" },
+    
     { label: "Contact", target: "contact" },
   ],
 };
