@@ -1,57 +1,64 @@
-## Stats / Counter Section — "আমার অর্জন"
+## How I Turn Ideas Into Reality — Process Section
 
-### কোথায় বসবে?
-**About section এর ঠিক পরে, Services-এর আগে** (`src/pages/Index.tsx`-এ order: Hero → About → **Stats** → Services → Projects …)।
+A new "Process" section with full admin control, placed between **Stats** and **Services** on the home page (natural flow: who I am → numbers → how I work → what I offer).
 
-কারণ:
-- About-এ ইউজার পরিচয় পায় → এরপরই credibility/proof দেখানো সবচেয়ে শক্তিশালী (classic SaaS/Agency pattern)।
-- Services-এর আগে stats দেখলে ভিজিটর trust নিয়ে নিচে scroll করে।
-- Hero-র নিচে রাখলে hero-র CTA-র focus নষ্ট হয়, তাই সেটা avoid করছি।
+### 1. Database (new migration)
 
-বিকল্প: চাইলে Projects-এর পরে রাখা যায় (কাজ দেখানোর পর সংখ্যায় summary)। কিন্তু About-Services-এর মাঝখানেই বেশি impactful।
+**Table: `process_steps`**
+- `step_number` (text, e.g. "01")
+- `title` (text, e.g. "Discovery & Strategy")
+- `description` (text)
+- `icon` (text — lucide icon name, e.g. "Lightbulb", "Palette", "Rocket")
+- `sort_order` (int)
+- `active` (bool)
+- standard id / created_at / updated_at
 
----
+**Table: `process_settings`** (single-row config so timeline + CTA + heading are fully editable)
+- `section_title` (default: "How I Turn Ideas Into Reality")
+- `section_subtitle` (default: "From Concept to Completion — A Simple, Transparent, and Results-Driven Process")
+- `timeline_title` (default: "Timeline")
+- `timeline_items` (jsonb array of `{ day, label, icon }`, e.g. `[{day:"Day 1", label:"Requirement Discussion & Planning", icon:"Calendar"}, ...]`)
+- `cta_text` (default: "Ready to bring your idea to life? Let's build something amazing together.")
+- `cta_button_label` (default: "Start Your Project")
+- `cta_button_link` (default: "#contact")
+- `active` (bool)
 
-### কী বানাবো
+RLS: public SELECT where active = true; admin-only INSERT/UPDATE/DELETE. GRANTs included. Seed with 3 default steps + default settings row.
 
-**Frontend — `src/components/sections/Stats.tsx`**
-- 4 card desktop (grid-cols-4), mobile 2x2 (grid-cols-2)
-- glassmorphism + neon purple glow (existing `glass-strong`, `neon-glow`, `--gradient-primary` tokens)
-- Lucide icon প্রতি card-এ (admin থেকে icon name select)
-- Counter animation: framer-motion `useInView` + `useMotionValue` + `animate()`, 0 → target, 2.5s ease-out, শুধু একবার trigger
-- Hover: `-translate-y-2`, glow intensify, smooth transition
-- Background: subtle floating particles (CSS only, existing pattern)
-- Suffix support ("+", "%") — number parse করে separately render
+### 2. Frontend — `src/components/sections/Process.tsx` (new)
 
-**Admin — `src/pages/admin/StatsAdmin.tsx`**
-CRUD (Add/Edit/Delete/Reorder) for stat cards:
-- value (number), suffix ("+", "%", "")
-- title (Bangla)
-- description (optional)
-- icon (Lucide icon name, dropdown from common set: Briefcase, Users, Award, Smile, TrendingUp, Star, Code, Zap)
-- order (up/down buttons)
-- active toggle
+- Fetches `process_steps` + `process_settings` from Supabase
+- All English copy
+- Dark theme, glassmorphism cards, neon purple glow (matches Stats / FAQ)
+- Layout:
+  - Section heading + subtitle (from settings)
+  - 3-column grid of step cards on desktop, stacked on mobile, each with: big step number, lucide icon, title, description
+  - Timeline strip below (icons + day labels from `timeline_items`)
+  - CTA block at the bottom with editable text + button
+- Framer-motion `useInView` reveal animations, hover glow on cards
+- Lazy-loaded in `src/pages/Index.tsx` between `<Stats />` and `<Services />`
 
-AdminLayout-এ নতুন tab: **"Stats"** (icon: `TrendingUp`)
+### 3. Admin — `src/pages/admin/ProcessAdmin.tsx` (new)
 
-**Database — নতুন table `stats`**
-columns: `id, value (int), suffix (text), title (text), description (text), icon (text), sort_order (int), active (bool), created_at, updated_at`
-- RLS: anyone can SELECT active stats; only admin INSERT/UPDATE/DELETE
-- Seed 4 default rows: 170+ প্রোজেক্ট, 30+ ক্লায়েন্ট, 5+ বছর, 100% সন্তুষ্টি
+Two panels in one page:
 
----
+**Steps panel (CRUD)**
+- Add / edit / delete steps (step number, title, description, icon name, sort_order, active toggle)
+- Up / down reorder buttons (swap `sort_order`)
+- Show/hide toggle
+- `logActivity()` on every change
 
-### Technical details
-- Counter: `motion.span` + `useInView({ once: true, amount: 0.4 })` triggers `animate(0, value, { duration: 2.5, onUpdate: v => setDisplay(Math.floor(v)) })`
-- Icon render: `const Icon = (LucideIcons as any)[name] ?? Sparkles`
-- Section lazy-loaded in `Index.tsx` (existing `lazy()` pattern)
-- Activity log: stats create/edit/delete logged via existing `logActivity()`
-- কোনো hardcoded color নয় — শুধু existing semantic tokens (`--primary`, `--gradient-primary`, `glass-strong`, `neon-glow`)
+**Settings panel**
+- Edit section title, subtitle, timeline title
+- Editable timeline items list (add / edit / remove `{day, label, icon}` rows)
+- Edit CTA text, button label, button link
+- Save button writes the single settings row
 
----
+Registered in `src/pages/admin/AdminLayout.tsx` as a new "Process" tab with a `Workflow` (lucide) icon, placed right after the "FAQ" tab.
 
-### Files
-**Create:** `src/components/sections/Stats.tsx`, `src/pages/admin/StatsAdmin.tsx`, migration for `stats` table
-**Edit:** `src/pages/Index.tsx` (add Stats import + place after About), `src/pages/admin/AdminLayout.tsx` (add Stats tab)
+### 4. Files
 
-Approve হলে migration দিয়ে শুরু করবো।
+- **Create**: migration, `src/components/sections/Process.tsx`, `src/pages/admin/ProcessAdmin.tsx`
+- **Edit**: `src/pages/Index.tsx` (lazy import + render), `src/pages/admin/AdminLayout.tsx` (new tab)
+
+No fixed/hardcoded copy — every visible string (heading, subtitle, steps, icons, timeline days, CTA) is admin-editable.

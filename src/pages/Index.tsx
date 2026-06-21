@@ -6,6 +6,7 @@ import Seo from "@/components/Seo";
 // Below-the-fold sections are code-split for faster initial paint
 const About = lazy(() => import("@/components/sections/About"));
 const Stats = lazy(() => import("@/components/sections/Stats"));
+const Process = lazy(() => import("@/components/sections/Process"));
 const Services = lazy(() => import("@/components/sections/Services"));
 const Projects = lazy(() => import("@/components/sections/Projects"));
 const Testimonials = lazy(() => import("@/components/sections/Testimonials"));
@@ -30,6 +31,7 @@ const Index = () => {
       <Suspense fallback={<div className="h-32" />}>
         <About />
         <Stats />
+        <Process />
         <Services />
         <Projects />
         <Pricing />

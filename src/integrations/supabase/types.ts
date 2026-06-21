@@ -268,6 +268,84 @@ export type Database = {
         }
         Relationships: []
       }
+      process_settings: {
+        Row: {
+          active: boolean
+          created_at: string
+          cta_button_label: string
+          cta_button_link: string
+          cta_text: string
+          id: string
+          section_subtitle: string
+          section_title: string
+          timeline_items: Json
+          timeline_title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          cta_button_label?: string
+          cta_button_link?: string
+          cta_text?: string
+          id?: string
+          section_subtitle?: string
+          section_title?: string
+          timeline_items?: Json
+          timeline_title?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          cta_button_label?: string
+          cta_button_link?: string
+          cta_text?: string
+          id?: string
+          section_subtitle?: string
+          section_title?: string
+          timeline_items?: Json
+          timeline_title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      process_steps: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          sort_order: number
+          step_number: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          step_number: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          step_number?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
