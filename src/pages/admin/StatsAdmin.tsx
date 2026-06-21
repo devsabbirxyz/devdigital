@@ -17,8 +17,12 @@ type Stat = {
 };
 
 const ICONS = [
-  "Briefcase", "Users", "Award", "Smile", "TrendingUp", "Star", "Code",
-  "Zap", "Trophy", "Heart", "Rocket", "Target", "ThumbsUp", "Sparkles",
+  "FolderCheck", "PackageCheck", "Rocket", "Globe", "Layers", "Code2",
+  "HeartHandshake", "UsersRound", "Heart", "Handshake", "Users", "Smile",
+  "CalendarDays", "CalendarClock", "Timer", "History", "Clock",
+  "ShieldCheck", "BadgeCheck", "Shield", "CheckCircle2", "Award",
+  "Gem", "Crown", "Diamond", "Medal", "Trophy", "Star", "Sparkles",
+  "Zap", "Target", "TrendingUp", "ThumbsUp", "Briefcase",
 ];
 
 const EMPTY: Omit<Stat, "id"> = {
