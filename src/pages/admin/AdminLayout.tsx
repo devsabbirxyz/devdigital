@@ -22,10 +22,12 @@ import IntroVideoAdmin from "./IntroVideoAdmin";
 import AdminUsers from "./AdminUsers";
 import BlogAdmin from "./BlogAdmin";
 import ServicePagesAdmin from "./ServicePagesAdmin";
+import BrandingAdmin from "./BrandingAdmin";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
   { id: "navigation", label: "Navigation", icon: Compass, Component: Navigation },
+  { id: "branding", label: "Branding", icon: ImageIcon, Component: BrandingAdmin },
   { id: "hero", label: "Hero Section", icon: ImageIcon, Component: HeroAdmin },
   { id: "about", label: "About", icon: User, Component: AboutAdmin },
   { id: "services", label: "Services", icon: Sparkles, Component: ServicesAdmin },
