@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
-  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare, TrendingUp, HelpCircle,
+  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare, TrendingUp, HelpCircle, Workflow,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ import PageSeoAdmin from "./PageSeoAdmin";
 import CommentsAdmin from "./CommentsAdmin";
 import StatsAdmin from "./StatsAdmin";
 import FaqAdmin from "./FaqAdmin";
+import ProcessAdmin from "./ProcessAdmin";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
@@ -36,6 +37,7 @@ const TABS = [
   { id: "hero", label: "Hero Section", icon: ImageIcon, Component: HeroAdmin },
   { id: "about", label: "About", icon: User, Component: AboutAdmin },
   { id: "stats", label: "Stats", icon: TrendingUp, Component: StatsAdmin },
+  { id: "process", label: "Process", icon: Workflow, Component: ProcessAdmin },
   { id: "services", label: "Services", icon: Sparkles, Component: ServicesAdmin },
   { id: "projects", label: "Projects", icon: FolderKanban, Component: ProjectsAdmin },
   { id: "pricing", label: "Pricing", icon: DollarSign, Component: PricingAdmin },
