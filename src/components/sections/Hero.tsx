@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -113,7 +113,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="relative pt-28 pb-16 overflow-hidden bg-grid">
+    <section id="home" className="relative pt-24 pb-16 overflow-hidden bg-grid">
       {/* ambient glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px] pointer-events-none" />
@@ -125,10 +125,6 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto text-center"
         >
-          <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6 text-xs font-medium text-foreground/80">
-            <Sparkles className="h-3 w-3 text-primary" />
-            Premium Portfolio · Crafted with Passion
-          </div>
           <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6">
             {data.title.split(" ").map((w, i, arr) => (
               <span key={i} className={i >= arr.length - 2 ? "text-gradient" : ""}>
