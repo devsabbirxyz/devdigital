@@ -63,6 +63,17 @@ export default function AboutAdmin() {
             {data.image_url && <GhostBtn onClick={() => setData({ ...data, image_url: "" })}>Remove</GhostBtn>}
           </div>
         </Field>
+        <Field label="Resume / CV (PDF)">
+          <div className="flex items-center gap-4">
+            {data.resume_url && (
+              <a href={data.resume_url} target="_blank" rel="noreferrer" className="text-sm text-primary underline">
+                View current file
+              </a>
+            )}
+            <input type="file" accept=".pdf" onChange={handleResume} disabled={resumeUploading} className="text-sm" />
+            {data.resume_url && <GhostBtn onClick={() => setData({ ...data, resume_url: "" })}>Remove</GhostBtn>}
+          </div>
+        </Field>
       </Card>
       <SaveBar saving={saving} onSave={save} />
     </>
