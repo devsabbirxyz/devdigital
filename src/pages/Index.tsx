@@ -9,6 +9,7 @@ const Stats = lazy(() => import("@/components/sections/Stats"));
 const Process = lazy(() => import("@/components/sections/Process"));
 const Services = lazy(() => import("@/components/sections/Services"));
 const Projects = lazy(() => import("@/components/sections/Projects"));
+const ServicesStack = lazy(() => import("@/components/sections/ServicesStack"));
 
 
 const BeforeAfter = lazy(() => import("@/components/sections/BeforeAfter"));
@@ -34,6 +35,7 @@ const Index = () => {
         <About />
         <Stats />
         <Services />
+        <ServicesStack />
         <Projects />
         <Process />
         <Pricing />
