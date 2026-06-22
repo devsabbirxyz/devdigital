@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, Sparkles, DollarSign, Image as ImageIcon,
-  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare, TrendingUp, HelpCircle, Workflow,
+  Settings, Mail, Users, LogOut, Menu, X, Compass, User, MessageCircle, Video, Phone, Newspaper, Briefcase, History, Search, MessagesSquare, TrendingUp, HelpCircle, Workflow, GitCompare,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
