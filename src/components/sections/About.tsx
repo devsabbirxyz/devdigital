@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
+import { Download } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import profileImg from "@/assets/profile.jpg";
 
-type AboutData = { title: string; tagline: string; name: string; bio: string; image_url: string };
+type AboutData = { title: string; tagline: string; name: string; bio: string; image_url: string; resume_url: string };
 const DEFAULT: AboutData = {
   title: "About Me",
   tagline: "Designer · Developer · AI Specialist",
   name: "Your Name",
   bio: "I build modern, future-ready digital products that blend stunning design with powerful technology. From web platforms to AI automations — I deliver work that drives real results.",
   image_url: "",
+  resume_url: "",
 };
 
 export default function About() {
