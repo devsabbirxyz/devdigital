@@ -16,6 +16,7 @@ const DEFAULT: AboutData = {
 export default function AboutAdmin() {
   const { data, setData, loading, saving, save } = useSettingForm<AboutData>("about", DEFAULT);
   const [uploading, setUploading] = useState(false);
+  const [resumeUploading, setResumeUploading] = useState(false);
 
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
 
