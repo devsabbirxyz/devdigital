@@ -30,6 +30,16 @@ export default function AboutAdmin() {
     setData({ ...data, image_url: url });
   };
 
+  const handleResume = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setResumeUploading(true);
+    const url = await uploadToBucket(file, "about");
+    setResumeUploading(false);
+    if (!url) return toast.error("Upload failed");
+    setData({ ...data, resume_url: url });
+  };
+
   return (
     <>
       <PageHeader title="About Section" />
