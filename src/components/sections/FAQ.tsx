@@ -50,10 +50,10 @@ export default function FAQ() {
             FAQ
           </div>
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-3">
-            <span className="text-gradient">সাধারণ জিজ্ঞাসা</span>
+            <span className="text-gradient">Frequently Asked Questions</span>
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base">
-            আমার সেবা সম্পর্কে সবচেয়ে বেশি জিজ্ঞাসিত প্রশ্নগুলোর উত্তর।
+            Answers to the most common questions about my services.
           </p>
         </motion.div>
 

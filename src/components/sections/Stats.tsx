@@ -73,10 +73,10 @@ export default function Stats() {
             Achievements
           </span>
           <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-            আমার <span className="text-gradient">অর্জন</span>
+            My <span className="text-gradient">Achievements</span>
           </h2>
           <p className="text-muted-foreground mt-3 text-lg">
-            সংখ্যা নয়, ফলাফলই আমার কাজের পরিচয়।
+            Not just numbers — results define my work.
           </p>
         </motion.div>
 
