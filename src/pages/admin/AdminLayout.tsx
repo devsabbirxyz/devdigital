@@ -42,6 +42,8 @@ const TABS = [
   { id: "services", label: "Services", icon: Sparkles, Component: ServicesAdmin },
   { id: "projects", label: "Projects", icon: FolderKanban, Component: ProjectsAdmin },
   { id: "pricing", label: "Pricing", icon: DollarSign, Component: PricingAdmin },
+  { id: "results", label: "Results", icon: GitCompare, Component: BeforeAfterAdmin },
+  
   
   { id: "blog", label: "Blog", icon: Newspaper, Component: BlogAdmin },
   { id: "comments", label: "Comments", icon: MessagesSquare, Component: CommentsAdmin },
