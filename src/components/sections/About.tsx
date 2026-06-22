@@ -54,6 +54,15 @@ export default function About() {
               {data.name}
             </h3>
             <p className="text-muted-foreground leading-relaxed text-lg">{data.bio}</p>
+            {data.resume_url && (
+              <a
+                href={data.resume_url}
+                download
+                className="mt-6 inline-flex items-center gap-2 bg-gradient-primary text-white font-semibold px-7 py-3 rounded-full neon-glow hover:scale-105 transition-transform"
+              >
+                <Download className="h-4 w-4" /> Download CV
+              </a>
+            )}
           </motion.div>
         </div>
       </div>
