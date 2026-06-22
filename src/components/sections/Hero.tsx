@@ -115,8 +115,10 @@ export default function Hero() {
   return (
     <section id="home" className="relative pt-24 pb-16 overflow-hidden bg-grid">
       {/* ambient glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px] pointer-events-none" />
+      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/30 rounded-full pointer-events-none ${isMobile ? "blur-3xl" : "blur-[120px]"}`} />
+      {!isMobile && (
+        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px] pointer-events-none" />
+      )}
 
       <div className="container relative z-10">
         <motion.div
@@ -156,23 +158,22 @@ export default function Hero() {
           {/* Outer halo — wide soft purple wash behind everything */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] md:w-[720px] h-[460px] md:h-[720px] rounded-full blur-3xl animate-pulse-glow"
+            className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] md:w-[720px] h-[460px] md:h-[720px] rounded-full blur-2xl md:blur-3xl ${isMobile ? "" : "animate-pulse-glow"}`}
             style={{
               background:
                 "radial-gradient(circle, #a855f7cc 0%, #a855f799 28%, #a855f744 55%, transparent 78%)",
               zIndex: 0,
-              animationDuration: isMobile ? "4.8s" : undefined,
             }}
           />
           {/* Inner core — bright lamp bulb, sits in front of side cards but behind the active card */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] md:w-[360px] h-[260px] md:h-[360px] rounded-full blur-2xl animate-pulse-glow"
+            className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] md:w-[360px] h-[260px] md:h-[360px] rounded-full blur-xl md:blur-2xl ${isMobile ? "" : "animate-pulse-glow"}`}
             style={{
               background:
                 "radial-gradient(circle, #f5d0fe 0%, #d8b4fe 18%, #a855f7 45%, #a855f766 70%, transparent 100%)",
               zIndex: 5,
-              animationDuration: isMobile ? "5.4s" : "2.6s",
+              animationDuration: "2.6s",
             }}
           />
           {readyImages.map((src, i) => {
@@ -205,7 +206,7 @@ export default function Hero() {
                   height={288}
                   className="w-full h-full object-cover"
                 />
-                {i === active && (
+                {i === active && !isMobile && (
                   <div className="absolute inset-0 ring-2 ring-primary/60 rounded-3xl pointer-events-none animate-pulse-glow" />
                 )}
               </motion.div>
