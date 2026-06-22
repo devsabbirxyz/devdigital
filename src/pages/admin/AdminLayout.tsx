@@ -29,7 +29,7 @@ import CommentsAdmin from "./CommentsAdmin";
 import StatsAdmin from "./StatsAdmin";
 import FaqAdmin from "./FaqAdmin";
 import ProcessAdmin from "./ProcessAdmin";
-
+import BeforeAfterAdmin from "./BeforeAfterAdmin";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Component: Dashboard },
