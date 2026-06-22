@@ -11,6 +11,7 @@ const Services = lazy(() => import("@/components/sections/Services"));
 const Projects = lazy(() => import("@/components/sections/Projects"));
 
 
+const BeforeAfter = lazy(() => import("@/components/sections/BeforeAfter"));
 const Testimonials = lazy(() => import("@/components/sections/Testimonials"));
 const Pricing = lazy(() => import("@/components/sections/Pricing"));
 const Contact = lazy(() => import("@/components/sections/Contact"));
