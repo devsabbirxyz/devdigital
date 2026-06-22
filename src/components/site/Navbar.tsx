@@ -5,6 +5,7 @@ import { Sparkles } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { scrollToSection } from "@/lib/scroll";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type NavData = {
   logo_url: string;
@@ -31,6 +32,7 @@ export default function Navbar() {
   const { data } = useSiteSettings<NavData>("navigation", DEFAULT);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -84,7 +86,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <ThemeToggle />
+        {!isMobile && <ThemeToggle />}
 
         <button
           onClick={() => handleNav("contact")}

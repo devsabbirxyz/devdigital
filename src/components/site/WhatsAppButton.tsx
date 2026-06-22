@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useIsMobile } from "@/hooks/use-mobile";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type WAData = { enabled: boolean; phone_number: string; default_message: string };
 const DEFAULT: WAData = { enabled: true, phone_number: "15551234567", default_message: "Hi! I am interested in your services." };
@@ -8,6 +10,7 @@ const DEFAULT: WAData = { enabled: true, phone_number: "15551234567", default_me
 export default function WhatsAppButton() {
   const { data } = useSiteSettings<WAData>("whatsapp", DEFAULT);
   const [hover, setHover] = useState(false);
+  const isMobile = useIsMobile();
 
   if (!data.enabled || !data.phone_number) return null;
 
@@ -23,6 +26,11 @@ export default function WhatsAppButton() {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
+      {isMobile && (
+        <div className="absolute bottom-full right-0 mb-3 flex justify-end">
+          <ThemeToggle />
+        </div>
+      )}
       {hover && (
         <motion.div
           initial={{ opacity: 0, x: 10 }}
