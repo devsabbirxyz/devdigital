@@ -3,18 +3,20 @@ import { toast } from "sonner";
 import { PageHeader, Card, Field, inputCls, GhostBtn, uploadToBucket } from "./_ui";
 import { useSettingForm, SaveBar } from "./SettingsForm";
 
-type AboutData = { title: string; tagline: string; name: string; bio: string; image_url: string };
+type AboutData = { title: string; tagline: string; name: string; bio: string; image_url: string; resume_url: string };
 const DEFAULT: AboutData = {
   title: "About Me",
   tagline: "Designer · Developer · AI Specialist",
   name: "Your Name",
   bio: "I build modern, future-ready digital products that blend stunning design with powerful technology.",
   image_url: "",
+  resume_url: "",
 };
 
 export default function AboutAdmin() {
   const { data, setData, loading, saving, save } = useSettingForm<AboutData>("about", DEFAULT);
   const [uploading, setUploading] = useState(false);
+  const [resumeUploading, setResumeUploading] = useState(false);
 
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
 
@@ -26,6 +28,16 @@ export default function AboutAdmin() {
     setUploading(false);
     if (!url) return toast.error("Upload failed");
     setData({ ...data, image_url: url });
+  };
+
+  const handleResume = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setResumeUploading(true);
+    const url = await uploadToBucket(file, "about");
+    setResumeUploading(false);
+    if (!url) return toast.error("Upload failed");
+    setData({ ...data, resume_url: url });
   };
 
   return (
@@ -49,6 +61,17 @@ export default function AboutAdmin() {
             {data.image_url && <img src={data.image_url} alt="" className="h-20 w-20 rounded-full object-cover glass" />}
             <input type="file" accept="image/*" onChange={handleImage} disabled={uploading} className="text-sm" />
             {data.image_url && <GhostBtn onClick={() => setData({ ...data, image_url: "" })}>Remove</GhostBtn>}
+          </div>
+        </Field>
+        <Field label="Resume / CV (PDF)">
+          <div className="flex items-center gap-4">
+            {data.resume_url && (
+              <a href={data.resume_url} target="_blank" rel="noreferrer" className="text-sm text-primary underline">
+                View current file
+              </a>
+            )}
+            <input type="file" accept=".pdf" onChange={handleResume} disabled={resumeUploading} className="text-sm" />
+            {data.resume_url && <GhostBtn onClick={() => setData({ ...data, resume_url: "" })}>Remove</GhostBtn>}
           </div>
         </Field>
       </Card>
