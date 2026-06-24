@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe, Palette, Bot, ShoppingCart, Smartphone, Wrench, Plug, Package,
   Check, ArrowLeft, ArrowRight, Loader2, Send, Shield, Clock, MapPin, Zap, Star, Briefcase,
+  Megaphone, ChevronDown,
 } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -18,11 +19,25 @@ const SERVICES = [
   { id: "web", label: "Web Development", icon: Globe },
   { id: "uiux", label: "UI/UX Design", icon: Palette },
   { id: "ai", label: "AI Automation", icon: Bot },
+  { id: "digital", label: "Digital Marketing", icon: Megaphone },
   { id: "ecom", label: "E-commerce Store", icon: ShoppingCart },
   { id: "mobile", label: "Mobile Responsive Design", icon: Smartphone },
   { id: "maint", label: "Website Maintenance", icon: Wrench },
   { id: "api", label: "API Integration", icon: Plug },
   { id: "full", label: "Full Package (All-in-One)", icon: Package },
+];
+
+const DIGITAL_SUBS = [
+  "Facebook Ads",
+  "Google Ads",
+  "SEO (Search Engine Optimization)",
+  "Social Media Marketing",
+  "Instagram Marketing",
+  "YouTube Marketing",
+  "Email Marketing",
+  "Content Marketing",
+  "Influencer Marketing",
+  "Marketing Strategy / Consultation",
 ];
 
 const PROJECT_TYPES = ["Brand New Project", "Redesign Existing Site", "Add Features to Existing Site", "Fix Bugs / Issues"];
@@ -76,12 +91,13 @@ type FormState = {
   referral: string;
   description: string;
   fileNote: string;
+  digitalSubs: string[];
 };
 
 const INITIAL: FormState = {
   services: [], projectType: "", platform: "", pages: "", designStatus: "", referenceLinks: "",
   revisions: "", budgetId: "", deadline: "", fullName: "", email: "", whatsapp: "",
-  company: "", role: "", referral: "", description: "", fileNote: "",
+  company: "", role: "", referral: "", description: "", fileNote: "", digitalSubs: [],
 };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -130,7 +146,11 @@ export default function HireMe() {
   }, [form.budgetId, form.services]);
 
   const canNext = useMemo(() => {
-    if (step === 1) return form.services.length > 0;
+    if (step === 1) {
+      if (form.services.length === 0) return false;
+      if (form.services.includes("digital") && form.digitalSubs.length === 0) return false;
+      return true;
+    }
     if (step === 2) return form.projectType && form.platform && form.pages && form.designStatus && form.revisions;
     if (step === 3) return form.budgetId && form.deadline;
     if (step === 4) {
@@ -162,6 +182,7 @@ export default function HireMe() {
     const summary = `🚀 NEW HIRE REQUEST
 
 Services: ${selectedServices}
+${form.services.includes("digital") ? `Digital Marketing Sub-services: ${form.digitalSubs.join(", ")}\n` : ""}
 Project Type: ${form.projectType}
 Platform: ${form.platform}
 Pages: ${form.pages}
@@ -327,6 +348,58 @@ Attachments note: ${form.fileNote || "—"}`;
                         );
                       })}
                     </div>
+                    <AnimatePresence>
+                      {form.services.includes("digital") && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="overflow-hidden mt-5"
+                        >
+                          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 md:p-5">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Megaphone className="h-4 w-4 text-primary" />
+                              <p className="text-sm font-semibold">Which Digital Marketing services?</p>
+                              <span className="text-xs text-muted-foreground ml-auto">Select all that apply</span>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {DIGITAL_SUBS.map((sub) => {
+                                const checked = form.digitalSubs.includes(sub);
+                                return (
+                                  <button
+                                    key={sub}
+                                    type="button"
+                                    onClick={() =>
+                                      setForm((p) => ({
+                                        ...p,
+                                        digitalSubs: checked
+                                          ? p.digitalSubs.filter((x) => x !== sub)
+                                          : [...p.digitalSubs, sub],
+                                      }))
+                                    }
+                                    className={`flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm transition ${
+                                      checked
+                                        ? "border-primary bg-primary/10 text-foreground"
+                                        : "border-border bg-card/40 hover:border-primary/50"
+                                    }`}
+                                  >
+                                    <span
+                                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                                        checked ? "bg-primary border-primary" : "border-border"
+                                      }`}
+                                    >
+                                      {checked && <Check className="h-3 w-3 text-primary-foreground" />}
+                                    </span>
+                                    <span className="font-medium">{sub}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </>
                 )}
 
