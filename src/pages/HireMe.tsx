@@ -40,11 +40,6 @@ const DIGITAL_SUBS = [
   "Marketing Strategy / Consultation",
 ];
 
-const PROJECT_TYPES = ["Brand New Project", "Redesign Existing Site", "Add Features to Existing Site", "Fix Bugs / Issues"];
-const PLATFORMS = ["React", "Next.js", "WordPress", "Webflow", "Lovable", "No Preference", "Other"];
-const PAGES = ["1–3 pages", "4–7 pages", "8–15 pages", "15+ pages", "Not Sure"];
-const DESIGN_STATUS = ["Yes, I have Figma/design files", "No, I need design too", "I have rough ideas only"];
-const REVISIONS = ["1 revision", "2 revisions", "3 revisions", "Unlimited revisions"];
 const BUDGETS = [
   { id: "b1", label: "$100 – $500", sub: "Small Project", icon: "💰", min: 100, max: 500 },
   { id: "b2", label: "$500 – $1,000", sub: "Medium Project", icon: "💰💰", min: 500, max: 1000 },
@@ -59,45 +54,29 @@ const DEADLINES = [
   { label: "1–2 Months", icon: "📆" },
   { label: "No Fixed Deadline", icon: "🕐" },
 ];
-const REFERRALS = ["Google Search", "Fiverr", "LinkedIn", "GitHub", "Friend/Referral", "Social Media", "Other"];
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 3;
 
 const contactSchema = z.object({
   fullName: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().email("Invalid email").max(255),
   whatsapp: z.string().trim().max(40).optional().or(z.literal("")),
-  company: z.string().trim().max(120).optional().or(z.literal("")),
-  role: z.string().trim().max(120).optional().or(z.literal("")),
-  referral: z.string().max(80).optional().or(z.literal("")),
   description: z.string().trim().min(10, "Please describe your project (min 10 chars)").max(5000),
-  fileNote: z.string().max(500).optional().or(z.literal("")),
 });
 
 type FormState = {
   services: string[];
-  projectType: string;
-  platform: string;
-  pages: string;
-  designStatus: string;
-  referenceLinks: string;
-  revisions: string;
   budgetId: string;
   deadline: string;
   fullName: string;
   email: string;
   whatsapp: string;
-  company: string;
-  role: string;
-  referral: string;
   description: string;
-  fileNote: string;
   digitalSubs: string[];
 };
 
 const INITIAL: FormState = {
-  services: [], projectType: "", platform: "", pages: "", designStatus: "", referenceLinks: "",
-  revisions: "", budgetId: "", deadline: "", fullName: "", email: "", whatsapp: "",
-  company: "", role: "", referral: "", description: "", fileNote: "", digitalSubs: [],
+  services: [], budgetId: "", deadline: "", fullName: "", email: "", whatsapp: "",
+  description: "", digitalSubs: [],
 };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
