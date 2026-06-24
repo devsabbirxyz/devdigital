@@ -348,6 +348,58 @@ Attachments note: ${form.fileNote || "—"}`;
                         );
                       })}
                     </div>
+                    <AnimatePresence>
+                      {form.services.includes("digital") && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="overflow-hidden mt-5"
+                        >
+                          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 md:p-5">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Megaphone className="h-4 w-4 text-primary" />
+                              <p className="text-sm font-semibold">Which Digital Marketing services?</p>
+                              <span className="text-xs text-muted-foreground ml-auto">Select all that apply</span>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {DIGITAL_SUBS.map((sub) => {
+                                const checked = form.digitalSubs.includes(sub);
+                                return (
+                                  <button
+                                    key={sub}
+                                    type="button"
+                                    onClick={() =>
+                                      setForm((p) => ({
+                                        ...p,
+                                        digitalSubs: checked
+                                          ? p.digitalSubs.filter((x) => x !== sub)
+                                          : [...p.digitalSubs, sub],
+                                      }))
+                                    }
+                                    className={`flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm transition ${
+                                      checked
+                                        ? "border-primary bg-primary/10 text-foreground"
+                                        : "border-border bg-card/40 hover:border-primary/50"
+                                    }`}
+                                  >
+                                    <span
+                                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                                        checked ? "bg-primary border-primary" : "border-border"
+                                      }`}
+                                    >
+                                      {checked && <Check className="h-3 w-3 text-primary-foreground" />}
+                                    </span>
+                                    <span className="font-medium">{sub}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </>
                 )}
 
