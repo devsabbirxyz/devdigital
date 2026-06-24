@@ -130,9 +130,8 @@ export default function HireMe() {
       if (form.services.includes("digital") && form.digitalSubs.length === 0) return false;
       return true;
     }
-    if (step === 2) return form.projectType && form.platform && form.pages && form.designStatus && form.revisions;
-    if (step === 3) return form.budgetId && form.deadline;
-    if (step === 4) {
+    if (step === 2) return !!(form.budgetId && form.deadline);
+    if (step === 3) {
       const parsed = contactSchema.safeParse(form);
       return parsed.success;
     }
@@ -152,7 +151,7 @@ export default function HireMe() {
     const parsed = contactSchema.safeParse(form);
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
-      setStep(4);
+      setStep(3);
       return;
     }
     setSubmitting(true);
@@ -162,12 +161,6 @@ export default function HireMe() {
 
 Services: ${selectedServices}
 ${form.services.includes("digital") ? `Digital Marketing Sub-services: ${form.digitalSubs.join(", ")}\n` : ""}
-Project Type: ${form.projectType}
-Platform: ${form.platform}
-Pages: ${form.pages}
-Design: ${form.designStatus}
-Revisions: ${form.revisions}
-References: ${form.referenceLinks || "—"}
 Budget: ${budget?.label || "—"} (${budget?.sub || ""})
 Deadline: ${form.deadline}
 Estimated: ${estimate ? `$${estimate.min} – $${estimate.max}` : "To discuss"}
@@ -175,14 +168,9 @@ Estimated: ${estimate ? `$${estimate.min} – $${estimate.max}` : "To discuss"}
 Name: ${form.fullName}
 Email: ${form.email}
 WhatsApp: ${form.whatsapp || "—"}
-Company: ${form.company || "—"}
-Role: ${form.role || "—"}
-Found via: ${form.referral || "—"}
 
 Description:
-${form.description}
-
-Attachments note: ${form.fileNote || "—"}`;
+${form.description}`;
 
     const { error } = await supabase.from("contact_submissions").insert({
       name: form.fullName, email: form.email, message: summary,
