@@ -13,6 +13,7 @@ const Auth = lazy(() => import("./pages/Auth.tsx"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.tsx"));
 const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const ServicePage = lazy(() => import("./pages/ServicePage.tsx"));
+const HireMe = lazy(() => import("./pages/HireMe.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
+          <Route path="/hire-me" element={<HireMe />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/services/:slug" element={<ServicePage />} />
           <Route path="/digitalmarketingservice" element={<ServicePage forcedSlug="digital-marketing" />} />

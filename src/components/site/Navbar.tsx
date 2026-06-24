@@ -89,7 +89,7 @@ export default function Navbar() {
         {!isMobile && <ThemeToggle />}
 
         <button
-          onClick={() => handleNav("contact")}
+          onClick={() => navigate("/hire-me")}
           className="bg-gradient-primary text-white text-[10px] md:text-sm font-semibold px-2.5 md:px-5 py-1 md:py-2 rounded-full neon-glow hover:scale-105 transition-transform whitespace-nowrap"
         >
           Hire Me
