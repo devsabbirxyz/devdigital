@@ -91,12 +91,13 @@ type FormState = {
   referral: string;
   description: string;
   fileNote: string;
+  digitalSubs: string[];
 };
 
 const INITIAL: FormState = {
   services: [], projectType: "", platform: "", pages: "", designStatus: "", referenceLinks: "",
   revisions: "", budgetId: "", deadline: "", fullName: "", email: "", whatsapp: "",
-  company: "", role: "", referral: "", description: "", fileNote: "",
+  company: "", role: "", referral: "", description: "", fileNote: "", digitalSubs: [],
 };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
