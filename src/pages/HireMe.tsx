@@ -146,7 +146,11 @@ export default function HireMe() {
   }, [form.budgetId, form.services]);
 
   const canNext = useMemo(() => {
-    if (step === 1) return form.services.length > 0;
+    if (step === 1) {
+      if (form.services.length === 0) return false;
+      if (form.services.includes("digital") && form.digitalSubs.length === 0) return false;
+      return true;
+    }
     if (step === 2) return form.projectType && form.platform && form.pages && form.designStatus && form.revisions;
     if (step === 3) return form.budgetId && form.deadline;
     if (step === 4) {
@@ -178,6 +182,7 @@ export default function HireMe() {
     const summary = `🚀 NEW HIRE REQUEST
 
 Services: ${selectedServices}
+${form.services.includes("digital") ? `Digital Marketing Sub-services: ${form.digitalSubs.join(", ")}\n` : ""}
 Project Type: ${form.projectType}
 Platform: ${form.platform}
 Pages: ${form.pages}
