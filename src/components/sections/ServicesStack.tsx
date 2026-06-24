@@ -13,6 +13,9 @@ import {
   Smartphone,
   type LucideIcon,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { scrollToSection } from "@/lib/scroll";
 
 type Service = { label: string; Icon: LucideIcon };
 
@@ -81,6 +84,17 @@ export default function ServicesStack() {
               );
             })}
           </div>
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Button
+            size="lg"
+            onClick={() => scrollToSection("contact")}
+            className="rounded-full px-8 shadow-card-soft group"
+          >
+            Hire Me
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
         </div>
       </div>
 
