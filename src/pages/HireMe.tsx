@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe, Palette, Bot, ShoppingCart, Smartphone, Wrench, Plug, Package,
   Check, ArrowLeft, ArrowRight, Loader2, Send, Shield, Clock, MapPin, Zap, Star, Briefcase,
+  Megaphone, ChevronDown,
 } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -18,11 +19,25 @@ const SERVICES = [
   { id: "web", label: "Web Development", icon: Globe },
   { id: "uiux", label: "UI/UX Design", icon: Palette },
   { id: "ai", label: "AI Automation", icon: Bot },
+  { id: "digital", label: "Digital Marketing", icon: Megaphone },
   { id: "ecom", label: "E-commerce Store", icon: ShoppingCart },
   { id: "mobile", label: "Mobile Responsive Design", icon: Smartphone },
   { id: "maint", label: "Website Maintenance", icon: Wrench },
   { id: "api", label: "API Integration", icon: Plug },
   { id: "full", label: "Full Package (All-in-One)", icon: Package },
+];
+
+const DIGITAL_SUBS = [
+  "Facebook Ads",
+  "Google Ads",
+  "SEO (Search Engine Optimization)",
+  "Social Media Marketing",
+  "Instagram Marketing",
+  "YouTube Marketing",
+  "Email Marketing",
+  "Content Marketing",
+  "Influencer Marketing",
+  "Marketing Strategy / Consultation",
 ];
 
 const PROJECT_TYPES = ["Brand New Project", "Redesign Existing Site", "Add Features to Existing Site", "Fix Bugs / Issues"];
