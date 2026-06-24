@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { scrollToId } from "@/lib/scroll";
+import { scrollToSection } from "@/lib/scroll";
 
 type Service = { label: string; Icon: LucideIcon };
 
@@ -89,7 +89,7 @@ export default function ServicesStack() {
         <div className="mt-10 flex justify-center">
           <Button
             size="lg"
-            onClick={() => scrollToId("contact")}
+            onClick={() => scrollToSection("contact")}
             className="rounded-full px-8 shadow-card-soft group"
           >
             Hire Me
