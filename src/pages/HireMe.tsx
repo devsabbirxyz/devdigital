@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe, Palette, Bot, ShoppingCart, Smartphone, Wrench, Plug, Package,
@@ -107,7 +107,6 @@ function OptionCard({
 }
 
 export default function HireMe() {
-  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [maxReached, setMaxReached] = useState(1);
   const [form, setForm] = useState<FormState>(INITIAL);
