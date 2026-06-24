@@ -90,7 +90,7 @@ export default function ServicesStack() {
           100% { transform: translateY(-50%); }
         }
         .services-stack-track {
-          animation: services-stack-scroll 8s linear infinite;
+          animation: services-stack-scroll 20s linear infinite;
           will-change: transform;
         }
       `}</style>
