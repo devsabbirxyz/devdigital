@@ -40,11 +40,6 @@ const DIGITAL_SUBS = [
   "Marketing Strategy / Consultation",
 ];
 
-const PROJECT_TYPES = ["Brand New Project", "Redesign Existing Site", "Add Features to Existing Site", "Fix Bugs / Issues"];
-const PLATFORMS = ["React", "Next.js", "WordPress", "Webflow", "Lovable", "No Preference", "Other"];
-const PAGES = ["1–3 pages", "4–7 pages", "8–15 pages", "15+ pages", "Not Sure"];
-const DESIGN_STATUS = ["Yes, I have Figma/design files", "No, I need design too", "I have rough ideas only"];
-const REVISIONS = ["1 revision", "2 revisions", "3 revisions", "Unlimited revisions"];
 const BUDGETS = [
   { id: "b1", label: "$100 – $500", sub: "Small Project", icon: "💰", min: 100, max: 500 },
   { id: "b2", label: "$500 – $1,000", sub: "Medium Project", icon: "💰💰", min: 500, max: 1000 },
@@ -59,45 +54,29 @@ const DEADLINES = [
   { label: "1–2 Months", icon: "📆" },
   { label: "No Fixed Deadline", icon: "🕐" },
 ];
-const REFERRALS = ["Google Search", "Fiverr", "LinkedIn", "GitHub", "Friend/Referral", "Social Media", "Other"];
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 3;
 
 const contactSchema = z.object({
   fullName: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().email("Invalid email").max(255),
   whatsapp: z.string().trim().max(40).optional().or(z.literal("")),
-  company: z.string().trim().max(120).optional().or(z.literal("")),
-  role: z.string().trim().max(120).optional().or(z.literal("")),
-  referral: z.string().max(80).optional().or(z.literal("")),
   description: z.string().trim().min(10, "Please describe your project (min 10 chars)").max(5000),
-  fileNote: z.string().max(500).optional().or(z.literal("")),
 });
 
 type FormState = {
   services: string[];
-  projectType: string;
-  platform: string;
-  pages: string;
-  designStatus: string;
-  referenceLinks: string;
-  revisions: string;
   budgetId: string;
   deadline: string;
   fullName: string;
   email: string;
   whatsapp: string;
-  company: string;
-  role: string;
-  referral: string;
   description: string;
-  fileNote: string;
   digitalSubs: string[];
 };
 
 const INITIAL: FormState = {
-  services: [], projectType: "", platform: "", pages: "", designStatus: "", referenceLinks: "",
-  revisions: "", budgetId: "", deadline: "", fullName: "", email: "", whatsapp: "",
-  company: "", role: "", referral: "", description: "", fileNote: "", digitalSubs: [],
+  services: [], budgetId: "", deadline: "", fullName: "", email: "", whatsapp: "",
+  description: "", digitalSubs: [],
 };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -151,9 +130,8 @@ export default function HireMe() {
       if (form.services.includes("digital") && form.digitalSubs.length === 0) return false;
       return true;
     }
-    if (step === 2) return form.projectType && form.platform && form.pages && form.designStatus && form.revisions;
-    if (step === 3) return form.budgetId && form.deadline;
-    if (step === 4) {
+    if (step === 2) return !!(form.budgetId && form.deadline);
+    if (step === 3) {
       const parsed = contactSchema.safeParse(form);
       return parsed.success;
     }
@@ -173,7 +151,7 @@ export default function HireMe() {
     const parsed = contactSchema.safeParse(form);
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
-      setStep(4);
+      setStep(3);
       return;
     }
     setSubmitting(true);
@@ -183,12 +161,6 @@ export default function HireMe() {
 
 Services: ${selectedServices}
 ${form.services.includes("digital") ? `Digital Marketing Sub-services: ${form.digitalSubs.join(", ")}\n` : ""}
-Project Type: ${form.projectType}
-Platform: ${form.platform}
-Pages: ${form.pages}
-Design: ${form.designStatus}
-Revisions: ${form.revisions}
-References: ${form.referenceLinks || "—"}
 Budget: ${budget?.label || "—"} (${budget?.sub || ""})
 Deadline: ${form.deadline}
 Estimated: ${estimate ? `$${estimate.min} – $${estimate.max}` : "To discuss"}
@@ -196,14 +168,9 @@ Estimated: ${estimate ? `$${estimate.min} – $${estimate.max}` : "To discuss"}
 Name: ${form.fullName}
 Email: ${form.email}
 WhatsApp: ${form.whatsapp || "—"}
-Company: ${form.company || "—"}
-Role: ${form.role || "—"}
-Found via: ${form.referral || "—"}
 
 Description:
-${form.description}
-
-Attachments note: ${form.fileNote || "—"}`;
+${form.description}`;
 
     const { error } = await supabase.from("contact_submissions").insert({
       name: form.fullName, email: form.email, message: summary,
@@ -405,75 +372,6 @@ Attachments note: ${form.fileNote || "—"}`;
 
                 {step === 2 && (
                   <>
-                    <SectionTitle>Tell me about your project</SectionTitle>
-                    <div className="space-y-6">
-                      <div>
-                        <p className="text-sm font-semibold mb-2">Project Type</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                          {PROJECT_TYPES.map((t) => (
-                            <OptionCard key={t} active={form.projectType === t} onClick={() => set("projectType", t)}>
-                              <span className="text-sm font-medium">{t}</span>
-                            </OptionCard>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold mb-2">Preferred Platform / Tech</p>
-                        <select
-                          value={form.platform}
-                          onChange={(e) => set("platform", e.target.value)}
-                          className="w-full bg-input/60 border border-border focus:border-primary focus:ring-2 focus:ring-primary/30 rounded-xl px-4 py-3 outline-none"
-                        >
-                          <option value="">Select a platform…</option>
-                          {PLATFORMS.map((p) => <option key={p} value={p}>{p}</option>)}
-                        </select>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold mb-2">Number of Pages Needed</p>
-                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                          {PAGES.map((p) => (
-                            <OptionCard key={p} active={form.pages === p} onClick={() => set("pages", p)} className="text-center">
-                              <span className="text-sm font-medium">{p}</span>
-                            </OptionCard>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold mb-2">Is your design ready?</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                          {DESIGN_STATUS.map((d) => (
-                            <OptionCard key={d} active={form.designStatus === d} onClick={() => set("designStatus", d)}>
-                              <span className="text-sm font-medium">{d}</span>
-                            </OptionCard>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold mb-2">Reference Website Links <span className="text-muted-foreground font-normal">(optional)</span></p>
-                        <input
-                          value={form.referenceLinks}
-                          onChange={(e) => set("referenceLinks", e.target.value)}
-                          placeholder="Paste any websites you like for reference..."
-                          maxLength={500}
-                          className="w-full bg-input/60 border border-border focus:border-primary focus:ring-2 focus:ring-primary/30 rounded-xl px-4 py-3 outline-none"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold mb-2">How many revisions do you expect?</p>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                          {REVISIONS.map((r) => (
-                            <OptionCard key={r} active={form.revisions === r} onClick={() => set("revisions", r)} className="text-center">
-                              <span className="text-sm font-medium">{r}</span>
-                            </OptionCard>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {step === 3 && (
-                  <>
                     <SectionTitle>Budget & Deadline</SectionTitle>
                     <div className="space-y-6">
                       <div>
@@ -513,9 +411,9 @@ Attachments note: ${form.fileNote || "—"}`;
                   </>
                 )}
 
-                {step === 4 && (
+                {step === 3 && (
                   <>
-                    <SectionTitle>How can I reach you?</SectionTitle>
+                    <SectionTitle>Your contact info</SectionTitle>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Full Name *">
                         <input value={form.fullName} onChange={(e) => set("fullName", e.target.value)} maxLength={100} className={inputCls} />
@@ -523,41 +421,20 @@ Attachments note: ${form.fileNote || "—"}`;
                       <Field label="Email Address *">
                         <input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} maxLength={255} className={inputCls} />
                       </Field>
-                      <Field label="WhatsApp Number">
-                        <input value={form.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} placeholder="+1 555 123 4567" maxLength={40} className={inputCls} />
-                      </Field>
-                      <Field label="Company or Brand Name">
-                        <input value={form.company} onChange={(e) => set("company", e.target.value)} maxLength={120} className={inputCls} />
-                      </Field>
-                      <Field label="Your Role / Position">
-                        <input value={form.role} onChange={(e) => set("role", e.target.value)} placeholder="Founder, Marketing Manager…" maxLength={120} className={inputCls} />
-                      </Field>
-                      <Field label="How did you find me?">
-                        <select value={form.referral} onChange={(e) => set("referral", e.target.value)} className={inputCls}>
-                          <option value="">Select…</option>
-                          {REFERRALS.map((r) => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                      </Field>
                       <div className="sm:col-span-2">
-                        <Field label="Project Description *">
-                          <textarea
-                            value={form.description}
-                            onChange={(e) => set("description", e.target.value)}
-                            rows={5}
-                            maxLength={5000}
-                            placeholder="Describe your project in detail. What problem are you solving? Who is your target audience? Any specific features you want?"
-                            className={`${inputCls} resize-none`}
-                          />
+                        <Field label="WhatsApp Number (optional)">
+                          <input value={form.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} placeholder="+1 555 123 4567" maxLength={40} className={inputCls} />
                         </Field>
                       </div>
                       <div className="sm:col-span-2">
-                        <Field label="Attach any documents, mockups or briefs (PDF, PNG, JPG, Figma link)">
-                          <input
-                            value={form.fileNote}
-                            onChange={(e) => set("fileNote", e.target.value)}
-                            placeholder="Paste Figma/Drive link or describe attachments…"
-                            maxLength={500}
-                            className={inputCls}
+                        <Field label="Tell me about your project *">
+                          <textarea
+                            value={form.description}
+                            onChange={(e) => set("description", e.target.value)}
+                            rows={4}
+                            maxLength={5000}
+                            placeholder="A few lines about what you need — goal, timeline, anything important."
+                            className={`${inputCls} resize-none`}
                           />
                         </Field>
                       </div>
@@ -566,48 +443,11 @@ Attachments note: ${form.fileNote || "—"}`;
                       <Shield className="h-3.5 w-3.5" />
                       Your information is safe and will never be shared with third parties.
                     </p>
-                  </>
-                )}
-
-                {step === 5 && (
-                  <>
-                    <SectionTitle>Review Your Request</SectionTitle>
-                    <div className="space-y-4">
-                      <SummaryRow label="Selected Services" value={form.services.map((id) => SERVICES.find((s) => s.id === id)?.label).join(", ") || "—"} />
-                      <SummaryRow label="Project Type" value={form.projectType} />
-                      <SummaryRow label="Platform" value={form.platform} />
-                      <SummaryRow label="Pages" value={form.pages} />
-                      <SummaryRow label="Design Status" value={form.designStatus} />
-                      <SummaryRow label="Revisions" value={form.revisions} />
-                      <SummaryRow label="Reference Links" value={form.referenceLinks || "—"} />
-                      <SummaryRow label="Budget" value={BUDGETS.find((b) => b.id === form.budgetId)?.label || "—"} />
-                      <SummaryRow label="Deadline" value={form.deadline} />
-                      <SummaryRow label="Estimated Price" value={estimate ? `$${estimate.min.toLocaleString()} – $${estimate.max.toLocaleString()}` : "To discuss"} highlight />
-                      <SummaryRow label="Name" value={form.fullName} />
-                      <SummaryRow label="Email" value={form.email} />
-                      <SummaryRow label="WhatsApp" value={form.whatsapp || "—"} />
-                      <SummaryRow label="Description" value={form.description} />
-                    </div>
-
-                    <div className="mt-6 rounded-2xl border border-border bg-card/40 p-5 flex flex-wrap items-center gap-4">
-                      <div className="w-14 h-14 rounded-full bg-gradient-primary flex items-center justify-center text-xl font-bold text-primary-foreground">
-                        S
-                      </div>
-                      <div className="flex-1 min-w-[180px]">
-                        <p className="font-semibold">You'll be working with Sabbir</p>
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground mt-1">
-                          <span className="flex items-center gap-1"><Briefcase className="h-3 w-3" />50+ Projects</span>
-                          <span className="flex items-center gap-1"><Star className="h-3 w-3 text-yellow-500" />5.0 Rating</span>
-                          <span className="flex items-center gap-1"><Zap className="h-3 w-3" />Replies in 2–4 hrs</span>
-                          <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />Worldwide</span>
-                        </div>
-                      </div>
-                    </div>
 
                     <Button
                       type="button"
                       onClick={submit}
-                      disabled={submitting}
+                      disabled={submitting || !canNext}
                       size="lg"
                       className="w-full mt-6 rounded-full bg-gradient-primary text-primary-foreground text-base font-semibold py-6 shadow-neon hover:scale-[1.01]"
                     >
@@ -619,7 +459,7 @@ Attachments note: ${form.fileNote || "—"}`;
             </AnimatePresence>
 
             {/* Nav */}
-            {step < 5 && (
+            {step < TOTAL_STEPS && (
               <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
                 {step > 1 ? (
                   <Button type="button" variant="ghost" onClick={goBack} className="rounded-full">
@@ -636,7 +476,7 @@ Attachments note: ${form.fileNote || "—"}`;
                 </Button>
               </div>
             )}
-            {step === 5 && (
+            {step === TOTAL_STEPS && (
               <div className="flex items-center justify-start mt-6">
                 <Button type="button" variant="ghost" onClick={goBack} className="rounded-full">
                   <ArrowLeft className="h-4 w-4" /> Back
