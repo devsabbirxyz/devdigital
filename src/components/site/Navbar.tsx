@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { scrollToSection } from "@/lib/scroll";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 type NavData = {
   logo_url: string;
@@ -31,8 +30,6 @@ export default function Navbar() {
   const { data } = useSiteSettings<NavData>("navigation", DEFAULT);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
