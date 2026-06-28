@@ -95,18 +95,16 @@ export default function Stats() {
                 className="group relative"
               >
                 <div className="absolute -inset-0.5 rounded-2xl bg-gradient-primary opacity-20 blur-lg group-hover:opacity-60 transition-opacity duration-500" />
-                <div className="relative glass-strong rounded-2xl p-4 md:p-5 flex items-center gap-3.5 md:gap-4 border border-primary/15 group-hover:border-primary/40 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)]">
+                <div className="relative h-full glass-strong rounded-2xl p-4 md:p-5 flex items-center gap-3.5 md:gap-4 border border-primary/15 group-hover:border-primary/40 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)]">
                   {/* Premium diamond icon badge */}
                   <div className="shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-[0.85rem] bg-gradient-primary flex items-center justify-center rotate-45 neon-glow">
                     <Icon className="w-5 h-5 md:w-6 md:h-6 text-white -rotate-45" strokeWidth={1.5} />
                   </div>
-                  <div className="min-w-0">
-                    <div className="flex items-baseline gap-1.5 flex-wrap leading-tight">
-                      <span className="font-display text-2xl md:text-3xl font-extrabold text-gradient tabular-nums drop-shadow-[0_0_12px_hsl(var(--primary)/0.4)]">
-                        <Counter to={s.value} suffix={s.suffix} />
-                      </span>
-                      <span className="font-semibold text-sm md:text-[0.95rem] truncate">{s.title}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-display text-2xl md:text-3xl font-extrabold text-gradient tabular-nums leading-none drop-shadow-[0_0_12px_hsl(var(--primary)/0.4)]">
+                      <Counter to={s.value} suffix={s.suffix} />
                     </div>
+                    <div className="font-semibold text-sm md:text-[0.95rem] mt-1 truncate">{s.title}</div>
                     {s.description && (
                       <p className="text-[0.7rem] md:text-xs text-muted-foreground truncate mt-0.5">
                         {s.description}
