@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { scrollToSection } from "@/lib/scroll";
-import ThemeToggle from "@/components/ThemeToggle";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type NavData = {
@@ -85,8 +84,6 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-
-        {!isMobile && <ThemeToggle />}
 
         <button
           onClick={() => navigate("/hire-me")}
