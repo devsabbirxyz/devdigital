@@ -11,7 +11,7 @@ type NavData = {
 };
 const DEFAULT: NavData = {
   logo_url: "",
-  brand_name: "PORTFOLIO",
+  brand_name: "DevDigital",
   menu_items: [
     { label: "Home", target: "home" },
     { label: "Solutions", target: "services" },

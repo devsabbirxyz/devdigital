@@ -14,8 +14,8 @@ type WAData = {
 };
 const DEFAULT: WAData = {
   enabled: true,
-  phone_number: "15551234567",
-  default_message: "Hi! I am interested in your services.",
+  phone_number: "8801941130981",
+  default_message: "Hi Sabbir! I am interested in your services.",
   notify_enabled: false,
   notify_phone: "",
   callmebot_apikey: "",

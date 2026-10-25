@@ -3,7 +3,7 @@ import { useSettingForm, SaveBar } from "./SettingsForm";
 import { FORMSUBMIT_NOTIFY_EMAIL } from "@/lib/formsubmit";
 
 type ContactInfo = { email: string; phone: string; location: string };
-const DEFAULT: ContactInfo = { email: "hello@portfolio.com", phone: "+1 (555) 123-4567", location: "New York, USA" };
+const DEFAULT: ContactInfo = { email: "developersabbir.x@gmail.com", phone: "+880 1941-130981", location: "Dhaka, Bangladesh" };
 
 export default function ContactInfoAdmin() {
   const { data, setData, loading, saving, save } = useSettingForm<ContactInfo>("contact", DEFAULT);

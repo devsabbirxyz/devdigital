@@ -5,11 +5,16 @@ export default {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
-    container: { center: true, padding: "1.5rem", screens: { "2xl": "1400px" } },
+    container: {
+      center: true,
+      padding: { DEFAULT: "1rem", sm: "1.5rem", lg: "2rem" },
+      screens: { "2xl": "1400px" },
+    },
     extend: {
       fontFamily: {
         display: ['Space Grotesk', 'sans-serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        poster: ['"Bebas Neue"', 'Anton', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

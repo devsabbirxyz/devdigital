@@ -423,7 +423,7 @@ ${form.description}`;
                       </Field>
                       <div className="sm:col-span-2">
                         <Field label="WhatsApp Number (optional)">
-                          <input value={form.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} placeholder="+1 555 123 4567" maxLength={40} className={inputCls} />
+                          <input value={form.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} placeholder="+880 1941-130981" maxLength={40} className={inputCls} />
                         </Field>
                       </div>
                       <div className="sm:col-span-2">

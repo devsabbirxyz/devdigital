@@ -1,25 +1,45 @@
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Pencil } from "lucide-react";
+import { Plus, Trash2, Pencil, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { PageHeader, Card, Field, inputCls, PrimaryBtn, GhostBtn, uploadToBucket } from "./_ui";
+import { Link } from "react-router-dom";
 
-type Page = { slug: string; title: string; description: string; image_url: string | null; floating_icons: string[] };
-type CardT = { id: string; page_slug: string; title: string; description: string; image_url: string | null; price: string | null; sort_order: number };
+type Page = {
+  slug: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  floating_icons: string[];
+};
+
+type CardT = {
+  id: string;
+  page_slug: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  price: string | null;
+  sort_order: number;
+};
 
 const SLUGS = [
-  { slug: "digital-marketing", label: "Digital Marketing" },
-  { slug: "web-development", label: "Web Development" },
-  { slug: "ai-automation", label: "AI Automation" },
+  { slug: "digital-marketing", label: "Digital Marketing", route: "/digitalmarketingservice" },
+  { slug: "web-development", label: "Web Development", route: "/webdev" },
+  { slug: "ai-automation", label: "AI Automation", route: "/aiautomation" },
 ];
 
-export default function ServicePagesAdmin() {
-  const [active, setActive] = useState(SLUGS[0].slug);
+export default function ServicePagesAdmin({ forcedSlug }: { forcedSlug?: string } = {}) {
+  const [active, setActive] = useState(forcedSlug ?? SLUGS[0].slug);
   const [page, setPage] = useState<Page | null>(null);
   const [cards, setCards] = useState<CardT[]>([]);
   const [editing, setEditing] = useState<Partial<CardT> | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    if (forcedSlug) setActive(forcedSlug);
+  }, [forcedSlug]);
 
   const load = async () => {
     const { data: p } = await supabase.from("service_pages").select("*").eq("slug", active).maybeSingle();
@@ -27,13 +47,20 @@ export default function ServicePagesAdmin() {
     const { data: c } = await supabase.from("service_page_cards").select("*").eq("page_slug", active).order("sort_order");
     setCards((c as any) || []);
   };
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [active]);
+
+  useEffect(() => {
+    load();
+    /* eslint-disable-next-line */
+  }, [active]);
 
   const savePage = async () => {
     if (!page) return;
     setSaving(true);
     const { error } = await supabase.from("service_pages").update({
-      title: page.title, description: page.description, image_url: page.image_url, floating_icons: page.floating_icons,
+      title: page.title,
+      description: page.description,
+      image_url: page.image_url,
+      floating_icons: page.floating_icons,
     }).eq("slug", active);
     setSaving(false);
     if (error) return toast.error(error.message);
@@ -78,101 +105,168 @@ export default function ServicePagesAdmin() {
     if (error) return toast.error(error.message);
     setEditing(null);
     load();
+    toast.success("Card saved");
   };
 
   const removeCard = async (id: string) => {
     if (!confirm("Delete this card?")) return;
     await supabase.from("service_page_cards").delete().eq("id", id);
     load();
+    toast.success("Card removed");
   };
 
-  if (!page) return <p className="text-muted-foreground">Loading…</p>;
+  const currentMeta = SLUGS.find((s) => s.slug === active) || SLUGS[0];
+
+  if (!page) return <p className="text-muted-foreground p-4">Loading…</p>;
 
   return (
     <>
-      <PageHeader title="Service Pages" description="Edit each service detail page and its service cards." />
-
-      <div className="flex flex-wrap gap-2 mb-6">
-        {SLUGS.map((s) => (
-          <button
-            key={s.slug}
-            onClick={() => setActive(s.slug)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-              active === s.slug ? "bg-gradient-primary text-white neon-glow" : "glass hover:bg-white/5"
-            }`}
-          >
-            {s.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <PageHeader
+          title={forcedSlug ? `${currentMeta.label} Page` : "Service Detail Pages"}
+          description="Manage 3D ring gallery hero, capabilities, deliverables, and pricing cards."
+        />
+        <Link
+          to={currentMeta.route}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass hover:bg-white/10 text-xs font-semibold text-primary transition-colors"
+        >
+          View Live 3D Ring Page <ExternalLink className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
+      {!forcedSlug && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {SLUGS.map((s) => (
+            <button
+              key={s.slug}
+              onClick={() => setActive(s.slug)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                active === s.slug ? "bg-gradient-primary text-white neon-glow" : "glass hover:bg-white/5"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Main Page Settings */}
       <Card className="space-y-4 mb-6">
-        <Field label="Title">
-          <input value={page.title} onChange={(e) => setPage({ ...page, title: e.target.value })} className={inputCls} />
+        <h3 className="font-display font-semibold text-lg">Hero & General Information</h3>
+        <Field label="Hero Title">
+          <input
+            value={page.title}
+            onChange={(e) => setPage({ ...page, title: e.target.value })}
+            className={inputCls}
+            placeholder="e.g. Digital Marketing Services"
+          />
         </Field>
-        <Field label="Description">
-          <textarea value={page.description} rows={4} onChange={(e) => setPage({ ...page, description: e.target.value })} className={inputCls + " resize-none"} />
+        <Field label="Hero Subheading & Description">
+          <textarea
+            value={page.description}
+            rows={3}
+            onChange={(e) => setPage({ ...page, description: e.target.value })}
+            className={inputCls + " resize-none"}
+            placeholder="Describe the value proposition for this service..."
+          />
         </Field>
-        <Field label="Profile / Service Image">
+        <Field label="Service Icon / Profile Image">
           <div className="flex items-center gap-4">
             {page.image_url && <img src={page.image_url} alt="" className="h-20 w-20 rounded-full object-cover glass" />}
             <input type="file" accept="image/*" onChange={handlePageImage} disabled={uploading} className="text-sm" />
             {page.image_url && <GhostBtn onClick={() => setPage({ ...page, image_url: null })}>Remove</GhostBtn>}
           </div>
         </Field>
-        <Field label="Floating Icons (comma-separated lucide names)" hint="e.g. Bot, Zap, Workflow, Brain, Sparkles">
-          <input
-            value={(page.floating_icons || []).join(", ")}
-            onChange={(e) => setPage({ ...page, floating_icons: e.target.value.split(",").map((x) => x.trim()).filter(Boolean) })}
-            className={inputCls}
-          />
-        </Field>
         <div className="flex justify-end">
-          <PrimaryBtn onClick={savePage} loading={saving}>Save Page</PrimaryBtn>
+          <PrimaryBtn onClick={savePage} loading={saving}>Save Page Details</PrimaryBtn>
         </div>
       </Card>
 
+      {/* Deliverable Cards */}
       <div className="flex items-center justify-between mb-3">
-        <h2 className="font-display font-semibold">Service Cards</h2>
+        <div>
+          <h2 className="font-display font-semibold text-lg">Service Cards & Deliverables</h2>
+          <p className="text-xs text-muted-foreground">
+            Cards appear in the 3D Ring Gallery and the Core Capabilities grid below the hero.
+          </p>
+        </div>
         <PrimaryBtn onClick={() => setEditing({ title: "", description: "", price: "", sort_order: cards.length })}>
           <Plus className="h-4 w-4" /> Add Card
         </PrimaryBtn>
       </div>
 
       {editing && (
-        <Card className="mb-6 space-y-4 ring-1 ring-primary/30">
-          <h3 className="font-display font-semibold">{editing.id ? "Edit" : "New"} Card</h3>
-          <Field label="Title"><input value={editing.title ?? ""} onChange={(e) => setEditing({ ...editing, title: e.target.value })} className={inputCls} /></Field>
-          <Field label="Description"><textarea value={editing.description ?? ""} rows={3} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className={inputCls + " resize-none"} /></Field>
-          <Field label="Price"><input value={editing.price ?? ""} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className={inputCls} placeholder="$299" /></Field>
-          <Field label="Image">
+        <Card className="mb-6 space-y-4 ring-1 ring-primary/40">
+          <h3 className="font-display font-semibold">{editing.id ? "Edit" : "New"} Deliverable Card</h3>
+          <Field label="Title">
+            <input
+              value={editing.title ?? ""}
+              onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+              className={inputCls}
+              placeholder="e.g. Meta & Instagram Ads Scale"
+            />
+          </Field>
+          <Field label="Description">
+            <textarea
+              value={editing.description ?? ""}
+              rows={3}
+              onChange={(e) => setEditing({ ...editing, description: e.target.value })}
+              className={inputCls + " resize-none"}
+              placeholder="Detailed description of what is included..."
+            />
+          </Field>
+          <Field label="Price / Starting Investment">
+            <input
+              value={editing.price ?? ""}
+              onChange={(e) => setEditing({ ...editing, price: e.target.value })}
+              className={inputCls}
+              placeholder="e.g. $499 or $99/mo"
+            />
+          </Field>
+          <Field label="Cover Image">
             <div className="flex items-center gap-4">
               {editing.image_url && <img src={editing.image_url} alt="" className="h-20 w-28 rounded-lg object-cover glass" />}
               <input type="file" accept="image/*" onChange={handleCardImage} disabled={uploading} className="text-sm" />
               {editing.image_url && <GhostBtn onClick={() => setEditing({ ...editing, image_url: null })}>Remove</GhostBtn>}
             </div>
           </Field>
-          <Field label="Sort Order"><input type="number" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} className={inputCls} /></Field>
+          <Field label="Sort Order">
+            <input
+              type="number"
+              value={editing.sort_order ?? 0}
+              onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })}
+              className={inputCls}
+            />
+          </Field>
           <div className="flex justify-end gap-2">
             <GhostBtn onClick={() => setEditing(null)}>Cancel</GhostBtn>
-            <PrimaryBtn onClick={saveCard} loading={saving}>Save</PrimaryBtn>
+            <PrimaryBtn onClick={saveCard} loading={saving}>Save Card</PrimaryBtn>
           </div>
         </Card>
       )}
 
-      <div className="grid sm:grid-cols-2 gap-3">
-        {cards.length === 0 && <p className="text-muted-foreground text-sm">No cards yet.</p>}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {cards.length === 0 && <p className="text-muted-foreground text-sm col-span-full">No custom cards yet. Default 3D ring items will display on the live site.</p>}
         {cards.map((c) => (
-          <Card key={c.id} className="!p-4">
+          <Card key={c.id} className="!p-4 flex flex-col justify-between">
             <div className="flex items-start justify-between gap-2">
-              <div>
-                <h3 className="font-semibold">{c.title}</h3>
-                <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
-                {c.price && <span className="text-sm text-primary font-semibold">{c.price}</span>}
+              <div className="flex-1">
+                {c.image_url && (
+                  <img src={c.image_url} alt="" className="w-full h-24 object-cover rounded-lg mb-2 glass" />
+                )}
+                <h3 className="font-semibold text-sm line-clamp-1">{c.title}</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2 my-1">{c.description}</p>
+                {c.price && <span className="text-xs font-bold text-primary">{c.price}</span>}
               </div>
               <div className="flex gap-1 flex-shrink-0">
-                <button onClick={() => setEditing(c)} className="p-1.5 rounded-lg hover:bg-white/5"><Pencil className="h-3.5 w-3.5" /></button>
-                <button onClick={() => removeCard(c.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                <button onClick={() => setEditing(c)} className="p-1.5 rounded-lg hover:bg-white/5" title="Edit">
+                  <Pencil className="h-3.5 w-3.5" />
+                </button>
+                <button onClick={() => removeCard(c.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive" title="Delete">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
               </div>
             </div>
           </Card>

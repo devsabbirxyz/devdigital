@@ -37,7 +37,7 @@ const SERVICES: Service[] = [
 export default function ServicesStack() {
   const loop = [...SERVICES, ...SERVICES];
   return (
-    <section className="relative py-24 bg-background">
+    <section className="relative py-24 bg-background content-auto">
       <div className="container">
         <div className="text-center mb-12">
           <span className="text-xs font-semibold tracking-[0.3em] text-primary uppercase">
@@ -87,14 +87,28 @@ export default function ServicesStack() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <Button
-            size="lg"
+          <button
+            type="button"
             onClick={() => scrollToSection("contact")}
-            className="rounded-full px-8 shadow-card-soft group"
+            className="relative group text-white font-bold px-8 py-3.5 rounded-full border border-white/30 hover:border-white/60 backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_25px_rgba(59,130,246,0.35)] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_0_35px_rgba(14,165,233,0.55)] overflow-hidden flex items-center justify-center gap-2 cursor-pointer"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(37, 99, 235, 0.35) 50%, rgba(14, 165, 233, 0.22) 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }}
           >
-            Hire Me
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
+            <span
+              aria-hidden="true"
+              className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+            />
+            <span className="relative z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Hire Me</span>
+            <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1 text-cyan-300 relative z-10" />
+          </button>
         </div>
       </div>
 

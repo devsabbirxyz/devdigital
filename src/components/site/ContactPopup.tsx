@@ -117,10 +117,24 @@ export default function ContactPopup({
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-gradient-primary text-white font-semibold py-3 rounded-xl neon-glow hover:scale-[1.02] transition-transform disabled:opacity-60 disabled:hover:scale-100 flex items-center justify-center gap-2"
+            className="relative group w-full text-white font-bold py-3.5 rounded-xl border border-white/30 hover:border-white/60 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_25px_rgba(59,130,246,0.35)] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_0_35px_rgba(14,165,233,0.55)] overflow-hidden flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(37, 99, 235, 0.35) 50%, rgba(14, 165, 233, 0.22) 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }}
           >
-            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            Submit
+            <span
+              aria-hidden="true"
+              className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+            />
+            {submitting && <Loader2 className="h-4 w-4 animate-spin relative z-10" />}
+            <span className="relative z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Submit Request</span>
           </button>
         </form>
       </DialogContent>

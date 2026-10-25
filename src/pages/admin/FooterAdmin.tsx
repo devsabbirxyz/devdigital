@@ -12,12 +12,12 @@ type FooterData = {
   socials: { platform: string; url: string }[];
 };
 const DEFAULT: FooterData = {
-  brand_name: "PORTFOLIO",
-  slogan: "Building the future, one pixel at a time.",
-  phone: "+1 (555) 123-4567",
-  email: "hello@portfolio.com",
-  location: "New York, USA",
-  copyright: "© 2026 Portfolio. All Rights Reserved.",
+  brand_name: "DevDigital",
+  slogan: "Building high-performance digital experiences that scale.",
+  phone: "+880 1941-130981",
+  email: "developersabbir.x@gmail.com",
+  location: "Dhaka, Bangladesh",
+  copyright: "© 2026 DevDigital. All Rights Reserved.",
   socials: [
     { platform: "facebook", url: "" },
     { platform: "instagram", url: "" },
