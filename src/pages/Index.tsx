@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/sections/Hero";
 import Seo from "@/components/Seo";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 
 import ScrollProgress from "@/components/site/ScrollProgress";
 import BrandMarquee from "@/components/sections/BrandMarquee";
@@ -33,21 +34,23 @@ const Index = () => {
       <Navbar />
       <Hero />
       <BrandMarquee />
-      <Suspense fallback={<div className="h-32" />}>
-        <About />
-        <Services />
-        <RoiCalculator />
-        <Projects />
-        <Process />
-        <Pricing />
-        <Testimonials />
-        <Blog />
-        <FAQ />
-        <Contact />
-        <Footer />
-        <WhatsAppButton />
-        <IntroVideoModal />
-      </Suspense>
+      <ErrorBoundary name="HomepageSections">
+        <Suspense fallback={<div className="h-32" />}>
+          <About />
+          <Services />
+          <RoiCalculator />
+          <Projects />
+          <Process />
+          <Pricing />
+          <Testimonials />
+          <Blog />
+          <FAQ />
+          <Contact />
+          <Footer />
+          <WhatsAppButton />
+          <IntroVideoModal />
+        </Suspense>
+      </ErrorBoundary>
     </main>
   );
 };

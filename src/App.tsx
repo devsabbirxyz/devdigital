@@ -44,47 +44,52 @@ function DynamicFavicon() {
 }
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <div className="fixed-bg" aria-hidden="true" />
-      <DynamicFavicon />
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ErrorBoundary name="RootApp">
-          <Suspense
-            fallback={
-              <div className="min-h-screen flex items-center justify-center text-muted-foreground text-sm font-mono">
-                Loading...
-              </div>
-            }
-          >
-            <AmbientCursorGlow />
-            <CommandPalette />
-            <LeadMagnetModal />
-            <AiTerminal />
-            <BookingModal />
-            <SocialProofTicker />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/projects" element={<AllProjects />} />
-              <Route path="/hire-me" element={<HireMe />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/services/:slug" element={<ServicePage />} />
-              <Route path="/digitalmarketingservice" element={<ServicePage forcedSlug="digital-marketing" />} />
-              <Route path="/aiautomation" element={<ServicePage forcedSlug="ai-automation" />} />
-              <Route path="/webdev" element={<ServicePage forcedSlug="web-development" />} />
-              <Route path="/webdevelopment" element={<ServicePage forcedSlug="web-development" />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/admin" element={<AdminLayout />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </ErrorBoundary>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary name="GlobalApp">
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <div className="fixed-bg" aria-hidden="true" />
+        <DynamicFavicon />
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ErrorBoundary name="RootRouter">
+            <Suspense fallback={null}>
+              <AmbientCursorGlow />
+              <CommandPalette />
+              <LeadMagnetModal />
+              <AiTerminal />
+              <BookingModal />
+              <SocialProofTicker />
+            </Suspense>
+
+            <Suspense
+              fallback={
+                <div className="min-h-screen flex items-center justify-center text-muted-foreground text-sm font-mono">
+                  Loading...
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/projects" element={<AllProjects />} />
+                <Route path="/hire-me" element={<HireMe />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/services/:slug" element={<ServicePage />} />
+                <Route path="/digitalmarketingservice" element={<ServicePage forcedSlug="digital-marketing" />} />
+                <Route path="/aiautomation" element={<ServicePage forcedSlug="ai-automation" />} />
+                <Route path="/webdev" element={<ServicePage forcedSlug="web-development" />} />
+                <Route path="/webdevelopment" element={<ServicePage forcedSlug="web-development" />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/admin" element={<AdminLayout />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

@@ -19,7 +19,7 @@ import { DEFAULT_ROI_SETTINGS, type RoiSettings } from "@/pages/admin/RoiAdmin";
 // ============================================================================
 // CONSTANTS & CONFIGURATION
 // ============================================================================
-export const USD_TO_BDT = 120; // 1 USD = 120 BDT
+const USD_TO_BDT = 120; // 1 USD = 120 BDT
 
 export type ServiceTab = "marketing" | "web" | "ai";
 export type Currency = "BDT" | "USD";
@@ -60,7 +60,7 @@ const SERVICE_TABS = [
   },
 ];
 
-export const METRIC_NAMES: Record<ServiceTab, string[]> = {
+const METRIC_NAMES: Record<ServiceTab, string[]> = {
   marketing: [
     "Monthly Ad Spend",
     "Agency / Freelancer Fee",

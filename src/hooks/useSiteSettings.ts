@@ -23,25 +23,45 @@ function writeCache(key: string, value: unknown) {
 export function useSiteSettings<T = any>(key: string, defaults: T) {
   const [data, setData] = useState<T>(() => {
     const cached = readCache<T>(key);
-    return cached ? ({ ...defaults, ...(cached as object) } as T) : defaults;
+    if (!cached) return defaults;
+    if (Array.isArray(defaults)) {
+      return (Array.isArray(cached) ? cached : defaults) as T;
+    }
+    return (typeof cached === "object" && cached !== null
+      ? { ...defaults, ...cached }
+      : cached) as T;
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const { data: row } = await supabase
-        .from("site_settings")
-        .select("value")
-        .eq("key", key)
-        .maybeSingle();
-      if (active && row?.value) {
-        setData({ ...defaults, ...(row.value as object) } as T);
-        writeCache(key, row.value);
+      try {
+        const { data: row } = await supabase
+          .from("site_settings")
+          .select("value")
+          .eq("key", key)
+          .maybeSingle();
+
+        if (active && row?.value) {
+          if (Array.isArray(defaults)) {
+            setData((Array.isArray(row.value) ? row.value : defaults) as T);
+          } else if (typeof row.value === "object" && row.value !== null) {
+            setData({ ...defaults, ...row.value } as T);
+          } else {
+            setData(row.value as T);
+          }
+          writeCache(key, row.value);
+        }
+      } catch (err) {
+        console.warn(`useSiteSettings[${key}] error:`, err);
+      } finally {
+        if (active) setLoading(false);
       }
-      if (active) setLoading(false);
     })();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
