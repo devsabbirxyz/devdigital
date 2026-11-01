@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Building2, ExternalLink } from "lucide-react";
+import { Globe, ExternalLink, Sparkles } from "lucide-react";
 
 // Real client brands with authentic downloaded logo images from live sites
 const CLIENTS = [
@@ -74,7 +74,7 @@ export default function ClientLogoStrip() {
       {/* Subtle background glow */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/5 to-transparent" />
 
-      {/* Header Eyebrow */}
+      {/* Header Eyebrow (Global Scale-Ups & Brands) */}
       <div className="container mb-5 text-center relative z-10 px-4">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -83,11 +83,11 @@ export default function ClientLogoStrip() {
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-2"
         >
-          <Building2 className="w-3.5 h-3.5 text-primary/70 animate-pulse" />
+          <Globe className="w-3.5 h-3.5 text-primary/70 animate-pulse" />
           <p className="text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-muted-foreground/80">
-            Trusted by Growing Businesses Across Bangladesh
+            Trusted by Ambitious Brands & Fast-Growing Scale-Ups Worldwide
           </p>
-          <Building2 className="w-3.5 h-3.5 text-primary/70 animate-pulse" />
+          <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
         </motion.div>
       </div>
 
