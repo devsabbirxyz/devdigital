@@ -152,6 +152,27 @@ export default function BookingModal() {
     setIsSuccess(false);
   };
 
+  const handleDownloadIcs = () => {
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//DevDigital//Strategy Meeting//EN",
+      "BEGIN:VEVENT",
+      `SUMMARY:Strategy Call with Sabbir (DevDigital) - ${selectedTopic}`,
+      `DESCRIPTION:1-on-1 Strategy Discovery Session with Sabbir (DevDigital).\\nTopic: ${selectedTopic}\\nContact: ${contactInfo}\\nLink: Google Meet / WhatsApp (+8801941130981)`,
+      "STATUS:CONFIRMED",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "devdigital-strategy-meeting.ics";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -227,22 +248,47 @@ export default function BookingModal() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-3">
+                {/* Instant Google Calendar + WhatsApp Confirmation Action Row */}
+                <div className="flex flex-wrap items-center justify-center gap-2.5">
+                  <a
+                    href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+                      `Strategy Session with Sabbir (DevDigital) — ${selectedTopic}`
+                    )}&details=${encodeURIComponent(
+                      `1-on-1 Strategy Discovery Session with Sabbir (DevDigital).\nTopic: ${selectedTopic}\nContact: ${contactInfo}\nMeeting Link: Google Meet / WhatsApp (+8801941130981)`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-primary hover:bg-primary-glow text-white font-semibold text-xs sm:text-sm px-5 py-3 rounded-full transition shadow-neon inline-flex items-center gap-2"
+                  >
+                    <CalendarIcon className="w-4 h-4" />
+                    <span>Add to Google Calendar</span>
+                  </a>
+
                   <a
                     href={`https://wa.me/8801941130981?text=Hi%20Sabbir,%20I%20just%20scheduled%20a%2015-minute%20call%20for%20${encodeURIComponent(
                       selectedDate + " at " + selectedTime
                     )}%20regarding%20${encodeURIComponent(selectedTopic)}.`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs sm:text-sm px-6 py-3 rounded-full transition shadow-lg shadow-emerald-500/20 inline-flex items-center gap-2"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs sm:text-sm px-5 py-3 rounded-full transition shadow-lg shadow-emerald-500/20 inline-flex items-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>Ping Sabbir on WhatsApp</span>
+                    <span>WhatsApp Sabbir</span>
                   </a>
+
+                  <button
+                    type="button"
+                    onClick={handleDownloadIcs}
+                    className="glass px-4 py-3 rounded-full text-xs sm:text-sm font-semibold hover:bg-white/10 text-white/80 hover:text-white transition"
+                    title="Download .ics for Outlook or Apple Calendar"
+                  >
+                    .ICS Invite
+                  </button>
+
                   <button
                     type="button"
                     onClick={close}
-                    className="glass px-6 py-3 rounded-full text-xs sm:text-sm font-semibold hover:bg-white/10 text-muted-foreground hover:text-white transition"
+                    className="glass px-5 py-3 rounded-full text-xs sm:text-sm font-semibold hover:bg-white/10 text-muted-foreground hover:text-white transition"
                   >
                     Done
                   </button>

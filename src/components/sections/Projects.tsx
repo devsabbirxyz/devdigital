@@ -704,6 +704,34 @@ export default function Projects({ all = false }: { all?: boolean }) {
                         <p className="text-muted-foreground text-xs sm:text-sm line-clamp-2 leading-relaxed">
                           {p.description}
                         </p>
+
+                        {/* Instant Problem ➜ Strategy ➜ Impact Strip for Buyers */}
+                        <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5 text-[11px]">
+                          <div className="flex items-start gap-1.5 text-zinc-300">
+                            <span className="px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/25 text-[9px] font-mono font-bold shrink-0 mt-0.5">
+                              CHALLENGE
+                            </span>
+                            <span className="text-muted-foreground truncate">
+                              {p.caseStudyDetails?.challenge ? p.caseStudyDetails.challenge.slice(0, 48) + "..." : "Legacy bottlenecks & low ROAS"}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-1.5 text-zinc-300">
+                            <span className="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/25 text-[9px] font-mono font-bold shrink-0 mt-0.5">
+                              STRATEGY
+                            </span>
+                            <span className="text-muted-foreground truncate">
+                              {p.caseStudyDetails?.solution ? p.caseStudyDetails.solution.slice(0, 48) + "..." : "Sub-second edge stack & funnel CRO"}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 text-[9px] font-mono font-bold shrink-0 mt-0.5">
+                              IMPACT
+                            </span>
+                            <span className="text-emerald-400 font-semibold font-mono truncate">
+                              {p.metrics.value}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
