@@ -12,24 +12,39 @@ import {
   Layers,
   Activity,
   Terminal,
-  Flame,
   ShieldCheck,
-  RefreshCw,
   Check,
   X,
-  Lock,
+  Workflow,
+  MessageCircle,
+  Database,
+  Globe,
+  Flame,
+  Clock,
+  Play,
+  RotateCcw,
 } from "lucide-react";
 import HolographicCard from "@/components/ui/HolographicCard";
 import { openAiTerminal } from "@/components/site/AiTerminal";
+import { openBookingModal } from "@/components/site/BookingModal";
 import { scrollToSection } from "@/lib/scroll";
 import SectionWatermark from "@/components/ui/SectionWatermark";
 
-interface PillarData {
+export interface TechLogoBadge {
+  name: string;
+  badge: string;
+  dotColor: string;
+}
+
+export interface PillarData {
   id: "pillar-1" | "pillar-2" | "pillar-3";
   stepNumber: string;
   pillarTag: string;
   category: "Digital Marketing" | "Web Development" | "AI Automation";
   icon: any;
+  accentColor: string;
+  glowColor: string;
+  techLogos: TechLogoBadge[];
   devdigital: {
     title: string;
     tagline: string;
@@ -39,6 +54,7 @@ interface PillarData {
     metricValue: string;
     statusText: string;
     deliverables: string[];
+    circuitFlow: string;
     telemetryLogs: { time: string; level: "info" | "success" | "warn"; tag: string; msg: string }[];
   };
   traditional: {
@@ -50,6 +66,7 @@ interface PillarData {
     metricValue: string;
     statusText: string;
     leakages: string[];
+    circuitFlow: string;
     telemetryLogs: { time: string; level: "error" | "warn"; tag: string; msg: string }[];
   };
 }
@@ -61,6 +78,14 @@ const PILLARS: PillarData[] = [
     pillarTag: "PILLAR 1 • TRAFFIC ACQUISITION",
     category: "Digital Marketing",
     icon: TrendingUp,
+    accentColor: "from-amber-500 to-orange-500",
+    glowColor: "rgba(245, 158, 11, 0.4)",
+    techLogos: [
+      { name: "Meta Ads (FB/IG)", badge: "border-blue-500/40 bg-blue-500/10 text-blue-300", dotColor: "bg-blue-400" },
+      { name: "Google Ads (P-Max)", badge: "border-amber-500/40 bg-amber-500/10 text-amber-300", dotColor: "bg-amber-400" },
+      { name: "Server CAPI (99% Match)", badge: "border-purple-500/40 bg-purple-500/10 text-purple-300", dotColor: "bg-purple-400" },
+      { name: "GA4 Analytics", badge: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300", dotColor: "bg-emerald-400" },
+    ],
     devdigital: {
       title: "Meta & Google Ads Scaling Engine",
       tagline: "High-intent buyer traffic acquisition with conversion API resilience and zero ad budget waste.",
@@ -69,11 +94,12 @@ const PILLARS: PillarData[] = [
       metricLabel: "Verified ROAS Surge",
       metricValue: "3.5x — 6.2x",
       statusText: "● 100% Verified CAPI Stream",
+      circuitFlow: "Ad Click Ingested ➔ Bot Filtered ➔ Server-Side CAPI Authenticated",
       deliverables: [
-        "Meta Conversions API (CAPI) + Google Enhanced Conversions (Cookie-less)",
-        "Negative keyword clusters eliminating 35-50% wasteful bot clicks",
-        "Direct-response UGC hooks & multi-variant creative testing",
-        "Dynamic Advantage+ shopping funnels with localized retargeting",
+        "Server-Side Meta Conversions API (CAPI) with 95%+ event match quality (Zero iOS cookie loss)",
+        "Negative keyword & audience clusters eliminating 35-50% wasteful bot clicks",
+        "Direct-response psychological creative hooks & continuous multi-variant testing",
+        "Advantage+ shopping funnels with localized Bangladesh & global retargeting",
       ],
       telemetryLogs: [
         { time: "00:00.12", level: "info", tag: "INGEST", msg: "Advantage+ ASC campaign scaled ($25K+ monthly target)" },
@@ -89,6 +115,7 @@ const PILLARS: PillarData[] = [
       metricLabel: "Ad Budget Wasted",
       metricValue: "-42% Loss",
       statusText: "⚠ Severe Data Leakage",
+      circuitFlow: "Browser Click ➔ 40% Blocked by AdBlock ➔ Untracked Ad Spend",
       leakages: [
         "35-50% ad budget wasted on broad audiences and bot clicks",
         "iOS 14.5+ tracking loss with up to 40% unrecorded purchase events",
@@ -108,22 +135,31 @@ const PILLARS: PillarData[] = [
     pillarTag: "PILLAR 2 • CONVERSION SURFACE",
     category: "Web Development",
     icon: Code2,
+    accentColor: "from-purple-500 to-cyan-500",
+    glowColor: "rgba(168, 85, 247, 0.4)",
+    techLogos: [
+      { name: "Next.js 15 & React", badge: "border-cyan-500/40 bg-cyan-500/10 text-cyan-300", dotColor: "bg-cyan-400" },
+      { name: "TypeScript", badge: "border-blue-500/40 bg-blue-500/10 text-blue-300", dotColor: "bg-blue-400" },
+      { name: "Tailwind CSS", badge: "border-sky-500/40 bg-sky-500/10 text-sky-300", dotColor: "bg-sky-400" },
+      { name: "Supabase & Postgres", badge: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300", dotColor: "bg-emerald-400" },
+    ],
     devdigital: {
-      title: "Next.js 14 Sub-Second Web Engine",
+      title: "Next.js 15 Sub-Second Web Engine",
       tagline: "Ultra-fast headless architecture converting cold ad traffic into paying customers before bounce.",
       highlightTag: "Sub-second load times engineered to maximize mobile checkout",
       badge: "border-purple-500/40 bg-purple-500/10 text-purple-300",
       metricLabel: "Lighthouse & Load Speed",
-      metricValue: "99/100 • 0.5s",
+      metricValue: "99/100 • 0.4s",
       statusText: "● Ultra-Fast Edge CDN",
+      circuitFlow: "Traffic Received ➔ 0.4s Sub-Second Hydration ➔ 1-Click Checkout",
       deliverables: [
-        "Next.js 14 App Router with sub-40ms Edge CDN global delivery",
-        "100% custom TypeScript architecture — zero bloated page builders",
+        "Next.js 15 App Router with sub-40ms Edge CDN global delivery (Zero layout shift)",
+        "100% custom TypeScript codebase — zero bloated plugins or slow builders",
         "High-converting mobile visual hierarchy & frictionless 1-click cart drawer",
-        "Instant payment gateway & seamless checkout API integration",
+        "Instant payment gateway & seamless bKash / Nagad / Stripe checkout integration",
       ],
       telemetryLogs: [
-        { time: "00:00.48", level: "info", tag: "EDGE_CDN", msg: "Regional edge node cache hit (LCP: 0.48s, CLS: 0.00)" },
+        { time: "00:00.48", level: "info", tag: "EDGE_CDN", msg: "Regional edge node cache hit (LCP: 0.38s, CLS: 0.00)" },
         { time: "00:00.62", level: "success", tag: "LIGHTHOUSE", msg: "Google Mobile Performance: 99 / 100 (Passes Core Web Vitals)" },
         { time: "00:00.85", level: "success", tag: "CHECKOUT", msg: "+48% mobile checkout completion rate with 0-lag instant cart" },
       ],
@@ -136,6 +172,7 @@ const PILLARS: PillarData[] = [
       metricLabel: "Mobile Visitor Bounce",
       metricValue: "53% Bounce",
       statusText: "⚠ Extreme Cart Abandonment",
+      circuitFlow: "User Waits 4.8s ➔ Lag & Plugin Sprawl ➔ 53% Bounce & Abandon",
       leakages: [
         "53% mobile users abandon site if loading takes longer than 3 seconds",
         "Bloated multi-plugin architecture slowing database queries to a crawl",
@@ -155,6 +192,14 @@ const PILLARS: PillarData[] = [
     pillarTag: "PILLAR 3 • RETENTION & SCALE",
     category: "AI Automation",
     icon: Bot,
+    accentColor: "from-cyan-500 to-emerald-500",
+    glowColor: "rgba(6, 182, 212, 0.4)",
+    techLogos: [
+      { name: "OpenAI GPT-4o", badge: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300", dotColor: "bg-emerald-400" },
+      { name: "Make.com & n8n", badge: "border-purple-500/40 bg-purple-500/10 text-purple-300", dotColor: "bg-purple-400" },
+      { name: "WhatsApp Cloud API", badge: "border-green-500/40 bg-green-500/10 text-green-300", dotColor: "bg-green-400" },
+      { name: "Automated CRM Sync", badge: "border-amber-500/40 bg-amber-500/10 text-amber-300", dotColor: "bg-amber-400" },
+    ],
     devdigital: {
       title: "24/7 Autonomous AI & Make.com Webhooks",
       tagline: "Zero-latency lead triage, WhatsApp sales dispatch, and automated CRM pipeline in under 15 seconds.",
@@ -163,16 +208,17 @@ const PILLARS: PillarData[] = [
       metricLabel: "Instant Lead Sync",
       metricValue: "< 15s • 0 Drop",
       statusText: "● 24/7 Autonomous Pipeline",
+      circuitFlow: "Checkout or Form ➔ Webhook Trigger ➔ AI Qualification ➔ WhatsApp Ping",
       deliverables: [
-        "Zero-latency Make.com & n8n webhook pipelines across Ads, CRM & Slack",
-        "Autonomous GPT-4o customer support AI copilot and lead qualifier",
-        "Instant WhatsApp Business API notifications sent within 15 seconds",
-        "Automated customer onboarding, order tracking & invoice generation",
+        "Zero-latency Make.com & n8n webhook pipelines syncing Ads, CRM, and WhatsApp",
+        "Autonomous dual-language (Bangla & English) GPT-4o customer support & lead qualifier",
+        "Instant WhatsApp Business API notifications sent within 15 seconds to customer & owner",
+        "Automated customer onboarding, order tracking (Steadfast/Pathao), and invoice dispatch",
       ],
       telemetryLogs: [
         { time: "00:01.05", level: "info", tag: "WEBHOOK", msg: "Lead submitted via ad form captured in Make.com pipeline" },
-        { time: "00:01.18", level: "success", tag: "CRM_SYNC", msg: "HubSpot CRM & Slack notification pushed in 4.2 seconds" },
-        { time: "00:01.32", level: "success", tag: "WHATSAPP_AI", msg: "Personalized WhatsApp welcome & qualification dispatched in 14.8s" },
+        { time: "00:01.18", level: "success", tag: "CRM_SYNC", msg: "HubSpot CRM & Slack notification pushed in 3.8 seconds" },
+        { time: "00:01.32", level: "success", tag: "WHATSAPP_AI", msg: "Personalized WhatsApp welcome & qualification dispatched in 12.4s" },
       ],
     },
     traditional: {
@@ -183,6 +229,7 @@ const PILLARS: PillarData[] = [
       metricLabel: "Average Delay",
       metricValue: "4h+ Delay",
       statusText: "⚠ Cold Leads & Missed Revenue",
+      circuitFlow: "Lead Waits in Inbox ➔ Manual Excel Copy ➔ Cold Lead Bought Elsewhere",
       leakages: [
         "Average 3 to 5-hour response delay when customers message on WhatsApp/Facebook",
         "60% of interested buyers buy from the competitor who responds first",
@@ -199,15 +246,15 @@ const PILLARS: PillarData[] = [
 ];
 
 export default function Process() {
-  const circuitMode = "devdigital" as const;
+  const [circuitMode, setCircuitMode] = useState<"devdigital" | "traditional">("devdigital");
   const [activeNodeId, setActiveNodeId] = useState<"pillar-1" | "pillar-2" | "pillar-3">("pillar-1");
-  const [activeTab, setActiveTab] = useState<"deliverables" | "telemetry">("deliverables");
-  const isAutoPlaying = true;
+  const [activeTab, setActiveTab] = useState<"deliverables" | "telemetry" | "architecture">("deliverables");
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const activePillar = PILLARS.find((p) => p.id === activeNodeId) || PILLARS[0];
   const activeContent = circuitMode === "devdigital" ? activePillar.devdigital : activePillar.traditional;
 
-  // Auto-play through pillars every 4.5 seconds if enabled
+  // Auto-play through pillars every 5 seconds if enabled
   useEffect(() => {
     if (!isAutoPlaying) return;
     const timer = setInterval(() => {
@@ -216,44 +263,40 @@ export default function Process() {
         if (prev === "pillar-2") return "pillar-3";
         return "pillar-1";
       });
-    }, 4500);
+    }, 5000);
     return () => clearInterval(timer);
   }, [isAutoPlaying]);
 
   return (
     <section id="process" className="relative py-12 sm:py-16 md:py-28 overflow-hidden bg-[#0A0C11] content-auto isolate">
       {/* Background ambient lighting & Watermark */}
-      <SectionWatermark text="PROCESS" glowColor={circuitMode === "devdigital" ? "cyan" : "rose"} />
+      <SectionWatermark text="CIRCUIT" glowColor={circuitMode === "devdigital" ? "cyan" : "rose"} />
 
       {/* Subtle Ambient Radial Glows */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-[160px] transition-all duration-700 ${
-            circuitMode === "devdigital"
-              ? "bg-[#0099FF]/20"
-              : "bg-rose-500/20"
+            circuitMode === "devdigital" ? "bg-[#0099FF]/20" : "bg-rose-500/20"
           }`}
         />
         <div
           className={`absolute bottom-1/4 right-1/4 w-[450px] h-[450px] rounded-full blur-[140px] transition-all duration-700 ${
-            circuitMode === "devdigital"
-              ? "bg-[#38BDF8]/15"
-              : "bg-amber-500/15"
+            circuitMode === "devdigital" ? "bg-[#38BDF8]/15" : "bg-amber-500/15"
           }`}
         />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-12"
+          className="text-center max-w-3xl mx-auto mb-6 sm:mb-8"
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold tracking-[0.25em] text-cyan-400 uppercase bg-cyan-500/10 border border-cyan-500/30 mb-3 sm:mb-4 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
-            <Cpu className="h-3.5 w-3.5 animate-pulse" />
+            <Cpu className="h-3.5 w-3.5 animate-pulse text-cyan-400" />
             <span>NEURAL ECOSYSTEM ARCHITECTURE</span>
           </div>
 
@@ -262,40 +305,82 @@ export default function Process() {
           </h2>
 
           <p className="text-muted-foreground text-xs sm:text-base mt-2 sm:mt-3 leading-relaxed">
-            Traffic without a high-speed web engine is wasted ad budget. A website without autonomous AI creates human bottlenecks. Here is how all 3 pillars interconnect into an unstoppable growth machine.
+            Traffic without a high-speed web engine is wasted ad budget. A website without autonomous AI creates human bottlenecks. 
+            Here is how all 3 pillars interconnect into an unstoppable growth machine.
           </p>
+
+          {/* Interactive Mode Switcher: DevDigital vs Traditional Setup */}
+          <div className="flex items-center justify-center gap-2 mt-5 sm:mt-6">
+            <div className="p-1 rounded-full glass-strong border border-white/15 flex items-center shadow-lg">
+              <button
+                type="button"
+                onClick={() => setCircuitMode("devdigital")}
+                className={`px-3.5 sm:px-5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  circuitMode === "devdigital"
+                    ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-neon"
+                    : "text-muted-foreground hover:text-white"
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 text-cyan-200" />
+                <span>DevDigital Neural Engine</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setCircuitMode("traditional")}
+                className={`px-3.5 sm:px-5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  circuitMode === "traditional"
+                    ? "bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-[0_0_20px_rgba(244,63,94,0.5)]"
+                    : "text-muted-foreground hover:text-white"
+                }`}
+              >
+                <X className="w-3.5 h-3.5 text-rose-300" />
+                <span>Traditional Bottlenecks</span>
+              </button>
+            </div>
+          </div>
         </motion.div>
 
         {/* ------------------------------------------------------------- */}
-        {/* 1. INTERACTIVE 3-NODE PIPELINE GRID (With Laser Holographic Cards) */}
+        {/* INTERACTIVE NEURAL PIPELINE VISUAL CONNECTOR BAR (DESKTOP) */}
         {/* ------------------------------------------------------------- */}
-        <div className="relative max-w-6xl mx-auto mb-10 sm:mb-12">
-          {/* Connecting Data Bus Line (Desktop only) */}
-          <div className="hidden lg:block absolute top-[44%] left-12 right-12 h-1 -z-10 pointer-events-none">
-            {/* Base track line */}
-            <div
-              className={`w-full h-full rounded-full transition-colors duration-700 ${
-                circuitMode === "devdigital"
-                  ? "bg-gradient-to-r from-amber-500/30 via-purple-500/30 to-cyan-500/30"
-                  : "bg-gradient-to-r from-rose-500/30 via-rose-500/20 to-amber-500/30 border-t border-dashed border-rose-500/40"
-              }`}
-            />
-            {/* Animated flowing energy beam */}
-            {circuitMode === "devdigital" ? (
-              <motion.div
-                animate={{ x: ["0%", "100%"] }}
-                transition={{ repeat: Infinity, duration: 3.5, ease: "linear" }}
-                className="w-28 h-1.5 -top-0.5 relative rounded-full bg-gradient-to-r from-transparent via-cyan-300 to-transparent shadow-[0_0_20px_#38bdf8]"
-              />
-            ) : (
-              <motion.div
-                animate={{ opacity: [0.2, 0.8, 0.2] }}
-                transition={{ repeat: Infinity, duration: 1.2 }}
-                className="w-full h-full -top-0.5 relative rounded-full bg-rose-500/40"
-              />
-            )}
+        <div className="hidden lg:flex items-center justify-between max-w-5xl mx-auto mb-6 px-8 py-3 rounded-2xl glass border border-white/10 bg-white/[0.02]">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="font-mono text-xs font-bold text-amber-300">01. Ads & CAPI Acquisition</span>
           </div>
 
+          <div className="flex-1 mx-4 relative h-1 bg-white/10 rounded-full overflow-hidden">
+            <motion.div
+              animate={{ x: ["-100%", "200%"] }}
+              transition={{ repeat: Infinity, duration: 2.2, ease: "linear" }}
+              className="w-16 h-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+            <span className="font-mono text-xs font-bold text-purple-300">02. Next.js 0.4s Conversion</span>
+          </div>
+
+          <div className="flex-1 mx-4 relative h-1 bg-white/10 rounded-full overflow-hidden">
+            <motion.div
+              animate={{ x: ["-100%", "200%"] }}
+              transition={{ repeat: Infinity, duration: 2.2, ease: "linear", delay: 0.7 }}
+              className="w-16 h-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-xs font-bold text-emerald-300">03. 24/7 AI Retention & Sync</span>
+          </div>
+        </div>
+
+        {/* ------------------------------------------------------------- */}
+        {/* 1. INTERACTIVE 3-NODE PIPELINE GRID (With Brand Tech Badges) */}
+        {/* ------------------------------------------------------------- */}
+        <div className="relative max-w-6xl mx-auto mb-8 sm:mb-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-7">
             {PILLARS.map((pillar) => {
               const Icon = pillar.icon;
@@ -306,6 +391,7 @@ export default function Process() {
                 <div
                   key={pillar.id}
                   onClick={() => {
+                    setIsAutoPlaying(false);
                     setActiveNodeId(pillar.id);
                   }}
                   className="cursor-pointer"
@@ -371,9 +457,27 @@ export default function Process() {
                           <span>{content.highlightTag}</span>
                         </div>
 
-                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-4 line-clamp-2 sm:line-clamp-none">
+                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-4 line-clamp-2">
                           {content.tagline}
                         </p>
+
+                        {/* ADVANCED TECH LOGO BADGES (Visual Platforms for Each Pillar) */}
+                        <div className="pt-2 pb-3 mb-2 border-t border-white/5">
+                          <p className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/70 mb-2">
+                            Engineered With:
+                          </p>
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {pillar.techLogos.map((tech, tIdx) => (
+                              <span
+                                key={tIdx}
+                                className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md border flex items-center gap-1 ${tech.badge}`}
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full ${tech.dotColor}`} />
+                                <span>{tech.name}</span>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
 
                       {/* Bottom Metric Pill */}
@@ -412,14 +516,14 @@ export default function Process() {
         </div>
 
         {/* ------------------------------------------------------------- */}
-        {/* 2. DEEP TELEMETRY INSPECTOR (Active node deep-dive view) */}
+        {/* 2. DEEP TELEMETRY & ARCHITECTURE INSPECTOR */}
         {/* ------------------------------------------------------------- */}
         <motion.div
           key={`${activePillar.id}-${circuitMode}`}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="max-w-6xl mx-auto rounded-2xl sm:rounded-3xl glass-strong border border-white/15 p-4 sm:p-7 md:p-10 relative overflow-hidden shadow-2xl mb-8 sm:mb-12 bg-[#0C0F17]/95"
+          className="max-w-6xl mx-auto rounded-2xl sm:rounded-3xl glass-strong border border-white/15 p-4 sm:p-7 md:p-9 relative overflow-hidden shadow-2xl mb-8 bg-[#0C0F17]/95"
         >
           {/* Subtle colored accent glow inside inspector */}
           <div
@@ -430,7 +534,7 @@ export default function Process() {
           />
 
           {/* Inspector Header */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 mb-5 sm:mb-8 pb-4 sm:pb-6 border-b border-white/10">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 mb-5 sm:mb-7 pb-4 sm:pb-6 border-b border-white/10">
             <div>
               <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <span className={`text-[10px] sm:text-[11px] font-mono font-bold px-2.5 sm:px-3 py-0.5 rounded-full border ${activeContent.badge}`}>
@@ -448,6 +552,9 @@ export default function Process() {
               <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-extrabold text-foreground">
                 {activeContent.title}
               </h3>
+              <p className="text-xs sm:text-sm text-cyan-300 font-mono mt-1">
+                ⚡ Data Route: {activeContent.circuitFlow}
+              </p>
             </div>
 
             {/* Quick Trigger CTA & Simulator */}
@@ -463,17 +570,17 @@ export default function Process() {
 
               <button
                 type="button"
-                onClick={() => scrollToSection("contact")}
+                onClick={() => openBookingModal(`Deploy ${activePillar.category} Architecture`)}
                 className="w-full sm:w-auto justify-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-full bg-gradient-primary text-white font-semibold text-xs flex items-center gap-2 shadow-neon hover:scale-105 transition-all"
               >
-                <span>Deploy This Architecture</span>
+                <span>Deploy This System</span>
                 <ArrowRight className="w-3.5 h-3.5 shrink-0" />
               </button>
             </div>
           </div>
 
           {/* Sub-tabs: Deliverables vs Live Telemetry Stream */}
-          <div className="flex items-center gap-2 mb-5 border-b border-white/10 pb-3">
+          <div className="flex items-center gap-2 mb-5 border-b border-white/10 pb-3 flex-wrap">
             <button
               type="button"
               onClick={() => setActiveTab("deliverables")}
@@ -558,7 +665,7 @@ export default function Process() {
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
                   </div>
-                  <span className="text-zinc-300 font-semibold ml-2">circuit-telemetry.log</span>
+                  <span className="text-zinc-300 font-semibold ml-2">neural-telemetry.log</span>
                 </div>
                 <div className="flex items-center gap-1 text-[10px] text-emerald-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
