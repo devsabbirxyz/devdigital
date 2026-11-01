@@ -6,6 +6,7 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { scrollToSection } from "@/lib/scroll";
 import { openCommandPalette } from "./CommandPalette";
 import { openBookingModal } from "./BookingModal";
+import SoundToggle from "./SoundToggle";
 
 type NavData = {
   logo_url: string;
@@ -98,6 +99,7 @@ export default function Navbar() {
             <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-white/[0.12] backdrop-blur-xl border border-white/25 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_15px_rgba(59,130,246,0.35)] group-hover:scale-105 transition-transform">
               <Sparkles className="h-3 w-3 md:h-4 md:w-4 text-cyan-300" />
             </div>
+
           )}
           <span className="font-display font-bold text-xs md:text-sm tracking-wider text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
             {brandName}
@@ -130,6 +132,9 @@ export default function Navbar() {
             ⌘K
           </span>
         </button>
+
+        {/* Tactile Cyber Audio Switch */}
+        <SoundToggle compact />
 
         {/* Hire Me Glass Jewel CTA Button */}
         <button
@@ -210,6 +215,7 @@ export default function Navbar() {
               ))}
             </div>
 
+
             <div className="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent my-1" />
 
             {/* Quick Actions in Mobile Menu */}
@@ -242,6 +248,11 @@ export default function Navbar() {
                 <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
                 <span>Hire Me</span>
               </motion.button>
+            </div>
+
+            {/* Mobile Tactile Audio Toggle */}
+            <div className="pt-0.5">
+              <SoundToggle className="w-full justify-center py-2" />
             </div>
           </motion.div>
         )}

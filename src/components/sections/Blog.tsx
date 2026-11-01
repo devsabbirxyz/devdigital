@@ -18,6 +18,26 @@ export type BlogPostItem = {
 };
 
 const DEFAULT_POSTS: BlogPostItem[] = [
+    {
+    id: "post-scaled-apparel-15l",
+    slug: "how-we-scaled-apparel-brand-15l-meta-capi",
+    title: "How We Scaled an Apparel Brand to ৳15L/Month using Meta CAPI",
+    excerpt: "A deep dive into server-side conversion matching, creative testing, and retargeting funnels that boosted monthly revenue from ৳2.5L to ৳15L.",
+    cover_url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
+    category: "Paid Ads & CAPI",
+    read_time: "7 min read",
+    date: "Nov 2026",
+  },
+  {
+    id: "post-wordpress-to-nextjs",
+    slug: "why-moving-wordpress-to-nextjs-cut-bounce-50",
+    title: "Why Moving from WordPress to Next.js Cut Bounce Rates by 50%",
+    excerpt: "How migrating a bloated 4.8s WooCommerce store to a headless Next.js 15 edge architecture doubled mobile checkouts and sliced bounce rates in half.",
+    cover_url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
+    category: "Web Development",
+    read_time: "6 min read",
+    date: "Nov 2026",
+  },
   {
     id: "post-meta-ads",
     slug: "meta-ads-scaling-playbook",

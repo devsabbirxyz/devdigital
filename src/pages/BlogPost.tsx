@@ -21,6 +21,81 @@ type Post = {
 };
 
 const FALLBACK_ARTICLES: Record<string, Post> = {
+  "how-we-scaled-apparel-brand-15l-meta-capi": {
+    id: "post-scaled-apparel-15l",
+    title: "How We Scaled an Apparel Brand to ৳15L/Month using Meta CAPI",
+    cover_url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
+    excerpt: "A deep dive into server-side conversion matching, creative testing, and retargeting funnels that boosted monthly revenue from ৳2.5L to ৳15L.",
+    created_at: new Date().toISOString(),
+    category: "Paid Ads & CAPI",
+    read_time: "7 min read",
+    content: `Scaling an apparel direct-to-consumer (DTC) brand in competitive markets requires far more than running boosted posts. In this case study, we document the exact 45-day sprint that took a lifestyle fashion store from a ৳2.5L/month plateau to ৳15.4L/month at a profitable 4.2x ROAS.
+
+The Baseline Bottleneck
+Prior to our intervention, the brand struggled with:
+• Severe iOS 14.5+ tracking loss: Meta pixel was recording less than 62% of actual purchase events due to browser ad-blockers and privacy shields.
+• High Cost-Per-Acquisition (CPA): Customer acquisition cost was hovering at ৳720, leaving razor-thin margins.
+• Ad fatigue: Running 2 single-image ads repeatedly to generic broad audiences resulted in frequency burnout.
+
+The 3-Phase Turnaround Strategy
+
+Phase 1: Server-Side Meta Conversions API (CAPI) Integration
+We deployed a dedicated Node/Supabase edge webhook router that fires conversion events directly to Meta's Graph API alongside browser events. By deduplicating events with external IDs and hashing user customer data (phone, email, IP, user agent), the Event Match Quality surged from 6.1 to 9.8 out of 10. Meta's algorithm now had full attribution data to locate verified buyers.
+
+Phase 2: High-Velocity Creative Testing Sprints
+We produced and tested 12 distinct video hooks weekly across 3 psychological angles:
+1. Social Proof & Unboxing: User-generated content showcasing fit, fabric feel, and genuine client reactions.
+2. Direct Problem-Agitation: "Tired of clothes that shrink after 2 washes?" contrasting poor alternatives with premium stitching.
+3. Limited Drop Scarcity: Highlighting limited stock numbers to drive urgency and immediate impulse purchases.
+
+Phase 3: Automated Retargeting & Instant WhatsApp Follow-up
+We connected an automated webhook from the checkout abandonment trigger directly to the WhatsApp Business API. Abandoned cart shoppers received a polite reminder with a 1-click checkout discount link within 15 minutes, recovering 24% of lost sales.
+
+The Verified Results
+• Monthly Revenue: Scaled from ৳2,50,000 to ৳15,42,000 in 45 days.
+• Blended ROAS: 4.2x consistent return on ad spend across Meta and Google.
+• Blended CPA: Dropped -54% from ৳720 to ৳330 per verified purchase.
+• Event Match Quality: 9.8 / 10 (Zero iOS data drop).
+
+Want similar results for your business? Book a 1:1 strategy session with Sabbir today!`,
+  },
+  "why-moving-wordpress-to-nextjs-cut-bounce-50": {
+    id: "post-wordpress-to-nextjs",
+    title: "Why Moving from WordPress to Next.js Cut Bounce Rates by 50%",
+    cover_url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
+    excerpt: "How migrating a bloated 4.8s WooCommerce store to a headless Next.js 15 edge architecture doubled mobile checkouts and sliced bounce rates in half.",
+    created_at: new Date().toISOString(),
+    category: "Web Development",
+    read_time: "6 min read",
+    content: `For e-commerce and lead generation businesses, website speed is not a technical vanity metric — it is directly tied to revenue. In this technical case study, we examine how migrating from a traditional WordPress/WooCommerce site to a custom Next.js 15 headless architecture halved bounce rates and unlocked 48% more conversions.
+
+The Problem with Legacy WordPress
+The client had a standard WooCommerce installation with 38 active plugins, Elementor builder, and multiple tracking scripts.
+• Initial Load Time: 4.8 seconds on mobile 4G networks.
+• First Input Delay (FID): 280ms lag before buttons responded to user taps.
+• Mobile Bounce Rate: 54% of visitors left the site before the product images finished loading.
+• Every 1-second delay in mobile page load is proven to reduce conversion rates by up to 7%.
+
+The Next.js 15 & Headless Engineering Solution
+
+1. Sub-Second Edge CDN Deployment
+We rebuilt the storefront using Next.js 15 App Router, React Server Components (RSC), and Tailwind CSS. Static assets and product listings are cached at Cloudflare global edge nodes, bringing Time to First Byte (TTFB) down to under 38ms worldwide.
+
+2. Code-Splitting & Zero Layout Shift
+Instead of loading hundreds of kilobytes of unused JavaScript on initial paint, below-the-fold modules (reviews, related products, calculators) are lazy-loaded on scroll. Cumulative Layout Shift (CLS) was reduced to a perfect 0.00.
+
+3. Frictionless 1-Click Cart Drawer & Instant Payments
+We eliminated multi-page checkout redirects. The new custom cart drawer opens instantly without page reload and connects directly to bKash, Nagad, and Stripe APIs with pre-validated address inputs.
+
+The Measured Performance Impact
+• Google Lighthouse Mobile Score: Surged from 38/100 to 99/100.
+• Page Load Time: Plunged from 4.8s to 0.45s (Sub-second speed).
+• Mobile Bounce Rate: Decreased from 54% to 26% (Over 50% drop in abandoned visits).
+• Checkout Completion Rate: Increased by +48% in the first 30 days after launch.
+
+Conclusion
+If your ad campaigns are sending expensive paid traffic to a slow, bloated website, you are burning ad budget. Upgrading to a modern headless web engine pays for itself in recovered conversions.`,
+  },
   "design-trends-2026": {
     id: "def-post-1",
     title: "High-Converting Web Design Trends in 2026: Tactical Glassmorphism & Spatial Depth",

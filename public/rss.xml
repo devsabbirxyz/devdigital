@@ -1,35 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel>
-  <title>DevDigital — Blog</title>
-  <link>https://devsabbir.pro.bd/</link>
-  <description>Latest articles from DevDigital.</description>
-  <lastBuildDate>Sun, 01 Nov 2026 13:08:19 GMT</lastBuildDate>
+  <title>DevDigital — Insights &amp; Case Studies</title>
+  <link>https://developersabbir.pro.bd/</link>
+  <description>Deep case studies and actionable growth frameworks on Paid Ads, CAPI, Next.js Web Engineering, and AI Automations by Sabbir.</description>
+  <lastBuildDate>Sun, 01 Nov 2026 14:00:18 GMT</lastBuildDate>
     <item>
-      <title>video editing </title>
-      <link>https://devsabbir.pro.bd/blog/video-editing</link>
-      <guid isPermaLink="true">https://devsabbir.pro.bd/blog/video-editing</guid>
-      <pubDate>Mon, 11 May 2026 04:07:06 GMT</pubDate>
-      <description>rgr</description>
+      <title>How We Scaled an Apparel Brand to ৳15L/Month using Meta CAPI</title>
+      <link>https://developersabbir.pro.bd/blog/how-we-scaled-apparel-brand-15l-meta-capi</link>
+      <guid isPermaLink="true">https://developersabbir.pro.bd/blog/how-we-scaled-apparel-brand-15l-meta-capi</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A deep dive into server-side conversion matching, creative testing, and retargeting funnels that boosted monthly revenue from ৳2.5L to ৳15L.</description>
     </item>
     <item>
-      <title>hy bara shala ra </title>
-      <link>https://devsabbir.pro.bd/blog/hy-bara-shala-ra</link>
-      <guid isPermaLink="true">https://devsabbir.pro.bd/blog/hy-bara-shala-ra</guid>
-      <pubDate>Sat, 09 May 2026 06:24:57 GMT</pubDate>
-      <description>bukacuda ra mar </description>
-    </item>
-    <item>
-      <title>Welcome to the Blog</title>
-      <link>https://devsabbir.pro.bd/blog/welcome-to-the-blog</link>
-      <guid isPermaLink="true">https://devsabbir.pro.bd/blog/welcome-to-the-blog</guid>
-      <pubDate>Wed, 06 May 2026 08:24:45 GMT</pubDate>
-      <description>First post — what to expect from this blog.</description>
-    </item>
-    <item>
-      <title>Design Trends to Watch in 2026</title>
-      <link>https://devsabbir.pro.bd/blog/design-trends-2026</link>
-      <guid isPermaLink="true">https://devsabbir.pro.bd/blog/design-trends-2026</guid>
-      <pubDate>Wed, 06 May 2026 08:24:45 GMT</pubDate>
-      <description>Glassmorphism is back — here is how to use it well.</description>
+      <title>Why Moving from WordPress to Next.js Cut Bounce Rates by 50%</title>
+      <link>https://developersabbir.pro.bd/blog/why-moving-wordpress-to-nextjs-cut-bounce-50</link>
+      <guid isPermaLink="true">https://developersabbir.pro.bd/blog/why-moving-wordpress-to-nextjs-cut-bounce-50</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>How migrating a bloated 4.8s WooCommerce store to a headless Next.js 15 edge architecture doubled mobile checkouts and sliced bounce rates in half.</description>
     </item>
 </channel></rss>

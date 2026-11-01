@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-const SITE_URL = "https://devsabbir.pro.bd";
+const SITE_URL = "https://developersabbir.pro.bd";
 
 type SeoProps = {
   path: string;

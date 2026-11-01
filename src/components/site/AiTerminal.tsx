@@ -15,8 +15,11 @@ import {
 } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { askGemini, ChatMessage } from "@/lib/gemini";
+import { openBookingModal } from "@/components/site/BookingModal";
+import { playUiSound } from "@/lib/soundEffects";
 
 export function openAiTerminal(command?: string) {
+  playUiSound("cyber");
   window.dispatchEvent(
     new CustomEvent("open-ai-terminal", { detail: { command } })
   );
@@ -36,34 +39,34 @@ type Message = {
 
 const SUGGESTED_PROMPTS = [
   {
-    cmd: "/audit-ads",
-    label: "Audit Meta & Google Ads",
+    cmd: "/audit",
+    label: "/audit • Full Funnel Audit",
     icon: TrendingUp,
-    query: "Can you audit my Meta and Google Ads performance and suggest how to improve ROAS?",
+    query: "/audit",
   },
   {
-    cmd: "/estimate-web",
-    label: "Web Specs & Stack",
+    cmd: "/pricing",
+    label: "/pricing • Packages & Tiers",
+    icon: Calculator,
+    query: "/pricing",
+  },
+  {
+    cmd: "/book",
+    label: "/book • 1:1 Strategy Meeting",
+    icon: MessageCircle,
+    query: "/book",
+  },
+  {
+    cmd: "/tech",
+    label: "/tech • Web Architecture",
     icon: Code2,
     query: "What is Sabbir's web development tech stack, timeline, and deliverables?",
   },
   {
-    cmd: "/automate-ai",
-    label: "AI Automations & Workflows",
+    cmd: "/agents",
+    label: "/agents • AI Automations",
     icon: Bot,
     query: "How can custom AI agents and n8n workflows automate my business operations?",
-  },
-  {
-    cmd: "/calc-roi",
-    label: "Calculate ROI & Pricing",
-    icon: Calculator,
-    query: "What are DevDigital's pricing packages and expected return on investment?",
-  },
-  {
-    cmd: "/book-call",
-    label: "Book Strategy Call",
-    icon: MessageCircle,
-    query: "How do I book a 1:1 strategy discovery session directly with Sabbir?",
   },
 ];
 
@@ -180,6 +183,7 @@ export default function AiTerminal() {
 
     // Quick instant commands
     if (lowerQuery === "/clear") {
+      playUiSound("soft-click");
       setMessages([
         {
           id: Math.random().toString(),
@@ -192,7 +196,14 @@ export default function AiTerminal() {
       return;
     }
 
-    if (lowerQuery === "/book-call" || lowerQuery.includes("book meeting") || lowerQuery.includes("call")) {
+    // /audit command
+    if (
+      lowerQuery === "/audit" ||
+      lowerQuery === "/audit-ads" ||
+      lowerQuery.startsWith("/audit") ||
+      lowerQuery === "audit"
+    ) {
+      playUiSound("success");
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
@@ -200,8 +211,65 @@ export default function AiTerminal() {
             id: Math.random().toString(),
             sender: "gemini",
             timestamp: getNow(),
-            text:
-              "You can schedule a direct 1:1 strategy discovery session with Sabbir (Founder, DevDigital) or message him instantly on WhatsApp for immediate priority scheduling.",
+            text: `⚡ DEVDIGITAL SYSTEM AUDIT ENGINE v2.6\nStatus: Active Diagnostic Scan Ready\n\nHere is the exact 5-point conversion & performance audit we perform for fast-growing brands:\n\n1. 🎯 Meta CAPI & Server-Side Event Matching:\n   • Verifies Event Match Quality (EMQ target ≥ 8.5/10).\n   • Server-side deduplication via Cloudflare Edge to eliminate 35% iOS 14.5+ attribution loss.\n\n2. ⚡ Sub-Second Speed & Mobile Drop-Off:\n   • Lighthouse 95+ target; sub-1.2s Largest Contentful Paint (LCP).\n   • Headless Next.js 15 migration cuts mobile bounce rates by up to 50%.\n\n3. 🎬 Creative Fatigue & Hook Velocity:\n   • 3 distinct angle sprints (UGC Unboxing, Pain-Agitation, Scarcity Drops) to counter high CPA.\n\n4. 💬 Automated Retention & Cart Recovery:\n   • Webhook-triggered WhatsApp abandonment follow-ups in < 15 mins (recovers ~24% abandoned carts).\n\n5. 📈 Unit Economics & LTV Scalability:\n   • CPA-to-AOV ratio calibrated for scalable 3.5x – 6.2x blended ROAS.\n\n👉 Would you like Sabbir to personally inspect your ad account or store architecture?`,
+            action: {
+              label: "Book Free 15-Min Live Audit",
+              icon: TrendingUp,
+              onClick: () => openBookingModal("Free 15-Min Live Growth Audit"),
+            },
+          },
+        ]);
+        setIsProcessing(false);
+      }, 350);
+      return;
+    }
+
+    // /pricing command
+    if (
+      lowerQuery === "/pricing" ||
+      lowerQuery === "/calc-roi" ||
+      lowerQuery.startsWith("/pricing") ||
+      lowerQuery === "pricing"
+    ) {
+      playUiSound("success");
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: "gemini",
+            timestamp: getNow(),
+            text: `💼 DEVDIGITAL INVESTMENT PACKAGES & DELIVERABLES\n\n🔹 1. FREE STRATEGY DISCOVERY — $0 / Free\n   • 15-minute 1:1 Growth & Funnel Diagnostic session with Sabbir.\n   • Immediate bottleneck identification & tailored roadmap.\n\n🚀 2. GROWTH ENGINE — $490 / month (~৳58,000)\n   • Meta & Google Ads full management, CAPI server-side setup.\n   • 8+ High-converting ad creatives + monthly copy sprints.\n   • Weekly ROAS & attribution tracking.\n\n👑 3. SCALE & DOMINATE — $1,250 / month (~৳1,48,000) [Most Popular]\n   • Everything in Growth Engine +\n   • Custom Next.js 15 Sub-Second Web Engine (Lighthouse 99/100).\n   • 24/7 Autonomous AI WhatsApp Agent for lead capture & automated bookings.\n   • Automated abandoned cart recovery pipeline.\n   • Dedicated Slack/WhatsApp direct channel.\n\n🏢 4. ENTERPRISE TITAN — Custom Scope\n   • Tailored multi-agent systems, internal ERPs & custom SaaS engineering.\n\n💡 All packages come with milestone-based delivery and performance guarantees.`,
+            action: {
+              label: "Schedule Strategy Call",
+              icon: Calculator,
+              onClick: () => openBookingModal("Pricing Strategy Consultation"),
+            },
+          },
+        ]);
+        setIsProcessing(false);
+      }, 350);
+      return;
+    }
+
+    // /book command
+    if (
+      lowerQuery === "/book" ||
+      lowerQuery === "/book-call" ||
+      lowerQuery.startsWith("/book") ||
+      lowerQuery.includes("book meeting") ||
+      lowerQuery === "call"
+    ) {
+      playUiSound("chime");
+      openBookingModal("AI Terminal Fast-Track Session");
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: "gemini",
+            timestamp: getNow(),
+            text: `📅 LAUNCHING STRATEGY BOOKING CALENDAR...\n\nThe 1:1 discovery calendar has opened on your screen. Pick your preferred date & time for a private 15-minute strategy call with Sabbir.\n\nPrefer immediate direct messaging instead? Tap below to connect on WhatsApp:`,
             action: {
               label: "Chat Directly on WhatsApp",
               icon: MessageCircle,
@@ -211,7 +279,7 @@ export default function AiTerminal() {
           },
         ]);
         setIsProcessing(false);
-      }, 400);
+      }, 350);
       return;
     }
 

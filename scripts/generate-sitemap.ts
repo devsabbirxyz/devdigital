@@ -5,18 +5,36 @@ import { config } from "dotenv";
 
 config();
 
-const BASE_URL = "https://devsabbir.pro.bd";
+const BASE_URL = "https://developersabbir.pro.bd";
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 type Entry = { path: string; lastmod?: string; changefreq?: string; priority?: string };
 
 const staticEntries: Entry[] = [
-  { path: "/", changefreq: "weekly", priority: "1.0" },
+  { path: "/", changefreq: "daily", priority: "1.0" },
   { path: "/projects", changefreq: "weekly", priority: "0.8" },
-  { path: "/webdev", changefreq: "monthly", priority: "0.7" },
-  { path: "/aiautomation", changefreq: "monthly", priority: "0.7" },
-  { path: "/digitalmarketingservice", changefreq: "monthly", priority: "0.7" },
+  { path: "/hire-me", changefreq: "weekly", priority: "0.8" },
+  { path: "/blog/how-we-scaled-apparel-brand-15l-meta-capi", changefreq: "weekly", priority: "0.9" },
+  { path: "/blog/why-moving-wordpress-to-nextjs-cut-bounce-50", changefreq: "weekly", priority: "0.9" },
+  { path: "/services/digital-marketing", changefreq: "monthly", priority: "0.7" },
+  { path: "/services/web-development", changefreq: "monthly", priority: "0.7" },
+  { path: "/services/ai-automation", changefreq: "monthly", priority: "0.7" },
+];
+
+const FALLBACK_POSTS = [
+  {
+    slug: "how-we-scaled-apparel-brand-15l-meta-capi",
+    title: "How We Scaled an Apparel Brand to ৳15L/Month using Meta CAPI",
+    excerpt: "A deep dive into server-side conversion matching, creative testing, and retargeting funnels that boosted monthly revenue from ৳2.5L to ৳15L.",
+    created_at: "2026-11-01T00:00:00.000Z",
+  },
+  {
+    slug: "why-moving-wordpress-to-nextjs-cut-bounce-50",
+    title: "Why Moving from WordPress to Next.js Cut Bounce Rates by 50%",
+    excerpt: "How migrating a bloated 4.8s WooCommerce store to a headless Next.js 15 edge architecture doubled mobile checkouts and sliced bounce rates in half.",
+    created_at: "2026-11-01T00:00:00.000Z",
+  },
 ];
 
 async function fetchTable<T = any>(table: string, query: string): Promise<T[]> {
@@ -69,9 +87,9 @@ function buildRss(posts: Array<{ slug: string; title: string; excerpt: string | 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0"><channel>',
-    "  <title>DevDigital — Blog</title>",
+    "  <title>DevDigital — Insights &amp; Case Studies</title>",
     `  <link>${BASE_URL}/</link>`,
-    "  <description>Latest articles from DevDigital.</description>",
+    "  <description>Deep case studies and actionable growth frameworks on Paid Ads, CAPI, Next.js Web Engineering, and AI Automations by Sabbir.</description>",
     `  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,
     items,
     "</channel></rss>",
@@ -79,10 +97,15 @@ function buildRss(posts: Array<{ slug: string; title: string; excerpt: string | 
 }
 
 async function main() {
-  const posts = await fetchTable<{ slug: string; title: string; excerpt: string | null; created_at: string; updated_at?: string }>(
+  let posts = await fetchTable<{ slug: string; title: string; excerpt: string | null; created_at: string; updated_at?: string }>(
     "blog_posts",
     "select=slug,title,excerpt,created_at,updated_at&published=eq.true&order=created_at.desc",
   );
+
+  if (!posts || posts.length === 0) {
+    posts = FALLBACK_POSTS;
+  }
+
   const services = await fetchTable<{ slug: string; updated_at?: string }>(
     "service_pages",
     "select=slug,updated_at",
@@ -103,9 +126,19 @@ async function main() {
     })),
   ];
 
-  writeFileSync(resolve("public/sitemap.xml"), buildSitemap([...staticEntries, ...dynamicEntries]));
+  // Avoid duplicate entries if present in staticEntries
+  const seenPaths = new Set<string>();
+  const allEntries: Entry[] = [];
+  for (const entry of [...staticEntries, ...dynamicEntries]) {
+    if (!seenPaths.has(entry.path)) {
+      seenPaths.add(entry.path);
+      allEntries.push(entry);
+    }
+  }
+
+  writeFileSync(resolve("public/sitemap.xml"), buildSitemap(allEntries));
   writeFileSync(resolve("public/rss.xml"), buildRss(posts));
-  console.log(`sitemap.xml (${staticEntries.length + dynamicEntries.length} urls) and rss.xml (${posts.length} posts) written`);
+  console.log(`sitemap.xml (${allEntries.length} urls) and rss.xml (${posts.length} posts) written`);
 }
 
 main().catch((e) => {
