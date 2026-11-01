@@ -54,26 +54,6 @@ const CLIENTS = [
     live_url: "https://dorjibari.com.bd",
   },
   {
-    name: "Apple Gadgets",
-    domain: "applegadgetsbd.com",
-    tagline: "Tech Retail & Storefront",
-    logo: "/images/clients/applegadgetsbd.com.png",
-    color: "text-cyan-400",
-    bg: "bg-cyan-500/10 border-cyan-500/25 hover:border-cyan-400/50",
-    initial: "A",
-    live_url: "https://applegadgetsbd.com",
-  },
-  {
-    name: "Pathao Logistics",
-    domain: "pathao.com",
-    tagline: "Courier & Ride API Sync",
-    logo: "/images/clients/pathao.com.png",
-    color: "text-rose-400",
-    bg: "bg-rose-500/10 border-rose-500/25 hover:border-rose-400/50",
-    initial: "P",
-    live_url: "https://pathao.com",
-  },
-  {
     name: "Steadfast Courier",
     domain: "steadfast.com.bd",
     tagline: "Nationwide Parcel Tracking",
@@ -86,7 +66,7 @@ const CLIENTS = [
 ];
 
 // Duplicate for seamless 360-degree marquee loop
-const LIST = [...CLIENTS, ...CLIENTS];
+const LIST = [...CLIENTS, ...CLIENTS, ...CLIENTS];
 
 export default function ClientLogoStrip() {
   return (
