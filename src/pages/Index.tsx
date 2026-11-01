@@ -17,6 +17,7 @@ const RoiCalculator = lazy(() => import("@/components/sections/RoiCalculator"));
 const Process = lazy(() => import("@/components/sections/Process"));
 const TrustGuarantee = lazy(() => import("@/components/sections/TrustGuarantee"));
 const Pricing = lazy(() => import("@/components/sections/Pricing"));
+const ProjectEstimator = lazy(() => import("@/components/sections/ProjectEstimator"));
 const Testimonials = lazy(() => import("@/components/sections/Testimonials"));
 const Blog = lazy(() => import("@/components/sections/Blog"));
 const FAQ = lazy(() => import("@/components/sections/FAQ"));
@@ -52,6 +53,8 @@ const Index = () => {
         {/* Trust & Guarantee section — removes buyer hesitation before Pricing */}
         <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><TrustGuarantee /></Suspense>
         <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Pricing /></Suspense>
+        {/* Dynamic Project Scope & Budget Estimator — lets clients configure their custom quote */}
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><ProjectEstimator /></Suspense>
         <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Testimonials /></Suspense>
         <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Blog /></Suspense>
         <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><FAQ /></Suspense>

@@ -599,10 +599,14 @@ export default function Pricing() {
           <p className="text-xs text-slate-400">
             Need a bespoke enterprise quote, custom automation pipeline, or multi-brand retainer?{" "}
             <button
-              onClick={() => openBookingModal("Custom Enterprise AI Scope")}
-              className="text-[#0099FF] hover:underline font-semibold"
+              onClick={() => {
+                const el = document.getElementById("estimator");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+                else openBookingModal("Custom Enterprise Scope");
+              }}
+              className="text-cyan-400 hover:underline font-bold"
             >
-              Book a strategy call directly &rarr;
+              Calculate custom scope with Project Estimator &rarr;
             </button>
           </p>
         </div>
