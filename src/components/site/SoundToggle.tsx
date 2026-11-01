@@ -72,3 +72,4 @@ export default function SoundToggle({ className = "", compact = false }: SoundTo
     </button>
   );
 }
+
