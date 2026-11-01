@@ -1,13 +1,67 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import * as Icons from "lucide-react";
-import { Sparkles, ArrowUpRight } from "lucide-react";
+import {
+  Sparkles,
+  ArrowUpRight,
+  TrendingUp,
+  Code2,
+  Bot,
+  Globe,
+  Cpu,
+  Zap,
+  Megaphone,
+  Search,
+  Share2,
+  Layers,
+  Smartphone,
+  Laptop,
+  Rocket,
+  BarChart,
+  Shield,
+  Workflow,
+  Palette,
+  Terminal,
+  Database,
+  LineChart,
+  Target,
+  MessageSquare,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import HolographicCard from "@/components/ui/HolographicCard";
 import SectionWatermark from "@/components/ui/SectionWatermark";
 
 type Service = { id: string; icon: string; title: string; description: string };
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  TrendingUp,
+  Code2,
+  Bot,
+  Sparkles,
+  Globe,
+  Cpu,
+  Zap,
+  Megaphone,
+  Search,
+  Share2,
+  Layers,
+  Smartphone,
+  Laptop,
+  Rocket,
+  BarChart,
+  Shield,
+  Workflow,
+  Palette,
+  Terminal,
+  Database,
+  LineChart,
+  Target,
+  MessageSquare,
+};
+
+function getServiceIcon(name: string) {
+  return ICON_MAP[name] || Sparkles;
+}
 
 function routeForTitle(title: string): string | null {
   const t = title.toLowerCase();
@@ -89,7 +143,7 @@ export default function Services() {
 
         <div className="grid md:grid-cols-3 gap-3.5 sm:gap-6">
           {services.map((s, i) => {
-            const Icon = (Icons as any)[s.icon] ?? Sparkles;
+            const Icon = getServiceIcon(s.icon);
             const route = routeForTitle(s.title);
             const Wrapper: any = route ? Link : "div";
             const wrapperProps: any = route ? { to: route } : {};

@@ -35,21 +35,20 @@ const Index = () => {
       <Hero />
       <BrandMarquee />
       <ErrorBoundary name="HomepageSections">
-        <Suspense fallback={<div className="h-32" />}>
-          <About />
-          <Services />
-          <RoiCalculator />
-          <Projects />
-          <Process />
-          <Pricing />
-          <Testimonials />
-          <Blog />
-          <FAQ />
-          <Contact />
-          <Footer />
-          <WhatsAppButton />
-          <IntroVideoModal />
-        </Suspense>
+        {/* Progressive reveal: each section loads independently without blocking others */}
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><About /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Services /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><RoiCalculator /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Projects /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Process /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Pricing /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Testimonials /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Blog /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><FAQ /></Suspense>
+        <Suspense fallback={<div className="h-24 w-full" aria-hidden="true" />}><Contact /></Suspense>
+        <Suspense fallback={null}><Footer /></Suspense>
+        <Suspense fallback={null}><WhatsAppButton /></Suspense>
+        <Suspense fallback={null}><IntroVideoModal /></Suspense>
       </ErrorBoundary>
     </main>
   );

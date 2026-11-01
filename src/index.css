@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Fonts loaded asynchronously via non-blocking <link> tags in index.html */
 
 @tailwind base;
 @tailwind components;
@@ -706,68 +706,30 @@
 }
 
 /* ============================================================
-   MOBILE ULTRA-SMOOTH KINETIC ANIMATIONS & TOUCH ENHANCEMENTS
+   SEQUENTIAL BLINKING DOTS (LOADING. . . .)
    ============================================================ */
-@media (max-width: 767px) {
-  .touch-pan-y {
-    touch-action: pan-y;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  @keyframes mobile-ambient-glow {
-    0%, 100% {
-      opacity: 0.35;
-      transform: scale(0.98);
-    }
-    50% {
-      opacity: 0.75;
-      transform: scale(1.02);
-    }
-  }
-
-  .animate-mobile-glow {
-    animation: mobile-ambient-glow 3.5s ease-in-out infinite;
-    will-change: opacity, transform;
-  }
-
-  /* Smooth continuous laser border beam on mobile cards */
-  @keyframes mobile-beam-pulse {
-    0%, 100% {
-      opacity: 0.50;
-    }
-    50% {
-      opacity: 0.90;
-    }
-  }
-
-  .animate-mobile-beam-pulse {
-    animation: mobile-beam-pulse 2.8s ease-in-out infinite;
-    will-change: opacity;
-  }
-
-  /* Mobile Safe Area Inset Support (Notch / Dynamic Island / Home Bar) */
-  .pb-safe {
-    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-  }
-  .pt-safe {
-    padding-top: max(0.75rem, env(safe-area-inset-top));
-  }
+@keyframes scifiDotBlink {
+  0%, 15% { opacity: 0.15; filter: drop-shadow(0 0 0 transparent); }
+  35%, 70% { opacity: 1; filter: drop-shadow(0 0 8px #00ffff); }
+  85%, 100% { opacity: 0.15; filter: drop-shadow(0 0 0 transparent); }
 }
 
-/* Accessibility: Respect reduced motion preference per modern-web-guidance */
-@media (prefers-reduced-motion: reduce) {
-  .animate-border-beam,
-  .animate-pulse-glow,
-  .animate-float,
-  .animate-marquee-left,
-  .animate-marquee-right,
-  .animate-marquee-up,
-  .circuit-laser-left,
-  .circuit-laser-right,
-  .animate-watermark-mask-sweep,
-  .animate-watermark-aura-sweep,
-  .animate-mobile-glow,
-  .animate-mobile-beam-pulse {
-    animation: none !important;
-  }
-}
+.animate-scifi-dot-1 {
+  animation: scifiDotBlink 1.4s infinite;
+  animation-delay: 0s;
+}
+
+.animate-scifi-dot-2 {
+  animation: scifiDotBlink 1.4s infinite;
+  animation-delay: 0.25s;
+}
+
+.animate-scifi-dot-3 {
+  animation: scifiDotBlink 1.4s infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-scifi-dot-4 {
+  animation: scifiDotBlink 1.4s infinite;
+  animation-delay: 0.75s;
+}

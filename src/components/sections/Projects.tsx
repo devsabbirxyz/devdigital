@@ -278,6 +278,50 @@ export const CURATED_SAMPLE_PROJECTS: EnrichedProject[] = [
   },
 ];
 
+// Fast automatic resolution to fixed local preview image by domain or live URL
+export function getProjectImage(p?: Partial<EnrichedProject> | null): string {
+  if (!p) return imgBloodBd;
+
+  // 1. If explicit valid image_url is provided and not empty
+  if (p.image_url && p.image_url.trim() && !p.image_url.includes("placeholder")) {
+    return p.image_url;
+  }
+
+  // 2. Resolve by domain, live_url or title
+  const url = (p.live_url || "").toLowerCase();
+  const domain = (p.live_domain || "").toLowerCase();
+  const title = (p.title || "").toLowerCase();
+
+  if (url.includes("blood-bd") || domain.includes("blood-bd") || title.includes("blood")) {
+    return imgBloodBd;
+  }
+  if (url.includes("gorurghash") || domain.includes("gorurghash") || title.includes("gorur ghash") || title.includes("meta ads")) {
+    return imgGorurGhash;
+  }
+  if (url.includes("praava") || domain.includes("praava") || title.includes("praava") || title.includes("google ads")) {
+    return imgPraava;
+  }
+  if (url.includes("make.com") || domain.includes("make.com") || title.includes("make flow") || title.includes("make.com")) {
+    return imgMake;
+  }
+  if (url.includes("khaasfood") || domain.includes("khaasfood") || title.includes("khaas food") || title.includes("organic")) {
+    return imgKhaasFood;
+  }
+  if (url.includes("chatbase") || domain.includes("chatbase") || title.includes("chatbase") || title.includes("support copilot")) {
+    return imgChatbase;
+  }
+  if (url.includes("dorjibari") || domain.includes("dorjibari") || title.includes("dorji bari") || title.includes("fashion retail")) {
+    return imgDorjiBari;
+  }
+
+  // 3. Dynamic screenshot if other live URL exists
+  if (p.live_url && p.live_url.startsWith("http")) {
+    return `https://api.microlink.io/?url=${encodeURIComponent(p.live_url)}&screenshot=true&meta=false&embed=screenshot.url`;
+  }
+
+  return imgBloodBd;
+}
+
 // Helper to determine category & tags from database fields
 function enrichProject(p: Project): EnrichedProject {
   const text = `${p.title} ${p.description}`.toLowerCase();
@@ -366,6 +410,23 @@ function enrichProject(p: Project): EnrichedProject {
 }
 
 export default function Projects({ all = false }: { all?: boolean }) {
+    // Pre-cache all project screenshots in browser memory immediately on mount
+  useEffect(() => {
+    const projectImages = [
+      imgBloodBd,
+      imgGorurGhash,
+      imgPraava,
+      imgMake,
+      imgKhaasFood,
+      imgChatbase,
+      imgDorjiBari,
+    ];
+    projectImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const [customList, setCustomList] = useState<EnrichedProject[] | null>(null);
   const [dbProjects, setDbProjects] = useState<Project[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");

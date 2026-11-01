@@ -1,0 +1,354 @@
+/* ============================================================
+   DevDigital — Premium Glassmorphism Preloader
+   All design tokens in :root so colours/sizes can be changed
+   in one place.
+   ============================================================ */
+
+:root {
+  --al-bg: #02060a;
+  --al-accent: #19f3ff;
+  --al-accent-2: #00b8ff;
+  --al-track: rgba(255, 255, 255, 0.08);
+  --al-glass: rgba(255, 255, 255, 0.04);
+  --al-border: rgba(255, 255, 255, 0.10);
+  --al-radius: 20px;
+  --al-bar-h: 5px;
+  --al-knob: 15px;
+  --al-width: min(520px, 82vw);
+  /* progress 0–1 updated from JS */
+  --p: 0;
+  /* track pixel width set from JS for knob translate */
+  --track-w: 520px;
+}
+
+/* ── Reset / base ─────────────────────────────────────── */
+#app-loader *,
+#app-loader *::before,
+#app-loader *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Root overlay ─────────────────────────────────────── */
+#app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--al-bg);
+  /* safe-area support */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* height: 100dvh — progressive enhancement */
+  height: 100dvh;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+/* ── Ambient radial glows (something for glass to blur) ── */
+.al-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  filter: blur(80px);
+  opacity: 0.22;
+}
+.al-glow--a {
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(circle, var(--al-accent) 0%, var(--al-accent-2) 40%, transparent 80%);
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: al-drift-a 22s ease-in-out infinite alternate;
+}
+.al-glow--b {
+  width: 350px;
+  height: 220px;
+  background: radial-gradient(circle, var(--al-accent-2) 0%, #006aff 50%, transparent 80%);
+  bottom: 28%;
+  right: 18%;
+  animation: al-drift-b 18s ease-in-out infinite alternate;
+}
+
+@keyframes al-drift-a {
+  from { transform: translate(-60%, -55%) scale(1); }
+  to   { transform: translate(-40%, -45%) scale(1.12); }
+}
+@keyframes al-drift-b {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-30px, 20px) scale(1.08); }
+}
+
+/* ── Faint scanline grid ─────────────────────────────── */
+#app-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 255, 0.018) 0px,
+      rgba(0, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 32px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Glass panel ─────────────────────────────────────── */
+.al-panel {
+  position: relative;
+  z-index: 2;
+  width: var(--al-width);
+  padding: 28px 32px;
+  border-radius: var(--al-radius);
+
+  /* Glassmorphism */
+  background: var(--al-glass);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--al-border);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 0 1px rgba(0, 255, 255, 0.06),
+    0 8px 40px rgba(0, 229, 255, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.5);
+
+  /* Fallback if backdrop-filter is unsupported */
+  @supports not (backdrop-filter: blur(1px)) {
+    background: rgba(2, 6, 10, 0.92);
+  }
+}
+
+/* ── Brand/logo line above bar ─────────────────────────── */
+.al-brand {
+  display: block;
+  text-align: center;
+  font-family: 'JetBrains Mono', 'Rajdhani', ui-monospace, monospace;
+  font-size: clamp(10px, 1.8vw, 13px);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--al-accent);
+  opacity: 0.55;
+  margin-bottom: 22px;
+  text-shadow: 0 0 14px rgba(25, 243, 255, 0.5);
+}
+
+/* ── Status text ─────────────────────────────────────── */
+.al-status {
+  display: block;
+  text-align: center;
+  font-family: 'JetBrains Mono', 'Rajdhani', ui-monospace, monospace;
+  font-size: clamp(9px, 1.5vw, 11px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(25, 243, 255, 0.55);
+  margin-top: 18px;
+  min-height: 1.3em;
+  transition: opacity 0.4s ease;
+  text-shadow: 0 0 10px rgba(25, 243, 255, 0.3);
+}
+
+/* ── Track ───────────────────────────────────────────── */
+.al-track {
+  position: relative;
+  width: 100%;
+  height: var(--al-bar-h);
+  border-radius: 999px;
+  background: var(--al-track);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  overflow: visible; /* knob sticks out */
+}
+
+/* ── Fill bar ─────────────────────────────────────────── */
+.al-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%; /* parent width; scaleX drives fill */
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--al-accent) 0%, var(--al-accent-2) 100%);
+  transform-origin: left center;
+  transform: scaleX(var(--p));
+  will-change: transform;
+  overflow: hidden;
+  box-shadow:
+    0 0 8px var(--al-accent),
+    0 0 20px var(--al-accent),
+    0 0 42px rgba(25, 243, 255, 0.55);
+}
+
+/* ── Glass shine sweep across fill ──────────────────── */
+.al-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 55%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  transform: translateX(-120%) skewX(-20deg);
+  animation: al-sweep 1.8s ease-in-out infinite;
+  will-change: transform;
+  pointer-events: none;
+}
+
+@keyframes al-sweep {
+  0%   { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(260%)  skewX(-20deg); }
+}
+
+/* ── Knob (leading edge circle) ─────────────────────── */
+.al-knob {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--al-knob);
+  height: var(--al-knob);
+  border-radius: 50%;
+  background: var(--al-accent);
+  transform: translate(
+    calc(var(--p) * var(--track-w) - var(--al-knob) / 2),
+    -50%
+  );
+  will-change: transform;
+  box-shadow:
+    0 0 0 3px rgba(25, 243, 255, 0.25),
+    0 0 14px var(--al-accent),
+    0 0 30px var(--al-accent),
+    0 0 50px rgba(25, 243, 255, 0.5);
+  animation: al-knob-pulse 1.2s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes al-knob-pulse {
+  0%, 100% { transform: translate(calc(var(--p) * var(--track-w) - var(--al-knob) / 2), -50%) scale(1); }
+  50%       { transform: translate(calc(var(--p) * var(--track-w) - var(--al-knob) / 2), -50%) scale(1.18); }
+}
+
+/* ── Pointer triangle above knob ────────────────────── */
+.al-pointer {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 8px solid var(--al-accent);
+  filter: drop-shadow(0 0 6px var(--al-accent));
+  animation: al-pointer-bob 1.2s ease-in-out infinite;
+}
+
+@keyframes al-pointer-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-3px); }
+}
+
+/* ── Meta row (label + percent) ─────────────────────── */
+.al-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-family: 'JetBrains Mono', 'Rajdhani', ui-monospace, monospace;
+  font-size: clamp(10px, 1.8vw, 12px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--al-accent);
+  text-shadow: 0 0 10px rgba(25, 243, 255, 0.55);
+}
+
+.al-label { display: flex; align-items: center; gap: 2px; }
+
+/* Dots driven by JS cycling class; CSS fallback steps() */
+.al-dots::after {
+  content: '.';
+  animation: al-dot-cycle 1.6s steps(4, end) infinite;
+}
+
+@keyframes al-dot-cycle {
+  0%   { content: '.'; }
+  25%  { content: '..'; }
+  50%  { content: '...'; }
+  75%  { content: '....'; }
+  100% { content: '.'; }
+}
+
+.al-percent {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5ch;
+  text-align: right;
+  font-size: clamp(12px, 2vw, 14px);
+  color: var(--al-accent);
+  text-shadow: 0 0 12px var(--al-accent), 0 0 24px rgba(25, 243, 255, 0.45);
+}
+
+/* ── 100% climax pulse ───────────────────────────────── */
+.al-panel.al-climax {
+  animation: al-panel-pulse 0.35s ease-out forwards;
+}
+
+@keyframes al-panel-pulse {
+  0%   { box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 0 0 1px rgba(0,255,255,.06), 0 8px 40px rgba(0,229,255,.12), 0 2px 8px rgba(0,0,0,.5); }
+  50%  { box-shadow: inset 0 1px 0 rgba(255,255,255,.30), 0 0 0 2px rgba(0,255,255,.35), 0 0 80px rgba(25,243,255,.55), 0 0 120px rgba(0,184,255,.35); }
+  100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 0 0 1px rgba(0,255,255,.10), 0 0 50px rgba(25,243,255,.30), 0 2px 8px rgba(0,0,0,.5); }
+}
+
+/* ── Exit transition ─────────────────────────────────── */
+#app-loader.al-exit {
+  animation: al-loader-out 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none !important;
+}
+
+@keyframes al-loader-out {
+  from { opacity: 1; filter: blur(0px);  }
+  to   { opacity: 0; filter: blur(12px); transform: scale(1.03); }
+}
+
+/* ── prefers-reduced-motion ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .al-glow,
+  .al-shine,
+  .al-knob,
+  .al-pointer,
+  .al-dots::after {
+    animation: none !important;
+  }
+  #app-loader.al-exit {
+    animation: al-loader-out-simple 300ms ease forwards;
+  }
+  @keyframes al-loader-out-simple {
+    to { opacity: 0; }
+  }
+}
+
+/* ── Mobile tweaks ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .al-panel {
+    padding: 20px 18px;
+  }
+  .al-brand {
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+}
+
