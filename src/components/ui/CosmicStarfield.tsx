@@ -11,12 +11,10 @@ interface Star {
   color: string;
 }
 
-export function CosmicStarfield({ count = 65 }: { count?: number }) {
-  // Deterministic star placement so hydration is stable
+export function CosmicStarfield({ count = 28 }: { count?: number }) {
   const stars = useMemo<Star[]>(() => {
     const starColors = ["#FFFFFF", "#E0C3FC", "#C8A2FF", "#9D6BFF", "#D8B4FE"];
     return Array.from({ length: count }, (_, i) => {
-      // Seeded-like random
       const rand1 = ((i * 37 + 19) % 100) / 100;
       const rand2 = ((i * 73 + 43) % 100) / 100;
       const rand3 = ((i * 29 + 11) % 100) / 100;
@@ -25,10 +23,10 @@ export function CosmicStarfield({ count = 65 }: { count?: number }) {
         id: i,
         top: `${rand1 * 100}%`,
         left: `${rand2 * 100}%`,
-        size: rand3 > 0.8 ? 2.5 : rand3 > 0.4 ? 1.5 : 1,
-        opacity: 0.25 + rand3 * 0.65,
-        duration: 2.5 + rand1 * 3.5,
-        delay: rand2 * 4,
+        size: rand3 > 0.8 ? 2 : rand3 > 0.4 ? 1.5 : 1,
+        opacity: 0.2 + rand3 * 0.5,
+        duration: 3 + rand1 * 3,
+        delay: rand2 * 3,
         color: starColors[i % starColors.length],
       };
     });
@@ -43,23 +41,16 @@ export function CosmicStarfield({ count = 65 }: { count?: number }) {
           "radial-gradient(ellipse at 50% 20%, #15102A 0%, #0D0A1C 45%, #08070C 100%)",
       }}
     >
-      {/* Subtle deep-space ambient nebulae */}
+      {/* Subtle deep-space ambient nebulae — static, hardware-accelerated */}
       <div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] sm:w-[900px] h-[450px] rounded-full blur-[160px] opacity-25"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full blur-[120px] opacity-20 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, #9B5DE5 0%, #3C1E70 50%, transparent 75%)",
         }}
       />
-      <div
-        className="absolute bottom-10 right-10 w-[450px] h-[350px] rounded-full blur-[140px] opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, #7000FF 0%, #1B0F33 60%, transparent 80%)",
-        }}
-      />
 
-      {/* Tiny glowing starlight particles */}
+      {/* Lightweight starlight particles */}
       {stars.map((star) => (
         <span
           key={star.id}
@@ -70,10 +61,6 @@ export function CosmicStarfield({ count = 65 }: { count?: number }) {
             width: `${star.size}px`,
             height: `${star.size}px`,
             backgroundColor: star.color,
-            boxShadow:
-              star.size > 1.5
-                ? `0 0 6px ${star.color}, 0 0 12px rgba(224, 195, 252, 0.4)`
-                : undefined,
             opacity: star.opacity,
             animationDuration: `${star.duration}s`,
             animationDelay: `${star.delay}s`,

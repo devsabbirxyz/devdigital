@@ -383,18 +383,13 @@
   }
 }
 
-/* GPU-accelerated pulse glow */
+/* GPU-accelerated pulse glow (compositor only) */
 @keyframes pulse-glow {
-
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.65;
-    transform: scale(0.98);
   }
-
   50% {
-    opacity: 1;
-    transform: scale(1.02);
+    opacity: 0.95;
   }
 }
 
@@ -537,12 +532,10 @@
 
 @keyframes cosmic-twinkle {
   0%, 100% {
-    opacity: 0.2;
-    transform: scale(0.85);
+    opacity: 0.25;
   }
   50% {
-    opacity: 0.95;
-    transform: scale(1.3);
+    opacity: 0.85;
   }
 }
 
@@ -552,8 +545,8 @@
 }
 
 .animate-cosmic-twinkle {
-  animation: cosmic-twinkle 3s ease-in-out infinite;
-  will-change: opacity, transform;
+  animation: cosmic-twinkle 3.5s ease-in-out infinite;
+  will-change: opacity;
 }
 
 /* ============================================================

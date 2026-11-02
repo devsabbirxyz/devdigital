@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Play } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
@@ -435,7 +435,7 @@ export default function Hero() {
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden",
                   boxShadow: isCurrentActive
-                    ? "0 0 50px rgba(168, 85, 247, 0.85), 0 0 100px rgba(168, 85, 247, 0.5), 0 0 160px rgba(217, 70, 239, 0.3)"
+                    ? "0 10px 40px rgba(168, 85, 247, 0.45)"
                     : undefined,
                 }}
               >

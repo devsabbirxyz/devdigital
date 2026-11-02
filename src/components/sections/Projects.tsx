@@ -588,19 +588,18 @@ export default function Projects({ all = false }: { all?: boolean }) {
         </div>
 
         {/* 2. PROJECTS GRID */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
-          <AnimatePresence>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
+          <AnimatePresence mode="popLayout">
             {filteredProjects.map((p, i) => {
               // On homepage (!all), show top 4 on mobile (<sm), and 6 on desktop (sm:)
               const isMobileHidden = !all && i >= 4;
               return (
                 <motion.article
-                  layout
                   key={p.id}
-                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.45, delay: i * 0.04 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28, delay: Math.min(i * 0.03, 0.12) }}
                   onClick={() => setActiveModalProject(p)}
                   className={`h-full cursor-pointer ${isMobileHidden ? "hidden sm:block" : "block"}`}
                 >
@@ -775,7 +774,7 @@ export default function Projects({ all = false }: { all?: boolean }) {
             );
           })}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
         {/* PROMINENT "EXPLORE ALL WORKS" BOTTOM CTA BANNER (DESKTOP & MOBILE) */}
         {!all && (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   Play,
   Pause,
@@ -200,6 +200,9 @@ export default function InteractiveTerminal() {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.2 });
+
   const currentLang = LANGUAGES[selectedLang];
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const pauseTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -210,6 +213,12 @@ export default function InteractiveTerminal() {
     if (timerRef.current) clearInterval(timerRef.current);
     if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
 
+    if (!isInView) {
+      // When off-screen, do not burn CPU cycles
+      setIsTyping(false);
+      return;
+    }
+
     setTypedLength(0);
     setIsTyping(true);
     setViewMode("code");
@@ -218,37 +227,31 @@ export default function InteractiveTerminal() {
     const fullText = currentLang.rawCode;
     let charIndex = 0;
 
-    // Steady, realistic typing speed ("aste typinger moto hube")
-    // Types ~1 to 2 characters every 24ms for a steady human-like cadence
+    // Smooth, efficient typing cadence (batched step prevents high-frequency render thrash)
     timerRef.current = setInterval(() => {
-      // Advance by 1 char, or 2 if current char is whitespace/indent for natural flow
-      const step = fullText[charIndex] === " " ? 2 : 1;
+      const step = fullText[charIndex] === " " ? 3 : 2;
       charIndex = Math.min(charIndex + step, fullText.length);
       setTypedLength(charIndex);
 
-      // When current language is finished typing
       if (charIndex >= fullText.length) {
         if (timerRef.current) clearInterval(timerRef.current);
         setIsTyping(false);
 
-        // If continuous auto-loop is enabled:
-        // Hold the completed code with full syntax highlight for 3.2 seconds,
-        // then cycle automatically to the next language!
         if (isAutoLoop) {
           pauseTimerRef.current = setTimeout(() => {
             const currentIdx = CYCLE.indexOf(selectedLang);
             const nextLang = CYCLE[(currentIdx + 1) % CYCLE.length];
             setSelectedLang(nextLang);
-          }, 3200);
+          }, 3600);
         }
       }
-    }, 24);
+    }, 36);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
     };
-  }, [selectedLang, isAutoLoop]);
+  }, [selectedLang, isAutoLoop, isInView]);
 
   // Handle manual tab switch
   const handleSelectLang = (lang: LanguageKey) => {
@@ -329,6 +332,7 @@ export default function InteractiveTerminal() {
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}

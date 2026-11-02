@@ -25,7 +25,6 @@ const CommandPalette = lazy(() => import("@/components/site/CommandPalette"));
 const LeadMagnetModal = lazy(() => import("@/components/site/LeadMagnetModal"));
 const AiTerminal = lazy(() => import("@/components/site/AiTerminal"));
 const BookingModal = lazy(() => import("@/components/site/BookingModal"));
-const SocialProofTicker = lazy(() => import("@/components/site/SocialProofTicker"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -104,7 +103,6 @@ const App = () => {
                 <LeadMagnetModal />
                 <AiTerminal />
                 <BookingModal />
-                <SocialProofTicker />
               </Suspense>
 
               <Suspense

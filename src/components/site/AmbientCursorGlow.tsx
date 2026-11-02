@@ -5,7 +5,7 @@ export default function AmbientCursorGlow() {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    // Detect desktop fine pointer vs mobile coarse pointer
+    // Only enable on desktop pointer devices
     const isFinePointer = window.matchMedia("(pointer: fine)").matches;
     if (!isFinePointer) {
       setIsDesktop(false);
@@ -19,70 +19,79 @@ export default function AmbientCursorGlow() {
     let targetX = currentX;
     let targetY = currentY;
     let isHovered = false;
-    let animId: number;
+    let isMoving = false;
+    let animId: number | null = null;
+    let stopTimeout: NodeJS.Timeout | null = null;
+
+    const render = () => {
+      const dx = targetX - currentX;
+      const dy = targetY - currentY;
+
+      // Smooth lerp
+      currentX += dx * 0.15;
+      currentY += dy * 0.15;
+
+      const el = glowRef.current;
+      if (el) {
+        const scale = isHovered ? 1.25 : 1;
+        const opacity = isHovered ? 0.35 : 0.22;
+        el.style.transform = `translate3d(${currentX.toFixed(1)}px, ${currentY.toFixed(1)}px, 0) translate(-50%, -50%) scale(${scale})`;
+        el.style.opacity = String(opacity);
+      }
+
+      // If nearly arrived and mouse stopped, sleep the loop to save 100% CPU/GPU
+      if (Math.abs(dx) < 0.3 && Math.abs(dy) < 0.3 && !isMoving) {
+        animId = null;
+        return;
+      }
+
+      animId = requestAnimationFrame(render);
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
+      isMoving = true;
 
-      // Check if hovering interactive element
+      if (stopTimeout) clearTimeout(stopTimeout);
+      stopTimeout = setTimeout(() => {
+        isMoving = false;
+      }, 80);
+
       const target = e.target as HTMLElement | null;
       if (target) {
         isHovered = Boolean(
           target.closest("button, a, input, select, textarea, [role='button'], .cursor-pointer")
         );
       }
-    };
 
-    const render = () => {
-      // Smooth liquid spring lerp
-      currentX += (targetX - currentX) * 0.12;
-      currentY += (targetY - currentY) * 0.12;
-
-      const el = glowRef.current;
-      if (el) {
-        const scale = isHovered ? 1.35 : 1;
-        const opacity = isHovered ? 0.45 : 0.3;
-        el.style.transform = `translate3d(calc(-50% + ${currentX.toFixed(1)}px), calc(-50% + ${currentY.toFixed(1)}px), 0) scale(${scale})`;
-        el.style.opacity = String(opacity);
+      if (animId === null) {
+        animId = requestAnimationFrame(render);
       }
-
-      animId = requestAnimationFrame(render);
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    animId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animId);
+      if (animId !== null) cancelAnimationFrame(animId);
+      if (stopTimeout) clearTimeout(stopTimeout);
     };
   }, []);
 
-  // On Mobile: Gentle GPU-accelerated ambient glowing nebula orb
-  if (!isDesktop) {
-    return (
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed top-1/4 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full blur-[100px] z-0 animate-mobile-glow opacity-30 will-change-transform"
-        style={{
-          background:
-            "radial-gradient(circle, hsl(205 100% 55% / 0.4) 0%, hsl(271 91% 65% / 0.25) 45%, transparent 70%)",
-        }}
-      />
-    );
-  }
+  // On Mobile: No background cursor orb (eliminates scroll lag)
+  if (!isDesktop) return null;
 
-  // On Desktop: Interactive liquid cursor spotlight
+  // On Desktop: Ultra-light, GPU-accelerated cursor halo
   return (
     <div
       ref={glowRef}
       aria-hidden="true"
-      className="pointer-events-none fixed top-0 left-0 w-[420px] h-[420px] rounded-full blur-[90px] z-0 transition-[opacity] duration-300 will-change-transform"
+      className="pointer-events-none fixed top-0 left-0 w-[300px] h-[300px] rounded-full blur-[65px] z-0 will-change-transform"
       style={{
         background:
-          "radial-gradient(circle, hsl(271 91% 65% / 0.32) 0%, hsl(328 86% 60% / 0.20) 45%, transparent 70%)",
-        opacity: 0.3,
+          "radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, rgba(56, 189, 248, 0.15) 45%, transparent 70%)",
+        opacity: 0.25,
       }}
     />
   );

@@ -17,15 +17,14 @@ export default function HolographicCard({
   enableTilt = true,
   enableGlare = true,
   enableBorderBeam = true,
-  tiltStrength = 10,
+  tiltStrength = 8,
   onClick,
 }: HolographicCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
 
-  // Detect touch devices to avoid unwanted continuous gyro tilt on mobile phones
+  // Detect touch devices to avoid unwanted continuous gyro tilt or heavy animations on mobile
   useEffect(() => {
     setIsTouchDevice(
       window.matchMedia("(pointer: coarse)").matches ||
@@ -34,20 +33,17 @@ export default function HolographicCard({
     );
   }, []);
 
-  // Motion values for smooth 3D tilt
+  // Motion values for smooth 3D tilt on desktop hover
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const springConfig = { stiffness: 260, damping: 20, mass: 0.2 };
+  const springConfig = { stiffness: 240, damping: 25, mass: 0.15 };
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
 
   // 3D rotation transforms
   const rotateX = useTransform(smoothMouseY, [0, 1], [tiltStrength, -tiltStrength]);
   const rotateY = useTransform(smoothMouseX, [0, 1], [-tiltStrength, tiltStrength]);
-
-  // Dynamic glare coordinates
-  const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -62,11 +58,10 @@ export default function HolographicCard({
       mouseX.set(x);
       mouseY.set(y);
 
+      // Pure CSS variable update: ZERO React re-renders for 60fps butter-smooth glare
       if (enableGlare) {
-        setGlarePos({
-          x: Math.round(x * 100),
-          y: Math.round(y * 100),
-        });
+        el.style.setProperty("--gx", `${(x * 100).toFixed(1)}%`);
+        el.style.setProperty("--gy", `${(y * 100).toFixed(1)}%`);
       }
     },
     [isTouchDevice, enableTilt, enableGlare, mouseX, mouseY]
@@ -82,33 +77,14 @@ export default function HolographicCard({
     mouseY.set(0.5);
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!enableGlare) return;
-    const el = cardRef.current;
-    if (!el || !e.touches[0]) return;
-    const rect = el.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
-    const y = Math.max(0, Math.min(1, (touch.clientY - rect.top) / rect.height));
-    setGlarePos({ x: Math.round(x * 100), y: Math.round(y * 100) });
-    setIsTouched(true);
-  };
-
-  const handleTouchEnd = () => {
-    setIsTouched(false);
-  };
-
   return (
     <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchEnd}
-      whileTap={{ scale: 0.982 }}
-      transition={{ type: "spring", stiffness: 380, damping: 24 }}
+      whileTap={{ scale: 0.985 }}
+      transition={{ type: "spring", stiffness: 350, damping: 25 }}
       onClick={onClick}
       style={{
         perspective: 1000,
@@ -118,20 +94,14 @@ export default function HolographicCard({
       }}
       className={`relative rounded-3xl cursor-pointer will-change-transform ${className}`}
     >
-      {/* 1. LASER BORDER BEAM (z-0: Behind content, shines through 1.5px border margin) */}
-      {enableBorderBeam && (
+      {/* 1. LASER BORDER BEAM — Only mounts when hovered on desktop to save 100% idle GPU */}
+      {enableBorderBeam && isHovered && !isTouchDevice && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -inset-[1.5px] rounded-[inherit] overflow-hidden z-0"
         >
           <div
-            className={`absolute inset-[-150%] animate-border-beam transition-opacity duration-500 ${
-              isHovered || isTouched
-                ? "opacity-100"
-                : isTouchDevice
-                ? "opacity-60 animate-pulse-glow"
-                : "opacity-45"
-            }`}
+            className="absolute inset-[-150%] animate-border-beam opacity-90 transition-opacity duration-300"
             style={{
               background:
                 "conic-gradient(from 0deg, transparent 0 310deg, #0099FF 330deg, #38bdf8 350deg, #ffffff 360deg)",
@@ -140,19 +110,20 @@ export default function HolographicCard({
         </div>
       )}
 
-      {/* 2. CARD CONTENT CONTAINER (z-10: Sits cleanly in front of the laser beam track) */}
-      <div className="relative z-10 h-full w-full rounded-[inherit] bg-[#10121A] border border-white/5 backdrop-blur-xl overflow-hidden pointer-events-auto">
+      {/* 2. CARD CONTENT CONTAINER */}
+      <div className="relative z-10 h-full w-full rounded-[inherit] bg-[#10121A] border border-white/10 hover:border-white/20 transition-colors backdrop-blur-xl overflow-hidden pointer-events-auto">
         {children}
       </div>
 
-      {/* 3. HOLOGRAPHIC GLARE / SHEEN (z-20: Pure visual pointer-events-none overlay, active on hover or mobile tap) */}
-      {enableGlare && (
+      {/* 3. HOLOGRAPHIC GLARE / SHEEN — GPU CSS variables */}
+      {enableGlare && !isTouchDevice && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[inherit] z-20 transition-opacity duration-300 overflow-hidden"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] z-20 transition-opacity duration-200 overflow-hidden"
           style={{
-            opacity: isHovered || isTouched ? 1 : 0,
-            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(0, 153, 255, 0.22) 0%, rgba(56, 189, 248, 0.15) 35%, transparent 70%)`,
+            opacity: isHovered ? 1 : 0,
+            background:
+              "radial-gradient(circle 240px at var(--gx, 50%) var(--gy, 50%), rgba(0, 153, 255, 0.22) 0%, rgba(56, 189, 248, 0.12) 35%, transparent 70%)",
           }}
         />
       )}

@@ -249,7 +249,7 @@ export default function Process() {
   const [circuitMode, setCircuitMode] = useState<"devdigital" | "traditional">("devdigital");
   const [activeNodeId, setActiveNodeId] = useState<"pillar-1" | "pillar-2" | "pillar-3">("pillar-1");
   const [activeTab, setActiveTab] = useState<"deliverables" | "telemetry" | "architecture">("deliverables");
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
   const activePillar = PILLARS.find((p) => p.id === activeNodeId) || PILLARS[0];
   const activeContent = circuitMode === "devdigital" ? activePillar.devdigital : activePillar.traditional;
