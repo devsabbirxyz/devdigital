@@ -9,12 +9,17 @@ export default function StickyBottomCTA() {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    // Show after scrolling 40% of page
+    let ticking = false;
     const handleScroll = () => {
-      if (dismissed) return;
-      const scrolled = window.scrollY;
-      const total = document.body.scrollHeight - window.innerHeight;
-      setVisible(scrolled > total * 0.15 && scrolled < total * 0.90);
+      if (dismissed || ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const scrolled = window.scrollY;
+        const total = document.body.scrollHeight - window.innerHeight;
+        const shouldShow = total > 0 && scrolled > total * 0.15 && scrolled < total * 0.90;
+        setVisible((prev) => (prev !== shouldShow ? shouldShow : prev));
+        ticking = false;
+      });
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -28,7 +33,7 @@ export default function StickyBottomCTA() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none"
+          className="hidden sm:block fixed bottom-0 left-0 right-0 z-50 pointer-events-none"
         >
           {/* Backdrop blur bar */}
           <div

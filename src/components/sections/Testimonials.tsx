@@ -414,7 +414,7 @@ function TestimonialCard({
 }) {
   return (
     <div
-      className={`group relative glass-strong rounded-2xl p-4 sm:p-6 md:p-7 backdrop-blur-2xl transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_35px_hsl(271_91%_65%/0.25)] flex flex-col justify-between ${
+      className={`group relative bg-[#0E111B] rounded-2xl p-4 sm:p-6 md:p-7 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_35px_hsl(271_91%_65%/0.25)] flex flex-col justify-between ${
         isFeatured
           ? "ring-1 ring-primary/40 shadow-[0_0_40px_hsl(271_91%_65%/0.2)]"
           : "border border-border/40"

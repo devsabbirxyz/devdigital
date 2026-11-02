@@ -253,10 +253,10 @@ export default function Hero() {
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={phraseIdx}
-                      initial={{ y: 28, opacity: 0, filter: "blur(6px)" }}
-                      animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                      exit={{ y: -28, opacity: 0, filter: "blur(6px)" }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      initial={{ y: 16, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -16, opacity: 0 }}
+                      transition={{ duration: 0.32, ease: "easeOut" }}
                       className="inline-block bg-gradient-to-r from-[#E0C3FC] via-[#B57BFF] to-[#9B5DE5] bg-clip-text text-transparent font-extrabold"
                     >
                       {ROTATING_PHRASES[phraseIdx]}
@@ -280,29 +280,8 @@ export default function Hero() {
             )}
           </h1>
 
-          {/* 3. SUB-HEADING: Mobile 1-Line Animated Ticker & Desktop Paragraph */}
-          {/* Mobile: exactly 1 single line with smooth continuous horizontal marquee animation */}
-          <div className="sm:hidden relative w-full max-w-sm mx-auto overflow-hidden mb-6 px-1 py-1">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-8 z-10 bg-gradient-to-r from-[#08070C] to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-[#08070C] to-transparent" />
-
-            <div
-              className="animate-marquee-left flex items-center whitespace-nowrap text-xs text-[#A39EB8]"
-              style={{ "--marquee-duration": "24s" } as React.CSSProperties}
-            >
-              <div className="flex items-center gap-2.5 pr-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping shrink-0" />
-                <span>{heroDescription}</span>
-              </div>
-              <div className="flex items-center gap-2.5 pr-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping shrink-0" />
-                <span>{heroDescription}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop: Multiline elegant paragraph */}
-          <p className="hidden sm:block text-sm sm:text-base md:text-lg text-[#A39EB8] max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-normal px-2">
+          {/* 3. SUB-HEADING: Clean readable typography across all devices */}
+          <p className="text-sm sm:text-base md:text-lg text-[#A39EB8] max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-normal px-4">
             {heroDescription}
           </p>
 
@@ -427,7 +406,7 @@ export default function Hero() {
                 key={i}
                 animate={style}
                 onClick={() => setActive(i)}
-                transition={{ type: "spring", stiffness: 70, damping: 20, mass: 0.8 }}
+                transition={{ type: "spring", stiffness: 180, damping: 22, mass: 0.4 }}
                 className="absolute w-32 md:w-48 h-48 md:h-72 rounded-3xl overflow-hidden glass-strong cursor-pointer group"
                 style={{
                   zIndex: isCurrentActive ? 20 : style.zIndex,

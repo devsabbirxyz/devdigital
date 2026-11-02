@@ -107,11 +107,11 @@ export default function ClientLogoStrip() {
               href={client.live_url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group relative flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-2xl border ${client.bg} backdrop-blur-md transition-all duration-300 hover:scale-105 shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(0,153,255,0.25)] select-none min-w-[190px] sm:min-w-[220px]`}
+              className={`group relative flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-2xl border ${client.bg} bg-[#0D0C14] transition-all duration-300 hover:scale-105 shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(0,153,255,0.25)] select-none min-w-[190px] sm:min-w-[220px]`}
               title={`Visit ${client.name} (${client.domain})`}
             >
               {/* Authentic Client Brand Logo */}
-              <div className="w-10 h-10 rounded-xl bg-white/[0.08] p-1.5 flex items-center justify-center border border-white/15 shrink-0 overflow-hidden shadow-sm backdrop-blur-md group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.08] p-1.5 flex items-center justify-center border border-white/15 shrink-0 overflow-hidden shadow-sm group-hover:scale-110 transition-transform">
                 <img
                   src={client.logo}
                   alt={`${client.name} official logo`}

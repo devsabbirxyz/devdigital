@@ -36,13 +36,20 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let ticking = false;
     const onScroll = () => {
-      setScrolled(window.scrollY > 30);
-      if (window.scrollY > 80 && mobileOpen) {
-        setMobileOpen(false);
-      }
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const isPast = window.scrollY > 30;
+        setScrolled((prev) => (prev !== isPast ? isPast : prev));
+        if (window.scrollY > 80 && mobileOpen) {
+          setMobileOpen(false);
+        }
+        ticking = false;
+      });
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [mobileOpen]);
 

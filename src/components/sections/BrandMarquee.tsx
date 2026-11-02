@@ -147,7 +147,7 @@ export default function BrandMarquee() {
             return (
               <div
                 key={`${item.name}-${idx}`}
-                className="group relative flex items-center gap-3 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-primary/40 backdrop-blur-md transition-all duration-300 shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.25)] hover:shadow-[0_0_20px_rgba(0,153,255,0.25)] cursor-default"
+                className="group relative flex items-center gap-3 px-4 py-2.5 rounded-xl border border-white/10 bg-[#0E111B] hover:bg-[#151926] hover:border-primary/40 transition-all duration-300 shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.25)] hover:shadow-[0_0_20px_rgba(0,153,255,0.25)] cursor-default"
               >
                 <div
                   className={`p-2 rounded-lg border flex items-center justify-center ${item.accentColor} transition-transform duration-300 group-hover:scale-110`}
