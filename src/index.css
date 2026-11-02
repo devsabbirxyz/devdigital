@@ -685,18 +685,7 @@
   }
 }
 
-/* Disable auto light sweep on desktop screens (>=768px) - desktop uses interactive mouse hover only */
-@media (min-width: 768px) {
-  .circuit-laser-left,
-  .circuit-laser-right,
-  .circuit-bead-left,
-  .circuit-bead-right,
-  .animate-watermark-mask-sweep,
-  .animate-watermark-aura-sweep {
-    animation: none !important;
-    display: none !important;
-  }
-}
+/* Watermark light sweep enabled for all viewports (Mobile & Desktop) */
 
 /* ============================================================
    SEQUENTIAL BLINKING DOTS (LOADING. . . .)
